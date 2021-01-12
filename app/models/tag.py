@@ -25,6 +25,7 @@ class Tag(db.Model, ModelMixin):
     zip_code = db.Column(db.String(16))
     available = db.Column(db.Boolean, default=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    searches = db.relationship("Search", lazy=True)
 
     def __init__(self):
         self.tag_id = tag_id_generator()
