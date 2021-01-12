@@ -22,6 +22,7 @@ class User(db.Model, UserMixin, ModelMixin):
     roles = db.Column(db.Text, default='user')
     activated = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.now)
+    tags = db.relationship("Tag", lazy=True)
 
     @property
     def rolenames(self):
