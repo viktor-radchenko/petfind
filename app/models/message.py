@@ -4,7 +4,7 @@ from app.models.utils import ModelMixin
 
 class Message(db.Model, ModelMixin):
 
-    __tablename__ = 'messages'
+    __tablename__ = 'message'
 
     message_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), nullable=False)
@@ -14,7 +14,7 @@ class Message(db.Model, ModelMixin):
     lon = db.Column(db.String(32))
     ip_address = db.Column(db.String(16))
     zip_code = db.Column(db.String(16))
-    tag_id = db.Column(db.Integer, db.ForeignKey("tags.tag_id"))
+    tag_id = db.Column(db.Integer, db.ForeignKey("tag.tag_id"))
 
     def __str__(self):
         return '<Message: %d>' % self.message_id

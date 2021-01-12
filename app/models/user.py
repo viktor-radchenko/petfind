@@ -8,7 +8,7 @@ from app.models.utils import ModelMixin
 
 class User(db.Model, UserMixin, ModelMixin):
 
-    __tablename__ = 'users'
+    __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Text)  # TODO: set up JWT auth using email

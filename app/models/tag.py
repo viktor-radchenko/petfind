@@ -9,7 +9,7 @@ from app.controllers import tag_id_generator
 
 class Tag(db.Model, ModelMixin):
 
-    __tablename__ = 'tags'
+    __tablename__ = 'tag'
 
     class StatusType(enum.Enum):
         enabled = 'enabled'
@@ -24,7 +24,7 @@ class Tag(db.Model, ModelMixin):
     country = db.Column(db.String(64))
     zip_code = db.Column(db.String(16))
     available = db.Column(db.Boolean, default=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     searches = db.relationship("Search", lazy=True)
 
     def __init__(self):

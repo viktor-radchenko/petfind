@@ -4,6 +4,8 @@ from app.models.utils import ModelMixin
 
 class Merch(db.Model, ModelMixin):
 
+    __tablename__ = 'merch'
+
     merch_id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.Text)
 
