@@ -10,7 +10,7 @@ class User(db.Model, UserMixin, ModelMixin):
 
     __tablename__ = 'user'
 
-    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Text)  # TODO: set up JWT auth using email
     email = db.Column(db.Text, unique=True)
     password = db.Column(db.String(256))
@@ -21,7 +21,7 @@ class User(db.Model, UserMixin, ModelMixin):
     zip_code = db.Column(db.String(16))
     roles = db.Column(db.Text, default='user')
     activated = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, default=datetime.now)
+    created_on = db.Column(db.DateTime, default=datetime.now)
     tags = db.relationship("Tag", lazy=True)
 
     @property
