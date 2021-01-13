@@ -37,15 +37,17 @@ export default function App() {
 }
 
 function Home() {
+  const [message, setMessage] = useState('');
   useEffect(() => {
     fetch("/api")
       .then((resp) => resp.json())
-      .then((resp) => console.log(resp));
+      .then((resp) => setMessage(resp.message));
   }, []);
-  return <h2>Home</h2>;
+  return <h2>{message}</h2>;
 }
 
 function Login() {
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -59,7 +61,7 @@ function Login() {
       password: password,
     };
     console.log(opts);
-    fetch("/api/login", {
+    fetch("/api/auth/login", {
       method: "post",
       body: JSON.stringify(opts),
     })

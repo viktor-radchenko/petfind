@@ -4,6 +4,7 @@ from flask_login import UserMixin, AnonymousUserMixin
 
 from app import db
 from app.models.utils import ModelMixin
+from app.logger import log
 
 
 class User(db.Model, UserMixin, ModelMixin):
@@ -20,7 +21,7 @@ class User(db.Model, UserMixin, ModelMixin):
     country = db.Column(db.String(64))
     zip_code = db.Column(db.String(16))
     roles = db.Column(db.Text, default='user')
-    activated = db.Column(db.Boolean, default=False)
+    activated = db.Column(db.Boolean, default=True)
     created_on = db.Column(db.DateTime, default=datetime.now)
     tags = db.relationship("RegisteredTag", lazy=True)
 
@@ -33,7 +34,8 @@ class User(db.Model, UserMixin, ModelMixin):
 
     @classmethod
     def lookup(cls, username):
-        return cls.query.filter_by(username=username).one_or_none()
+        log(log.DEBUG, '[Looking up username %s]', username)
+        return cls.query.filter_by(email=username).one_or_none()
 
     @classmethod
     def identify(cls, id):

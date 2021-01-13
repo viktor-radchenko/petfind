@@ -13,8 +13,10 @@ class Tag(db.Model, ModelMixin):
     is_registered = db.Column(db.Boolean, default=False)
     created_on = db.Column(db.DateTime, default=datetime.now)
 
-    def __init__(self):
-        self.tag_id = tag_id_generator()
+    def __init__(self, tag_id=None):
+        self.tag_id = tag_id
+        if not self.tag_id:
+            self.tag_id = tag_id_generator()
 
     def __str__(self):
         return '<Tag: %s' % self.tag_id
