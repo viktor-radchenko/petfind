@@ -8,6 +8,7 @@ main_blueprint = Blueprint('main', __name__)
 
 
 @main_blueprint.route('/test-index')
+@auth_required
 def index():
     return render_template('index.html')
 
