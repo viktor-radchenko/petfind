@@ -23,7 +23,7 @@ def register():
            "email":"test@example.com"
          }'
     """
-    tag_image = request.files.get("file")
+    tag_image = request.files.get("tagImage")
 
     # req = request.get_json(force=True)
     tag_id = request.form.get("tagId", None)
