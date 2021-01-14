@@ -9,7 +9,7 @@ def send_async_email(app, msg):
         mail.send(msg)
 
 
-def send_email(to, subject, template, **kwargs):
+def send_registration_email(to, subject, template, **kwargs):
     app = current_app._get_current_object()
     msg = Message(app.config['MAIL_SUBJECT_PREFIX'] + ' ' + subject,
                   sender=app.config['PRAETORIAN_CONFIRMATION_SENDER'], recipients=[to])

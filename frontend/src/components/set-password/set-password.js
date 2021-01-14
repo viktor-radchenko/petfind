@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useHistory, useParams, Link } from "react-router-dom";
-import { useAuth, login, logout } from "../../services";
+import { useAuth, login } from "../../services";
 
 export default function SetPassword() {
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const { token } = useParams();
   const [logged] = useAuth();
   const history = useHistory();
@@ -21,8 +21,8 @@ export default function SetPassword() {
     e.preventDefault();
     console.log("You pressed submit passwords");
     let opts = {
-      password: password,
-      passwordConfirmation: passwordConfirmation,
+      oldPassword: oldPassword,
+      newPassword: newPassword,
       token: token,
     };
     console.log(opts);
@@ -41,12 +41,12 @@ export default function SetPassword() {
       });
   };
 
-  const handlePassChange = (e) => {
-    setPassword(e.target.value);
+  const handleOldPassChange = (e) => {
+    setOldPassword(e.target.value);
   };
 
-  const handlePassConfirmationChange = (e) => {
-    setPasswordConfirmation(e.target.value);
+  const handleNewPassChange = (e) => {
+    setNewPassword(e.target.value);
   };
 
   return (
@@ -57,7 +57,7 @@ export default function SetPassword() {
         <form className='auth__form' action='#'>
           <label className='label'>
             <span>Old Password</span>
-            <input className='input auth__input' type='password' onChange={handlePassChange} value={password} />
+            <input className='input auth__input' type='password' onChange={handleOldPassChange} value={oldPassword} />
           </label>
 
           <label className='label'>
@@ -65,8 +65,8 @@ export default function SetPassword() {
             <input
               className='input auth__input'
               type='password'
-              onChange={handlePassConfirmationChange}
-              value={passwordConfirmation}
+              onChange={handleNewPassChange}
+              value={newPassword}
             />
           </label>
 

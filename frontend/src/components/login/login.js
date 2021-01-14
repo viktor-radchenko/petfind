@@ -31,13 +31,17 @@ export default function Login() {
     })
       .then((r) => r.json())
       .then((token) => {
+        if (!token.ok) {
+          throw new Error(token.message);
+        }
         if (token.access_token) {
           login(token);
           console.log(token);
         } else {
           console.log("Please type in correct username/password");
         }
-      });
+      })
+      .catch(e => console.log(e));
   };
 
   const handleUsernameChange = (e) => {

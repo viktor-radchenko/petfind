@@ -24,6 +24,7 @@ class RegisteredTag(db.Model, ModelMixin):
     address = db.Column(db.Text)
     city = db.Column(db.String(64))
     country = db.Column(db.String(64))
+    state = db.Column(db.String(64))
     zip_code = db.Column(db.String(16))
     available = db.Column(db.Boolean, default=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))

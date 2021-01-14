@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+
+import { completeRegistration } from "../../services";
 
 const initialFormState = {
   tagIdMessage: "",
@@ -64,7 +65,7 @@ export default function RegisterTagForm() {
     });
   };
 
-  // Validate tagId 
+  // Validate tagId
   useEffect(() => {
     if (tagId.length === 6) {
       const fetchTagId = async () => {
@@ -75,7 +76,7 @@ export default function RegisterTagForm() {
       fetchTagId().then((res) => {
         dispatch({
           field: "tagIdMessage",
-          value: res
+          value: res,
         });
         if (res === "Confirmed") {
           console.log(`${res} is confirmed`);
@@ -86,8 +87,8 @@ export default function RegisterTagForm() {
         }
       });
     } else {
-      dispatch({field: "tagIdIsValid", value: false});
-      dispatch({field: "tagIdMessage", value: ""});
+      dispatch({ field: "tagIdIsValid", value: false });
+      dispatch({ field: "tagIdMessage", value: "" });
     }
   }, [tagId]);
 
@@ -104,21 +105,38 @@ export default function RegisterTagForm() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(`Submitted data:`, {
-      currentStep: currentStep,
-      tagId: tagId,
-      tagName: tagName,
-      tagImage: tagImage,
-      firstName: firstName,
-      lastName: lastName,
-      phone: phone,
-      email: email,
-      address: address,
-      city: city,
-      country: country,
-      zipCode: zipCode,
-      userState: userState,
-    });
+    completeRegistration(
+      tagId,
+      tagName,
+      tagImage,
+      firstName,
+      lastName,
+      phone,
+      email,
+      address,
+      city,
+      country,
+      zipCode,
+      userState
+    )
+      .then((res) => res.json())
+      .then((res) => console.log(res))
+      .catch((e) => console.error(e));
+    // console.log(`Submitted data:`, {
+    //   currentStep: currentStep,
+    //   tagId: tagId,
+    //   tagName: tagName,
+    //   tagImage: tagImage,
+    //   firstName: firstName,
+    //   lastName: lastName,
+    //   phone: phone,
+    //   email: email,
+    //   address: address,
+    //   city: city,
+    //   country: country,
+    //   zipCode: zipCode,
+    //   userState: userState,
+    // });
   };
 
   return (
@@ -139,7 +157,7 @@ export default function RegisterTagForm() {
           <span className='title register-item__title'>Register Item</span>
           <span className='register-item__subtitle'>Add basic details about the item</span>
 
-          <form className='register-item__form' action='#' autocomplete="off">
+          <form className='register-item__form' action='#' autoComplete='off'>
             <div className='register-item__box'>
               <div className='register-item__img'>
                 <span>Add an Image</span>
@@ -162,14 +180,18 @@ export default function RegisterTagForm() {
             <label className='label label__tag-id'>
               <span>Tag ID</span>
               <input
-                className={tagIdIsValid ? 'input register-item__input-id register-item__input-id--active' : 'input register-item__input-id' }
+                className={
+                  tagIdIsValid
+                    ? "input register-item__input-id register-item__input-id--active"
+                    : "input register-item__input-id"
+                }
                 type='text'
                 maxLength='6'
                 name='tagId'
                 value={tagId}
                 onChange={onChange}
               />
-              {tagIdMessage && <span className="register-item__message">{tagIdMessage}</span>}
+              {tagIdMessage && <span className='register-item__message'>{tagIdMessage}</span>}
             </label>
 
             <label className='label'>
@@ -184,11 +206,10 @@ export default function RegisterTagForm() {
             </label>
 
             <button
-              disabled={ !tagIdIsValid }
+              disabled={!tagIdIsValid}
               className='button register-item__btn'
               type='button'
-              onClick={handleNextStep}
-            >
+              onClick={handleNextStep}>
               Next
             </button>
           </form>
@@ -203,12 +224,12 @@ export default function RegisterTagForm() {
 
           <span className='register-item__subtitle'> Add personal details about you </span>
 
-          <form className='create-account__form' action='#' autocomplete="off">
+          <form className='create-account__form' action='#' autoComplete='off'>
             <div className='create-account__name'>
               <label className='label'>
                 <span>First Name</span>
                 <input
-                  required="required"
+                  required='required'
                   className='input create-account__input'
                   type='text'
                   name='firstName'
@@ -220,7 +241,7 @@ export default function RegisterTagForm() {
               <label className='label'>
                 <span>Last Name</span>
                 <input
-                  required="required"
+                  required='required'
                   className='input create-account__input'
                   type='text'
                   name='lastName'
@@ -232,7 +253,7 @@ export default function RegisterTagForm() {
               <label className='label'>
                 <span>Phone Number</span>
                 <input
-                  required="required"
+                  required='required'
                   className='input create-account__input'
                   type='tel'
                   name='phone'
@@ -244,7 +265,7 @@ export default function RegisterTagForm() {
               <label className='label'>
                 <span>Email Address</span>
                 <input
-                  required="required"
+                  required='required'
                   className='input create-account__input'
                   type='email'
                   name='email'

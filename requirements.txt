@@ -16,3 +16,4 @@ Werkzeug
 WTForms
 flask-praetorian
 flask-cors
+Pillow

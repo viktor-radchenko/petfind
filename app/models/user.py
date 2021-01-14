@@ -20,6 +20,7 @@ class User(db.Model, UserMixin, ModelMixin):
     address = db.Column(db.Text)
     city = db.Column(db.String(64))
     country = db.Column(db.String(64))
+    state = db.Column(db.String(64))
     zip_code = db.Column(db.String(16))
     roles = db.Column(db.Text, default='user')
     activated = db.Column(db.Boolean, default=False)

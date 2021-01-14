@@ -14,7 +14,7 @@ class BaseConfig(object):
     SECRET_KEY = os.environ.get('SECRET_KEY', 'Ensure you set a secret key, this is important!')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     WTF_CSRF_ENABLED = False
-    
+
     MAIL_SERVER = 'smtp.googlemail.com'
     MAIL_PORT = 587
     MAIL_USE_TLS = True
