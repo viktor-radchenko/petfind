@@ -1,7 +1,5 @@
-from flask import request, render_template, Blueprint
+from flask import render_template, Blueprint
 from flask_praetorian import auth_required, current_user
-
-from app import guard
 
 
 main_blueprint = Blueprint('main', __name__)

@@ -20,9 +20,9 @@ class BaseConfig(object):
     MAIL_USE_TLS = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME', None)
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', None)
-    PRAETORIAN_CONFIRMATION_SENDER = os.environ.get('MAIL_USERNAME')
-    PRAETORIAN_CONFIRMATION_URI = 'http://localhost:5000/api/v1/verify'
-    FLASKY_MAIL_SUBJECT_PREFIX = "User Registration"
+    PRAETORIAN_CONFIRMATION_SENDER = os.environ.get('MAIL_USERNAME', None)
+    PRAETORIAN_CONFIRMATION_URI = 'http://localhost:5000/api/verify'
+    MAIL_SUBJECT_PREFIX = "User Registration"
 
     @staticmethod
     def configure(app):

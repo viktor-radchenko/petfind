@@ -3,6 +3,7 @@ import pendulum
 from flask import request, Blueprint, jsonify
 
 from app import guard, db
+from app.logger import log
 from app.models import User
 from app.controllers import send_email
 
@@ -17,19 +18,28 @@ def register():
     .. example::
        $ curl http://localhost:5000/api/v1/auth/register -X POST \
          -d '{
-           "username":"joebloggs", \
-           "password":"password" \
+           "firstName":"joebloggs", \
            "email":"test@example.com"
          }'
     """
     req = request.get_json(force=True)
-    username = req.get("username", None)
     email = req.get("email", None)
-    password = req.get("password", None)
+    phone = req.get("phone", None)
+    first_name = req.get("firstName", None)
+    last_name = req.get("lastName", None)
+    address = req.get("address", None)
+    city = req.get("city", None)
+    country = req.get("country", None)
+    zip_code = req.get("zipCode", None)
     new_user = User(
-        username=username,
-        password=guard.hash_password(password),
+        first_name=first_name,
+        last_name=last_name,
         email=email,
+        phone=phone,
+        address=address,
+        city=city,
+        country=country,
+        zip_code=zip_code,
         roles="user",
     )
     db.session.add(new_user)
@@ -40,24 +50,61 @@ def register():
     #                                     subject='User Registration')
     token = guard.encode_jwt_token(
         new_user,
-        override_access_lifespan=pendulum.duration(minutes=15),
+        override_access_lifespan=pendulum.duration(minutes=60),
         bypass_user_check=True,
         is_registration_token=True,
     )
     send_email(
-        new_user.email,
-        "Confirm Your Account",
-        "email/confirm",
+        to=new_user.email,
+        subject="Confirm Your Account",
+        template="email/registration",
         user=new_user,
         token=token,
     )
     response = {
         "message": "successfully sent registration email to user {}".format(
             new_user.username
-        )
+        ),
+        "token": token
     }
 
     return jsonify(response)
+
+
+@auth_blueprint.route('/auth/set-password/<token>', methods=['GET'])
+def test_verify(token):
+    return None
+
+
+@auth_blueprint.route('/api/auth/verify', methods=['POST'])
+def verify():
+    """
+    Finalizes a user registration with the token that they were issued in their
+    registration email
+    .. example::
+       $ curl http://localhost:5000/api/v1/auth/verify -X GET \
+         -H "Authorization: Bearer <your_token>"
+    """
+    # registration_token = guard.read_token_from_header()
+    # print("TOKEN_: ", registration_token)
+    req = request.get_json(force=True)
+    token = req.get("token", None)
+    password = req.get("password", None)
+    password_confirmation = req.get("passwordConfirmation", None)
+    if not password:
+        return {"message": "Password credentials are invalid. Check your data and try again"}, 401
+    if not password_confirmation:
+        return {"message": "Password credentials are invalid. Check your data and try again"}, 401
+    if password != password_confirmation:
+        return {"message": "Passwords do not match"}, 401
+    user = guard.get_user_from_registration_token(token)
+    user.password = guard.hash_password(password)
+    user.activated = True
+    user.save()
+    # perform 'activation' of user here...like setting 'active' or something
+    ret = {'access_token': guard.encode_jwt_token(user)}
+    log(log.DEBUG, "ENCODED NEW TOKEN")
+    return jsonify(ret), 200
 
 
 @auth_blueprint.route("/api/auth/login", methods=["POST"])

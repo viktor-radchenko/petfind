@@ -1,3 +1,3 @@
-import { useAuth, authFetch, login, logout } from "./trace-return-services";
+import { useAuth, authFetch, login, logout, lookUpTagId } from "./trace-return-services";
 
-export { useAuth, authFetch, login, logout };
+export { useAuth, authFetch, login, logout, lookUpTagId };

@@ -7,7 +7,8 @@ from app.models import User, Tag
 
 app = create_app()
 
-ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
+ADMIN_FIRST_NAME = os.environ.get("ADMIN_FIRST_NAME", "Test")
+ADMIN_LAST_NAME = os.environ.get("ADMIN_LAST_NAME", "Admin")
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "admin@default.com")
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin")
 
@@ -15,9 +16,11 @@ ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin")
 def add_admin():
     db.session.add(
         User(
-            username=ADMIN_USERNAME,
+            first_name=ADMIN_FIRST_NAME,
+            last_name=ADMIN_LAST_NAME,
             email=ADMIN_EMAIL,
             password=guard.hash_password(ADMIN_PASSWORD),
+            activated=True,
             roles="admin",
         )
     )
