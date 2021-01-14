@@ -1,0 +1,32 @@
+.header__inner {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px 0;
+}
+
+.menu__list {
+  display: flex;
+}
+
+.menu__item + .menu__item {
+  margin-left: 20px;
+}
+
+.menu__item:first-child {
+  margin-right: auto;
+}
+
+.menu__link {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  outline: transparent;
+  color: inherit;
+  transition: color 0.3s;
+}
+
+.menu__link:hover {
+  color: #111;
+}
+

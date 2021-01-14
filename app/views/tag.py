@@ -13,6 +13,6 @@ def lookup(tag_id):
     if tag.is_registered:
         return {"message": "Tag is already registered"}, 200
     return {
-        "message": "Tag ID is valid for registration",
+        "message": "Confirmed",
         "tagId": tag.tag_id
     }, 200

@@ -1,223 +1,10 @@
+import React, { useState, useEffect } from "react"
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Switch, Route, Link, Redirect, useParams, useHistory } from "react-router-dom";
-import { login, useAuth, authFetch, logout, lookUpTagId } from "./services";
 
 
-export default function App() {
-  return (
-    <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to='/'>Home</Link>
-            </li>
-            <li>
-              <Link to='/login'>Login</Link>
-            </li>
-            <li>
-              <Link to='/dashboard'>Dashboard</Link>
-            </li>
-            <li>
-              <Link to='/register_tag'>Register Tag</Link>
-            </li>
-          </ul>
-        </nav>
 
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-        <Switch>
-          <Route path='/login'>
-            <Login />
-          </Route>
-          <Route path='/register_tag'>
-            <RegisterTagForm />
-          </Route>
-          <Route path='/auth/set-password/:token'>
-            <SetPassword />
-          </Route>
-          <PrivateRoute path='/dashboard' component={Secret} />
-          <Route path='/'>
-            <Home />
-          </Route>
-        </Switch>
-      </div>
-    </Router>
-  );
-}
 
-function Home() {
-  const [message, setMessage] = useState("");
-  useEffect(() => {
-    fetch("/api")
-      .then((resp) => resp.json())
-      .then((resp) => setMessage(resp.message));
-  }, []);
-  return <h2>{message}</h2>;
-}
-
-function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const [logged] = useAuth();
-
-  const onSubmitClick = (e) => {
-    e.preventDefault();
-    console.log("You pressed login");
-    let opts = {
-      username: username,
-      password: password,
-    };
-    console.log(opts);
-    fetch("/api/auth/login", {
-      method: "post",
-      body: JSON.stringify(opts),
-    })
-      .then((r) => r.json())
-      .then((token) => {
-        if (token.access_token) {
-          login(token);
-          console.log(token);
-        } else {
-          console.log("Please type in correct username/password");
-        }
-      });
-  };
-
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  return (
-    <div>
-      <h2>Login</h2>
-      {!logged ? (
-        <form action='#'>
-          <div>
-            <input type='text' placeholder='Email' onChange={handleUsernameChange} value={username} />
-          </div>
-          <div>
-            <input type='password' placeholder='Password' onChange={handlePasswordChange} value={password} />
-          </div>
-          <button onClick={onSubmitClick} type='submit'>
-            Login Now
-          </button>
-        </form>
-      ) : (
-        <button onClick={() => logout()}>Logout</button>
-      )}
-    </div>
-  );
-}
-
-function SetPassword() {
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const { token } = useParams();
-  const [logged] = useAuth();
-  const history = useHistory();
-
-  if (logged) {
-    const redirect = () => {
-      history.push("/");
-    };
-
-    redirect();
-  }
-
-  const onSubmitClick = (e) => {
-    e.preventDefault();
-    console.log("You pressed submit passwords");
-    let opts = {
-      password: password,
-      passwordConfirmation: passwordConfirmation,
-      token: token,
-    };
-    console.log(opts);
-    fetch("/api/auth/verify", {
-      method: "post",
-      body: JSON.stringify(opts),
-    })
-      .then((r) => r.json())
-      .then((token) => {
-        if (token.access_token) {
-          login(token);
-          console.log(token);
-        } else {
-          console.log("Please type in correct username/password");
-        }
-      });
-  };
-
-  const handlePassChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handlePassConfirmationChange = (e) => {
-    setPasswordConfirmation(e.target.value);
-  };
-
-  return (
-    <div>
-      <h2>Set Your Password</h2>
-      {!logged ? (
-        <form action='#'>
-          <div>
-            <input type='password' placeholder='Password' onChange={handlePassChange} value={password} />
-          </div>
-          <div>
-            <input
-              type='password'
-              placeholder='Confirm password'
-              onChange={handlePassConfirmationChange}
-              value={passwordConfirmation}
-            />
-          </div>
-          <button onClick={onSubmitClick} type='submit'>
-            Login Now
-          </button>
-        </form>
-      ) : (
-        <button onClick={() => logout()}>Logout</button>
-      )}
-    </div>
-  );
-}
-
-function Secret() {
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    authFetch("/api/protected")
-      .then((response) => {
-        if (response.status === 401) {
-          setMessage("Sorry you aren't authorized!");
-          return null;
-        }
-        return response.json();
-      })
-      .then((response) => {
-        if (response && response.message) {
-          setMessage(response.message);
-        }
-      });
-  }, []);
-  return <h2>Secret: {message}</h2>;
-}
-
-const PrivateRoute = ({ component: Component, ...rest }) => {
-  const [logged] = useAuth();
-
-  return <Route {...rest} render={(props) => (logged ? <Component {...props} /> : <Redirect to='/login' />)} />;
-};
-
-function RegisterTagForm() {
+export default function RegisterTagForm() {
   // Initialise registration form state
   const [tagInfo, setTagInfo] = useState();
   const [tagIdIsValid, setTagIdIsValid] = useState(false);
@@ -239,11 +26,10 @@ function RegisterTagForm() {
     let timer;
     if (tagId.length === 6) {
       timer = setTimeout(() => {
-
         const fetchTagId = async () => {
           const result = await axios(`/api/tag-id-lookup/${tagId}`);
           setTagInfo(result.data.message);
-        }
+        };
 
         fetchTagId();
 
@@ -282,61 +68,61 @@ function RegisterTagForm() {
   };
 
   const handleTagId = (event) => {
-    console.log(tagId)
-    console.log(event.target.value)
+    console.log(tagId);
+    console.log(event.target.value);
     setTagId(event.target.value);
   };
   const handleTagName = (event) => {
-    console.log(tagName)
-    console.log(event.target.value)
+    console.log(tagName);
+    console.log(event.target.value);
     setTagName(event.target.value);
   };
   const handleTagImage = (event) => {
     setTagImage(event.target.files[0]);
   };
   const handleFirstName = (event) => {
-    console.log(firstName)
-    console.log(event.target.value)
+    console.log(firstName);
+    console.log(event.target.value);
     setFirstName(event.target.value);
   };
   const handleLastName = (event) => {
-    console.log(lastName)
-    console.log(event.target.value)
+    console.log(lastName);
+    console.log(event.target.value);
     setLastName(event.target.value);
   };
   const handlePhone = (event) => {
-    console.log(phone)
-    console.log(event.target.value)
+    console.log(phone);
+    console.log(event.target.value);
     setPhone(event.target.value);
   };
   const handleEmail = (event) => {
-    console.log(email)
-    console.log(event.target.value)
+    console.log(email);
+    console.log(event.target.value);
     setEmail(event.target.value);
   };
   const handleAddress = (event) => {
-    console.log(address)
-    console.log(event.target.value)
+    console.log(address);
+    console.log(event.target.value);
     setAddress(event.target.value);
   };
   const handleCity = (event) => {
-    console.log(city)
-    console.log(event.target.value)
+    console.log(city);
+    console.log(event.target.value);
     setCity(event.target.value);
   };
   const handleCountry = (event) => {
-    console.log(country)
-    console.log(event.target.value)
+    console.log(country);
+    console.log(event.target.value);
     setCountry(event.target.value);
   };
   const handleZipCode = (event) => {
-    console.log(zipCode)
-    console.log(event.target.value)
+    console.log(zipCode);
+    console.log(event.target.value);
     setZipCode(event.target.value);
   };
   const handleUserState = (event) => {
-    console.log(userState)
-    console.log(event.target.value)
+    console.log(userState);
+    console.log(event.target.value);
     setUserState(event.target.value);
   };
 
@@ -396,7 +182,7 @@ function Step1(props) {
           id='tag-id'
           name='tag-id'
           type='text'
-          maxLength="6"
+          maxLength='6'
           placeholder='Enter tag id'
           value={props.tagId} // Prop: The tag input data
           onChange={props.setTagId} // Prop: Puts data into state
@@ -414,7 +200,9 @@ function Step1(props) {
           onChange={props.setTagName} // Prop: Puts data into state
         />
       </div>
-      <button disabled={!props.tagIdIsValid} type="button" onClick={props.onStepChange}>Next Step</button>
+      <button disabled={!props.tagIdIsValid} type='button' onClick={props.onStepChange}>
+        Next Step
+      </button>
     </>
   );
 }
@@ -535,7 +323,7 @@ function Step2(props) {
           onChange={props.setZipCode} // Prop: Puts data into state
         />
       </div>
-      <button type="submit">Submit form</button>
+      <button type='submit'>Submit form</button>
     </>
   );
 }
