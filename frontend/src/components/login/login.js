@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { login, useAuth } from "../../services";
 
+import logo from "../../images/logo.png";
+
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -55,7 +57,7 @@ export default function Login() {
   return (
     <>
       <div className='full-logo'>
-        <img src='images/logo.png' alt='full logo' />
+        <img src={logo} alt='full logo' />
       </div>
 
       <div className='auth'>

@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 
 import { completeRegistration } from "../../services";
 
+import logo from "../../images/logo.png";
+import imagePlaceholder from "../../images/icons/add-photo.svg";
+
 const initialFormState = {
   tagIdMessage: "",
   tagIdIsValid: false,
@@ -122,27 +125,12 @@ export default function RegisterTagForm() {
       .then((res) => res.json())
       .then((res) => console.log(res))
       .catch((e) => console.error(e));
-    // console.log(`Submitted data:`, {
-    //   currentStep: currentStep,
-    //   tagId: tagId,
-    //   tagName: tagName,
-    //   tagImage: tagImage,
-    //   firstName: firstName,
-    //   lastName: lastName,
-    //   phone: phone,
-    //   email: email,
-    //   address: address,
-    //   city: city,
-    //   country: country,
-    //   zipCode: zipCode,
-    //   userState: userState,
-    // });
   };
 
   return (
     <>
       <div className='full-logo'>
-        <img src='images/logo.png' alt='full logo' />
+        <img src={logo} alt='full logo' />
       </div>
 
       <ul className='breadcrumbs'>
@@ -161,7 +149,7 @@ export default function RegisterTagForm() {
             <div className='register-item__box'>
               <div className='register-item__img'>
                 <span>Add an Image</span>
-                <img src='images/icons/add-photo.svg' alt='img' />
+                <img src={imagePlaceholder} alt='img' />
               </div>
 
               <label className='register-item__label'>
