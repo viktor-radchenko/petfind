@@ -33,9 +33,6 @@ export default function Login() {
     })
       .then((r) => r.json())
       .then((token) => {
-        if (!token.ok) {
-          throw new Error(token.message);
-        }
         if (token.access_token) {
           login(token);
           console.log(token);
