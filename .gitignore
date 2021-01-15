@@ -3,6 +3,7 @@ __pycache__/
 env/
 .venv/
 .pytest_cache/
+app/static/tag_pics/*
 
 # ignore files
 .flaskenv

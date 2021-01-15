@@ -1,0 +1,18 @@
+Dear {{ user.username }},
+
+Welcome to PetFind App!
+
+To confirm your account please click on the following link:
+
+{{ url_for('auth.test_verify', token=token, _external=True) }}
+
+Your temporary password is:
+{{ password }}
+
+NOTE! Do not share this password with anybody. You will be prompted to update it before completing registration.
+
+Sincerely,
+
+The PetFind App Team
+
+Note: replies to this email address are not monitored.

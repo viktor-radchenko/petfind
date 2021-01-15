@@ -1,40 +1,61 @@
 from datetime import datetime
 
 from flask_login import UserMixin, AnonymousUserMixin
-from sqlalchemy.ext.hybrid import hybrid_property
-from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db
 from app.models.utils import ModelMixin
+from app.logger import log
 
 
 class User(db.Model, UserMixin, ModelMixin):
 
-    __tablename__ = 'users'
+    __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(60), unique=True, nullable=False)
-    email = db.Column(db.String(255), unique=True, nullable=False)
-    password_hash = db.Column(db.String(255), nullable=False)
+    first_name = db.Column(db.String(64))
+    last_name = db.Column(db.String(64))
+    email = db.Column(db.String(64), unique=True)
+    password = db.Column(db.String(256))
+    phone = db.Column(db.String(32), unique=True)
+    address = db.Column(db.Text)
+    city = db.Column(db.String(64))
+    country = db.Column(db.String(64))
+    state = db.Column(db.String(64))
+    zip_code = db.Column(db.String(16))
+    roles = db.Column(db.Text, default='user')
     activated = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, default=datetime.now)
+    created_on = db.Column(db.DateTime, default=datetime.now)
+    tags = db.relationship("RegisteredTag", lazy=True)
 
-    @hybrid_property
-    def password(self):
-        return self.password_hash
+    @property
+    def username(self):
+        return f'{self.first_name} {self.last_name}'
 
-    @password.setter
-    def password(self, password):
-        self.password_hash = generate_password_hash(password)
+    @property
+    def rolenames(self):
+        try:
+            return self.roles.split(',')
+        except Exception:
+            return []
 
     @classmethod
-    def authenticate(cls, user_id, password):
-        user = cls.query.filter(db.or_(cls.username == user_id, cls.email == user_id)).first()
-        if user is not None and check_password_hash(user.password, password):
-            return user
+    def lookup(cls, username):
+        log(log.DEBUG, '[Looking up username %s]', username)
+        return cls.query.filter_by(email=username).one_or_none()
+
+    @classmethod
+    def identify(cls, id):
+        return cls.query.get(id)
+
+    @property
+    def identity(self):
+        return self.id
+
+    def is_valid(self):
+        return self.activated
 
     def __str__(self):
-        return '<User: %s>' % self.username
+        return '<User: %s %s>' % self.first_name, self.last_name
 
 
 class AnonymousUser(AnonymousUserMixin):

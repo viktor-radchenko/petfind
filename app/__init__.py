@@ -3,11 +3,17 @@ import os
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_mail import Mail
+from flask_praetorian import Praetorian
+from flask_cors import CORS
 from werkzeug.exceptions import HTTPException
 
 # instantiate extensions
 login_manager = LoginManager()
+guard = Praetorian()
+cors = CORS()
 db = SQLAlchemy()
+mail = Mail()
 
 
 def create_app(environment='development'):
@@ -16,6 +22,7 @@ def create_app(environment='development'):
     from app.views import (
         main_blueprint,
         auth_blueprint,
+        tag_blueprint
     )
     from app.models import (
         User,
@@ -30,13 +37,26 @@ def create_app(environment='development'):
     app.config.from_object(config[env])
     config[env].configure(app)
 
+    # Set JWT lifespan
+    # TODO: set proper lifespan before putting in production
+    app.config['JWT_ACCESS_LIFESPAN'] = {'minutes': 1}
+    app.config['JWT_REFRESH_LIFESPAN'] = {'days': 3}
+    guard.init_app(app, User)
+
     # Set up extensions.
     db.init_app(app)
     login_manager.init_app(app)
 
+    # Initialise CORS
+    cors.init_app(app)
+
+    # Initialise email
+    mail.init_app(app)
+
     # Register blueprints.
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(main_blueprint)
+    app.register_blueprint(tag_blueprint)
 
     # Set up flask login.
     @login_manager.user_loader
