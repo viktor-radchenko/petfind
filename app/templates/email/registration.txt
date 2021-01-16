@@ -1,4 +1,4 @@
-Dear {{ user.username }},
+Dear {{ user.full_name }},
 
 Welcome to PetFind App!
 

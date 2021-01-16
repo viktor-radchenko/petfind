@@ -580,7 +580,7 @@ body {
   position: absolute;
   content: '';
   background-image: url("images/icons/gold-key.svg");
-  top: 4px;
+  top: 13px;
   left: 0;
   width: 20px;
   height: 10px;
@@ -609,18 +609,25 @@ body {
 
 .password-notify__link {
   font-size: 16px;
-  -webkit-text-decoration-line: underline;
-          text-decoration-line: underline;
   color: #FE4A59;
   outline: transparent;
+  border: none;
+  padding: none;
+  background: none;
+  cursor: pointer;
+  transition: all 0.1s;
 }
 
 .password-notify__link:focus {
   color: #fd0015;
+  -webkit-text-decoration-line: underline;
+          text-decoration-line: underline;
 }
 
 .password-notify__link:hover {
   color: #fd0015;
+  -webkit-text-decoration-line: underline;
+          text-decoration-line: underline;
 }
 
 @media (max-width: 600px) {

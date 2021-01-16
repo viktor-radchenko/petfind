@@ -25,4 +25,4 @@ def protected():
        $ curl http://localhost:5000/api/protected -X GET \
          -H "Authorization: Bearer <your_token>"
     """
-    return {'message': f'protected endpoint (allowed user {current_user().username})'}
+    return {'message': f'protected endpoint (allowed user {current_user().full_name})'}

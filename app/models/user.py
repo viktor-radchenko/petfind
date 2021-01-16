@@ -28,7 +28,7 @@ class User(db.Model, UserMixin, ModelMixin):
     tags = db.relationship("RegisteredTag", lazy=True)
 
     @property
-    def username(self):
+    def full_name(self):
         return f'{self.first_name} {self.last_name}'
 
     @property
