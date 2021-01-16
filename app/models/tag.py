@@ -1,8 +1,9 @@
 from datetime import datetime
+import string
+import random
 
 from app import db
 from app.models.utils import ModelMixin
-from app.controllers import tag_id_generator
 
 
 class Tag(db.Model, ModelMixin):
@@ -20,3 +21,7 @@ class Tag(db.Model, ModelMixin):
 
     def __str__(self):
         return '<Tag: %s' % self.tag_id
+
+    @staticmethod
+    def tag_id_generator(size=6, chars=string.ascii_uppercase + string.digits):
+        return ''.join(random.choice(chars) for _ in range(size))

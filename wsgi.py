@@ -3,7 +3,8 @@ import os
 import click
 
 from app import create_app, db, models, forms, guard
-from app.models import User, Tag
+from app.models import User, Tag, MessageQueue
+from app.controllers import MessageSender
 
 app = create_app()
 
@@ -66,6 +67,15 @@ def create_db():
 def drop_db():
     """Drop the current database."""
     db.drop_all()
+
+
+@app.cli.command()
+def send_messages():
+    """Activate Message Queue manager and send SMS/email messages"""
+    messages = MessageQueue.query.filter_by(sent=False).all()
+    sender = MessageSender(messages)
+    sender.prepare_messages()
+    sender.send_messages()
 
 
 if __name__ == "__main__":

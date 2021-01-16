@@ -1,4 +1,3 @@
-import pendulum
 import secrets
 
 from flask import request, Blueprint, jsonify
@@ -6,7 +5,9 @@ from flask import request, Blueprint, jsonify
 from app import guard, db
 from app.logger import log
 from app.models import User, RegisteredTag
-from app.controllers import send_registration_email, save_picture
+from app.controllers import save_picture
+from app.models import MessageQueue
+
 
 auth_blueprint = Blueprint("auth", __name__)
 
@@ -89,33 +90,18 @@ def register():
         new_tag.tag_image = picture_file
 
     db.session.add(new_tag)
-    db.session.commit()
-    # app = current_app._get_current_object()
-    # guard.send_registration_email(email, user=new_user,
-    #                                     confirmation_sender=app.config['MAIL_USERNAME'],
-    #                                     subject='User Registration')
-    token = guard.encode_jwt_token(
-        new_user,
-        override_access_lifespan=pendulum.duration(days=1),
-        bypass_user_check=True,
-        is_registration_token=True,
-    )
-    send_registration_email(
-        to=new_user.email,
-        subject="Confirm Your Account",
-        template="email/registration",
-        user=new_user,
-        password=temp_user_password,
-        token=token,
-    )
-    response = {
-        "message": "successfully sent registration email to user {}".format(
-            new_user.username
-        ),
-        "token": token
-    }
 
-    return jsonify(response)
+    new_message = MessageQueue(
+        recipient_id=new_user.id,
+        message_type=MessageQueue.MessageType.registration_email,
+        temp_data=temp_user_password
+    )
+    db.session.add(new_message)
+    db.session.commit()
+    response = {
+        "confirmed": True
+    }
+    return jsonify(response), 200
 
 
 @auth_blueprint.route('/auth/set-password/<token>', methods=['GET'])
@@ -180,8 +166,28 @@ def refresh():
        $ curl http://localhost:5000/api/refresh -X GET \
          -H "Authorization: Bearer <your_token>"
     """
-    print("refresh request")
     old_token = request.get_data()
     new_token = guard.refresh_jwt_token(old_token)
     response = {"access_token": new_token}
     return response, 200
+
+
+@auth_blueprint.route("/api/auth/resend-registration-email", methods=["POST"])
+def resend_email():
+    req = request.get_json(force=True)
+    email = req.get("email", None)
+    user = User.query.filter_by(email=email).first_or_404()
+    if user.activated:
+        response = {"error": "User is already activated. Please log in"}
+        return jsonify(response), 401
+    temp_user_password = secrets.token_urlsafe(8)
+    user.password = guard.hash_password(temp_user_password)
+    user.save()
+    new_message = MessageQueue(
+        recipient_id=user.id,
+        message_type=MessageQueue.MessageType.registration_email,
+        temp_data=temp_user_password
+    )
+    new_message.save()
+    response = {"message": "Activation email succesfully sent. Check your inbox."}
+    return jsonify(response), 200

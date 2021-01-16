@@ -81,8 +81,7 @@ export default function RegisterTagForm() {
           field: "tagIdMessage",
           value: res,
         });
-        if (res === "Confirmed") {
-          console.log(`${res} is confirmed`);
+        if (res === "Available") {
           dispatch({
             field: "tagIdIsValid",
             value: true,
@@ -123,8 +122,28 @@ export default function RegisterTagForm() {
       userState
     )
       .then((res) => res.json())
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+        if (res.confirmed) {
+          dispatch({
+            field: "currentStep",
+            value: 3,
+          });
+        }
+      })
       .catch((e) => console.error(e));
+  };
+
+  const resendRegistrationEmail = (e) => {
+    e.preventDefault();
+    console.log("RESENDING EMAIL");
+    // let opts = {
+    //   email: email,
+    // };
+    // fetch("/api/auth/resend-registration-email", {
+    //   method: "post",
+    //   body: JSON.stringify(opts),
+    // });
   };
 
   return (
@@ -133,10 +152,12 @@ export default function RegisterTagForm() {
         <img src={logo} alt='full logo' />
       </div>
 
-      <ul className='breadcrumbs'>
-        <li className='breadcrumbs__item breadcrumbs__item--active'>Register item</li>
-        <li className='breadcrumbs__item'>Create Account</li>
-      </ul>
+      {currentStep !== 3 ? (
+        <ul className='breadcrumbs'>
+          <li className='breadcrumbs__item breadcrumbs__item--active'>Register item</li>
+          <li className='breadcrumbs__item'>Create Account</li>
+        </ul>
+      ) : null}
 
       {currentStep === 1 && (
         <section className='register-item'>
@@ -336,6 +357,18 @@ export default function RegisterTagForm() {
               </span>
             </div>
           </form>
+        </section>
+      )}
+
+      {currentStep === 3 && (
+        <section className='password-notify'>
+          <span className='title password-notify__title'>Set your password</span>
+
+          <p className='password-notify__text'>You need to set a password. We have sent you a link at {email}.</p>
+
+          <button className='password-notify__link' onClick={resendRegistrationEmail}>
+            Resend Link
+          </button>
         </section>
       )}
 
