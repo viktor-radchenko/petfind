@@ -9,7 +9,7 @@ import imagePlaceholder from "../../images/icons/add-photo.svg";
 const initialFormState = {
   tagIdMessage: "",
   tagIdIsValid: false,
-  currentStep: 1,
+  currentStep: 3,
   tagId: "",
   tagName: "",
   tagImage: null,
@@ -133,10 +133,13 @@ export default function RegisterTagForm() {
         <img src={logo} alt='full logo' />
       </div>
 
+      {currentStep !== 3 ? 
       <ul className='breadcrumbs'>
         <li className='breadcrumbs__item breadcrumbs__item--active'>Register item</li>
         <li className='breadcrumbs__item'>Create Account</li>
-      </ul>
+      </ul> : 
+      null
+      }
 
       {currentStep === 1 && (
         <section className='register-item'>
@@ -336,6 +339,20 @@ export default function RegisterTagForm() {
               </span>
             </div>
           </form>
+        </section>
+      )}
+
+      {currentStep === 3 && (
+        <section className='password-notify'>
+          <span className='title password-notify__title'>Set your password</span>
+
+          <p className='password-notify__text'>
+            You need to set a password, we have sent you a link at riya1995jain@gmail.com.
+          </p>
+
+          <Link className='password-notify__link' to='#'>
+            Resend Link
+          </Link>
         </section>
       )}
 

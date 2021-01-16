@@ -21,21 +21,18 @@ export default function Login() {
 
   const onSubmitClick = (e) => {
     e.preventDefault();
-    console.log("You pressed login");
     let opts = {
       username: username,
       password: password,
     };
-    console.log(opts);
     fetch("/api/auth/login", {
       method: "post",
       body: JSON.stringify(opts),
     })
-      .then((r) => r.json())
-      .then((token) => {
-        if (token.access_token) {
-          login(token);
-          console.log(token);
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.access_token) {
+          login(res);
         } else {
           console.log("Please type in correct username/password");
         }
