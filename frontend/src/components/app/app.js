@@ -12,12 +12,14 @@ import PrivateRoute from "../hoc";
 
 import "./app.css";
 
+const _geolocationDbKey = process.env.GEOLOCATION_DB_KEY || "";
+
 export default function App() {
   const [location, setLocation] = useState(null);
   console.log(location);
 
   const fetchLocation = async () => {
-    return await fetch("https://geolocation-db.com/json/c0593a60-4159-11eb-80cd-db15f946225f")
+    return await fetch(`https://geolocation-db.com/json/${_geolocationDbKey}`)
     .then((res) => res.json())
   }
   useEffect(() => {
