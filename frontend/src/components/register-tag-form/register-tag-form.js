@@ -43,7 +43,6 @@ export default function RegisterTagForm() {
     tagId,
     tagName,
     tagImage,
-    tagThumbnail,
     firstName,
     lastName,
     phone,

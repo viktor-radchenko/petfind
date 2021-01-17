@@ -27,6 +27,15 @@ class User(db.Model, UserMixin, ModelMixin):
     created_on = db.Column(db.DateTime, default=datetime.now)
     tags = db.relationship("RegisteredTag", lazy=True)
 
+    def to_json(self):
+        return {
+            "id": self.id,
+            "full_name": self.full_name,
+            "phone": self.phone,
+            "email": self.email,
+            "address": f"{self.address}, {self.city}, {self.state}, {self.zip_code}, {self.country}"
+        }
+
     @property
     def full_name(self):
         return f'{self.first_name} {self.last_name}'

@@ -1,5 +1,8 @@
 import { createAuthProvider } from "react-token-auth";
 
+const _geolocationDbKey = process.env.GEOLOCATION_DB_KEY || "";
+
+
 export const [useAuth, authFetch, login, logout] = createAuthProvider({
   accessTokenKey: "access_token",
   onUpdateToken: (token) =>
@@ -42,3 +45,15 @@ export const completeRegistration = async (
     body: formData,
   });
 };
+
+export const fetchLocation = async () => {
+  return await fetch(`https://geolocation-db.com/json/${_geolocationDbKey}`).then((res) => res.json());
+};
+
+export const lookUpTagId = async (tagId, location) => {
+  return await fetch (`/api/registered-tag/${tagId}`, {
+    method: "post",
+    body: JSON.stringify(location),
+  })
+    .then(res => res.json())
+}
