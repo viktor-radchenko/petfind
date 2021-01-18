@@ -10,6 +10,7 @@ import Dasboard from "../dashboard";
 import SetPassword from "../set-password";
 import RegisterTagForm from "../register-tag-form";
 import Footer from "../footer";
+import DashboardTable from "../dashboard-table";
 import PrivateRoute from "../hoc";
 
 import "./app.css";
@@ -94,6 +95,9 @@ export default function App() {
           </Route>
           <Route path='/auth/set-password/:token'>
             <SetPassword />
+          </Route>
+          <Route path='/dashboard-table'>
+            <DashboardTable />
           </Route>
           <PrivateRoute path='/dashboard' component={Dasboard} />
           <Route path='/'>

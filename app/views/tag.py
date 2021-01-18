@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_praetorian import auth_required, current_user
 
 from app.models import Tag, RegisteredTag, User, Search
 
@@ -46,3 +47,12 @@ def registered_lookup(tag_id):
         "user": user.to_json()
     }
     return jsonify(response), 200
+
+
+@tag_blueprint.route('/api/registered_tags/details')
+@auth_required
+def get_registered_tags():
+    tags = [tag.to_json() for tag in RegisteredTag.query.filter_by(user_id=current_user().id).all()]
+    if not tags:
+        return {"message": "No tags found"}
+    return jsonify(tags), 200
