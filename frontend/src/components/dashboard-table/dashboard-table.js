@@ -8,10 +8,13 @@ import "./dashboard-table.css";
 
 export default function DashboardTable() {
   const [tableData, setTableData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowPerPage, setRowPerPage] = useState(8);
+  const [filter, setFilter] = useState("");
 
+  // Populate table with authFetch for current user
   useEffect(() => {
     const fetchTableData = () => {
       setLoading(true);
@@ -27,6 +30,17 @@ export default function DashboardTable() {
     fetchTableData().then((res) => setTableData(res));
   }, []);
 
+  useEffect(() => {
+    if (tableData.length > 1) {
+      const results = tableData.filter(
+        (tag) => tag.tag_name.toLowerCase().includes(filter) || tag.tag_id.toLowerCase().includes(filter)
+      );
+      setFilteredData(results);
+    } else {
+      setFilteredData(tableData);
+    }
+  }, [filter, tableData]);
+
   const paginate = (page) => {
     setCurrentPage(page);
   };
@@ -37,26 +51,53 @@ export default function DashboardTable() {
   };
 
   const nextPage = () => {
-    if (currentPage + 1 > Math.ceil(tableData.length / rowPerPage)) return;
+    if (currentPage + 1 > Math.ceil(filteredData.length / rowPerPage)) return;
     setCurrentPage(currentPage + 1);
   };
 
-  // Get current posts
+  const handleFilter = (e) => {
+    setFilter(e.target.value.toLowerCase());
+  };
 
+  // Get current posts
   const indexOfLastRow = currentPage * rowPerPage;
   const indexOfFirstRow = indexOfLastRow - rowPerPage;
-  const currentRows = tableData.slice(indexOfFirstRow, indexOfLastRow);
-
-  console.log(currentRows);
+  const currentRows = filteredData.slice(indexOfFirstRow, indexOfLastRow)
 
   return (
-    <div>
-      <div className='table__header'></div>
-      <TableRows rows={currentRows} loading={loading} />
-      <div className='table__footer'>
+    <div className='dashboard__inner'>
+      <div className='dashboard__box'>
+        <button className='burger-btn'>Burger Button</button>
+        <span className='title dashboard__title'>Dashboard</span>
+      </div>
+
+      <form className='dashboard__search'>
+        <input
+          className='input dashboard__input'
+          type='text'
+          placeholder='Search by tag ID, name'
+          value={filter}
+          onChange={handleFilter}
+        />
+        <button className='button dashboard__btn'>Add New Tag</button>
+      </form>
+
+      <div class='table'>
+        <div class='table__header'>
+          <div class='table__item-img'></div>
+          <div class='table__item-tag table__item-tag--title'>tag id</div>
+          <div class='table__item-name'>item name</div>
+          <div class='table__item-email'>email</div>
+          <div class='table__item-number'>number</div>
+          <div class='table__item-address'>address</div>
+          <div class='table__item-state table__item-state--title'>state</div>
+          <div class='table__item-actions'>actions</div>
+        </div>
+
+        <TableRows rows={currentRows} loading={loading} />
         <TablePagination
           rowPerPage={rowPerPage}
-          totalRows={tableData.length}
+          totalRows={filteredData.length}
           paginate={paginate}
           currentPage={currentPage}
           previousPage={previousPage}

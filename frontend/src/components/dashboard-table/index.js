@@ -1,3 +1,3 @@
-import DashBoardTable from './dashboard-table';
+import DashboardTable from './dashboard-table';
 
-export default DashBoardTable;
+export default DashboardTable;

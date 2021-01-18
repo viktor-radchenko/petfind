@@ -28,9 +28,9 @@ export default function TableRows({ rows, loading }) {
   };
 
   return (
-    <ul className='table'>
+    <ul className='table__content'>
       {rows.map((row) => (
-        <li key={row.tag_id} className='table__item'>
+        <li key={row.tag_id} className='table__row'>
           <div className='table__item-img'>
             <img src={icon} alt='pet' />
           </div>

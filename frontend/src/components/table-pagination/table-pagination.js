@@ -8,7 +8,7 @@ export default function TablePagination({ rowPerPage, totalRows, paginate, curre
   }
 
   return (
-    <div className='table__bottom'>
+    <div className='table__footer'>
       <div className='pagination'>
         <button className='pagination__arrow pagination__arrow--left' onClick={() => previousPage()}></button>
         <ul className='pagination__list'>
