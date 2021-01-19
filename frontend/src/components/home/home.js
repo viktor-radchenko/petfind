@@ -38,9 +38,7 @@ export default function Home() {
 
             </div>
 
-            <div className='connect__img'>
-              <img src={headerBg} alt='found my pet' />
-            </div>
+            <div className='connect__img'></div>
           </div>
         </div>
       </section>
