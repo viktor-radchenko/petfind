@@ -4,7 +4,7 @@ Welcome to PetFind App!
 
 To confirm your account please click on the following link:
 
-{{ url_for('auth.test_verify', token=token, _external=True) }}
+{{ callback_url }}
 
 Your temporary password is:
 {{ password }}
