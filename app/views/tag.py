@@ -7,7 +7,7 @@ from app.controllers import save_picture
 tag_blueprint = Blueprint('tag', __name__)
 
 
-@tag_blueprint.route('/api/tag/<tag_id>')
+@tag_blueprint.route('/api/tag-id-lookup/<tag_id>')
 def lookup(tag_id):
     tag = Tag.query.get(tag_id)
     if not tag:
