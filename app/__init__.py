@@ -39,8 +39,8 @@ def create_app(environment='development'):
 
     # Set JWT lifespan
     # TODO: set proper lifespan before putting in production
-    app.config['JWT_ACCESS_LIFESPAN'] = {'minutes': 1}
-    app.config['JWT_REFRESH_LIFESPAN'] = {'days': 3}
+    app.config['JWT_ACCESS_LIFESPAN'] = {'days': 1}
+    app.config['JWT_REFRESH_LIFESPAN'] = {'days': 7}
     guard.init_app(app, User)
 
     # Set up extensions.

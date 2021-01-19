@@ -87,7 +87,7 @@ export default function TableRows({ rows, loading, handleUpdate }) {
                 <span className='switch__slider'></span>
               </label>
               <div>
-              {row.is_private && <span class="table__item-state--block"></span>}
+              {row.is_private && <span className="table__item-state--block"></span>}
               </div>
             </div>
             <form className='table__item-actions'>

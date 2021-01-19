@@ -98,10 +98,10 @@ export default function ModalEditTag({ data }) {
             </label>
           </div>
 
-          <div class='edit-tag__tag'>
-            <div class='table__item-tag table__item-tag--title edit-tag__title'>Tag ID</div>
+          <div className='edit-tag__tag'>
+            <div className='table__item-tag table__item-tag--title edit-tag__title'>Tag ID</div>
 
-            <div class='table__item-tag edit-tag__name'>{tagId}</div>
+            <div className='table__item-tag edit-tag__name'>{tagId}</div>
           </div>
 
           <label className='label edit-tag__label'>

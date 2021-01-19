@@ -26,7 +26,6 @@ function reducer(state, { field, value }) {
 }
 
 export default function ModalAddTag() {
-  const [userData, setUserData] = useState();
   const [state, dispatch] = useReducer(reducer, initialFormState);
 
   const {
@@ -45,18 +44,6 @@ export default function ModalAddTag() {
   } = state;
   console.log("Moda state:", state);
 
-  const updateInitialState = (data) => {
-    return {
-      phone: data.phone,
-      email: data.email,
-      address: data.address,
-      city: data.city,
-      country: data.country,
-      zipCode: data.zip_code,
-      userState: data.state,
-    };
-  };
-
   useEffect(() => {
     authFetch("/api/auth/get_user_data")
       .then((response) => {
@@ -66,16 +53,51 @@ export default function ModalAddTag() {
         }
         return response.json();
       })
-      .then((response) => setUserData(response));
-    // const new_data = updateInitialState(userData);
-    console.log("Prepared user data for state", userData);
-    // for (const property in new_data) {
-    //   dispatch({
-    //     field: property,
-    //     value: new_data[property],
-    //   });
-    // }
+      .then((response) => {
+        const new_state = {
+          phone: response.phone,
+          email: response.email,
+          address: response.address,
+          city: response.city,
+          country: response.country,
+          zipCode: response.zip_code,
+          userState: response.state,
+        };
+
+        for (const property in new_state) {
+          dispatch({
+            field: property,
+            value: new_state[property],
+          });
+        }
+      });
   }, []);
+
+  // Validate tagId
+  useEffect(() => {
+    if (tagId.length === 6) {
+      const fetchTagId = async () => {
+        return await fetch(`/api/tag-id-lookup/${tagId.toUpperCase()}`)
+          .then((res) => res.json())
+          .then((res) => res.message);
+      };
+      fetchTagId().then((res) => {
+        dispatch({
+          field: "tagIdMessage",
+          value: res,
+        });
+        if (res === "Available") {
+          dispatch({
+            field: "tagIdIsValid",
+            value: true,
+          });
+        }
+      });
+    } else {
+      dispatch({ field: "tagIdIsValid", value: false });
+      dispatch({ field: "tagIdMessage", value: "" });
+    }
+  }, [tagId]);
 
   const onChange = (e) => {
     dispatch({

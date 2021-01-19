@@ -96,7 +96,7 @@ export default function DashboardTable() {
         </div>
 
         <form className='dashboard__search'>
-          <div class='dashboard__form'>
+          <div className='dashboard__form'>
             <input
               className='input dashboard__input'
               type='text'
@@ -105,7 +105,7 @@ export default function DashboardTable() {
               onChange={handleFilter}
             />
             {filter && (
-              <button onClick={handleClearFilter} class='dashboard__input--clear' type='button'>
+              <button onClick={handleClearFilter} className='dashboard__input--clear' type='button'>
                 clear
               </button>
             )}
