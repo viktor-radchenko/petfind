@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from 'react-router-dom';
 
+import TagForm from '../tag-form';
+
 import videoPlaceholder from "../../images/video.jpg";
 import headerBg from "../../images/main-img.png";
 import tagImg from "../../images/tag-img.jpg";
@@ -30,16 +32,10 @@ export default function Home() {
               </div>
 
               <span className='connect__subtitle'>Found a Lost item?</span>
-
               <span className='connect__label'>Enter the unique code on the back of the tag</span>
 
-              <div className='id-form'>
-                <input className='id-form__input' type='text' placeholder='Enter Tag ID' />
+              <TagForm />
 
-                <button className='id-form__btn id-form__btn--search' type='submit'>
-                  Search the owner
-                </button>
-              </div>
             </div>
 
             <div className='connect__img'>

@@ -15,6 +15,9 @@ class Tag(db.Model, ModelMixin):
     created_on = db.Column(db.DateTime, default=datetime.now)
 
     def __init__(self, tag_id=None):
+        def tag_id_generator(size=6, chars=string.ascii_uppercase + string.digits):
+            return ''.join(random.choice(chars) for _ in range(size))
+        
         self.tag_id = tag_id
         if not self.tag_id:
             self.tag_id = tag_id_generator()
@@ -22,6 +25,3 @@ class Tag(db.Model, ModelMixin):
     def __str__(self):
         return '<Tag: %s' % self.tag_id
 
-    @staticmethod
-    def tag_id_generator(size=6, chars=string.ascii_uppercase + string.digits):
-        return ''.join(random.choice(chars) for _ in range(size))

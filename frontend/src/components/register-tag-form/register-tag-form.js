@@ -170,7 +170,7 @@ export default function RegisterTagForm() {
             <div className='register-item__box'>
               <div className='register-item__img'>
                 <span>Add an Image</span>
-                <img src={imagePlaceholder} alt='img' />
+                <img src={tagImage ? URL.createObjectURL(tagImage) : imagePlaceholder} alt='img' />
               </div>
 
               <label className='register-item__label'>
