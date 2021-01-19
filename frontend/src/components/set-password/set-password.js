@@ -75,8 +75,8 @@ export default function SetPassword() {
           </button>
         </form>
       </section>
-      <div classN="go-home">
-        <small><Link classN="go-home__link" to="/">Cancel  and back to home</Link></small>
+      <div className="go-home">
+        <small><Link className="go-home__link" to="/">Cancel  and back to home</Link></small>
       </div>
     </>
   );

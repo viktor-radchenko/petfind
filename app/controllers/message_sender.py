@@ -63,12 +63,22 @@ class MessageSender:
             bypass_user_check=True,
             is_registration_token=True,
         )
-        callback_url = f"http://{current_app.config['SERVER_NAME']}/auth/set_password/{token}"
+        callback_url = (
+            f"http://{current_app.config['SERVER_NAME']}/auth/set_password/{token}"
+        )
         msg_body = render_template(
-            template + ".txt", user=recipient, password=message.temp_data, token=token, callback_url=callback_url
+            template + ".txt",
+            user=recipient,
+            password=message.temp_data,
+            token=token,
+            callback_url=callback_url,
         )
         msg_html = render_template(
-            template + ".html", user=recipient, password=message.temp_data, token=token, callback_url=callback_url
+            template + ".html",
+            user=recipient,
+            password=message.temp_data,
+            token=token,
+            callback_url=callback_url,
         )
         email_template = {
             "To": [{"Email": recipient.email, "Name": recipient.full_name}],

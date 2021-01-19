@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import TagForm from '../tag-form';
 
 import videoPlaceholder from "../../images/video.jpg";
-import headerBg from "../../images/main-img.png";
 import tagImg from "../../images/tag-img.jpg";
 
 export default function Home() {
