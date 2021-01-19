@@ -23,11 +23,11 @@ export function useAppContext() {
 
 const initialState = {
   location: null,
-  foundOwnerModal: false,
-  contactOwnerModal: false,
-  editTagModal: false,
-  deleteTagModal: false,
-  addTagModal: false
+  foundOwnerModal: {isOpen: false, data: []},
+  contactOwnerModal: {isOpen: false, data: []},
+  editTagModal: {isOpen: false, data: []},
+  deleteTagModal: {isOpen: false, data: []},
+  addTagModal: {isOpen: false, data: []}
 };
 
 function reducer(state, action) {

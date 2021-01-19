@@ -28,9 +28,9 @@ export default function Dasboard() {
     <section className='dashboard'>
       <DashboardSidebar />
       <div className='dashboard__content'>
-        <div className='dashboard__inner'>
-          <DashboardTable />
-        </div>
+        
+        <DashboardTable />
+        
         <div className='buy-tags'>
           <div className='buy-tags__top'>
             <span className='title buy-tags__title'>Buy Tags</span>

@@ -2,7 +2,6 @@ import { createAuthProvider } from "react-token-auth";
 
 const _geolocationDbKey = process.env.GEOLOCATION_DB_KEY || "";
 
-
 export const [useAuth, authFetch, login, logout] = createAuthProvider({
   accessTokenKey: "access_token",
   onUpdateToken: (token) =>
@@ -51,9 +50,29 @@ export const fetchLocation = async () => {
 };
 
 export const lookUpTagId = async (tagId, location) => {
-  return await fetch (`/api/registered-tag/${tagId}`, {
+  return await fetch(`/api/registered_tag/${tagId}`, {
     method: "post",
     body: JSON.stringify(location),
-  })
-    .then(res => res.json())
-}
+  }).then((res) => res.json());
+};
+
+export const updateRegisteredTag = async (tagId, options) => {
+  console.log('Parsing options:', options);
+  const formData = new FormData();
+  formData.append("tag_name", options.tagName);
+  formData.append("tag_image", options.tagImage);
+  formData.append("phone", options.phone);
+  formData.append("email", options.email);
+  formData.append("address", options.address);
+  formData.append("city", options.city);
+  formData.append("country", options.country);
+  formData.append("zip_code", options.zipCode);
+  formData.append("state", options.tagState);
+  formData.append("status", options.tagStatus);
+  formData.append("is_private", options.isPrivate);
+
+  return await fetch(`/api/registered_tag/modify/${tagId}`, {
+    method: "POST",
+    body: formData,
+  });
+};

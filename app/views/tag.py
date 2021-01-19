@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_praetorian import auth_required, current_user
 
 from app.models import Tag, RegisteredTag, User, Search
+from app.controllers import save_picture
 
 tag_blueprint = Blueprint('tag', __name__)
 
@@ -19,7 +20,7 @@ def lookup(tag_id):
     }, 200
 
 
-@tag_blueprint.route('/api/registered-tag/<tag_id>', methods=['POST'])
+@tag_blueprint.route('/api/registered_tag/<tag_id>', methods=['POST'])
 def registered_lookup(tag_id):
     tag = RegisteredTag.query.get(tag_id)
     location = request.get_json(force=True)
@@ -49,10 +50,30 @@ def registered_lookup(tag_id):
     return jsonify(response), 200
 
 
-@tag_blueprint.route('/api/registered_tags/details')
+@tag_blueprint.route('/api/registered_tag/details')
 @auth_required
 def get_registered_tags():
     tags = [tag.to_json() for tag in RegisteredTag.query.filter_by(user_id=current_user().id).all()]
     if not tags:
         return {"message": "No tags found"}
     return jsonify(tags), 200
+
+
+@tag_blueprint.route('/api/registered_tag/modify/<tag_id>', methods=['POST'])
+# @auth_required
+def modify_tag(tag_id):
+    tag = RegisteredTag.query.get_or_404(tag_id)
+
+    tag_image = request.files.get("tagImage")
+    if tag_image:
+        picture_file = save_picture(tag_image)
+        tag.tag_image = picture_file
+
+    for key, value in request.form.items():
+        if key == "is_private":
+            value = request.form.get(key) == 'true'
+            setattr(tag, key, value)
+        if value != "undefined":
+            setattr(tag, key, value)
+    tag.save()
+    return jsonify(tag.to_json()), 200
