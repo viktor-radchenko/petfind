@@ -60,11 +60,11 @@ def get_registered_tags():
 
 
 @tag_blueprint.route('/api/registered_tag/modify/<tag_id>', methods=['POST'])
-# @auth_required
+@auth_required
 def modify_tag(tag_id):
     tag = RegisteredTag.query.get_or_404(tag_id)
 
-    tag_image = request.files.get("tagImage")
+    tag_image = request.files.get("tag_image")
     if tag_image:
         picture_file = save_picture(tag_image)
         tag.tag_image = picture_file

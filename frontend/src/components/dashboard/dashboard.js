@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import DashboardTable from "../dashboard-table";
 import DashboardSidebar from "../dashboard-sidebar";
@@ -6,7 +6,6 @@ import DashboardSidebar from "../dashboard-sidebar";
 import "./dashboard.css";
 
 export default function Dasboard() {
-  const [message, setMessage] = useState("");
 
   // useEffect(() => {
   //   authFetch("/api/protected")

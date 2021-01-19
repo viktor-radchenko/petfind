@@ -71,7 +71,7 @@ export const updateRegisteredTag = async (tagId, options) => {
   formData.append("status", options.tagStatus);
   formData.append("is_private", options.isPrivate);
 
-  return await fetch(`/api/registered_tag/modify/${tagId}`, {
+  return await authFetch(`/api/registered_tag/modify/${tagId}`, {
     method: "POST",
     body: formData,
   });
