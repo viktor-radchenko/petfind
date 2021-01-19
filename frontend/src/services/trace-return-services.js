@@ -57,7 +57,6 @@ export const lookUpTagId = async (tagId, location) => {
 };
 
 export const updateRegisteredTag = async (tagId, options) => {
-  console.log('Parsing options:', options);
   const formData = new FormData();
   formData.append("tag_name", options.tagName);
   formData.append("tag_image", options.tagImage);
@@ -74,5 +73,12 @@ export const updateRegisteredTag = async (tagId, options) => {
   return await authFetch(`/api/registered_tag/modify/${tagId}`, {
     method: "POST",
     body: formData,
+  });
+};
+
+
+export const deleteRegisteredTag = async (tagId) => {
+  return await authFetch(`/api/registered_tag/delete/${tagId}`, {
+    method: "DELETE"
   });
 };

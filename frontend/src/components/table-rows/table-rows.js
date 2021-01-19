@@ -3,12 +3,14 @@ import { updateRegisteredTag } from "../../services";
 
 import ModalWrapper from "../modal-wrapper";
 import ModalEditTag from "../modal-edit-tag";
+import ModalDeleteTag from "../modal-delete-tag";
 
 import icon from "../../images/pet-avatar.jpg";
 
 export default function TableRows({ rows, loading, handleUpdate }) {
   const [rowState, setRowState] = useState({});
-  const modal = useRef(null);
+  const editModal = useRef(null);
+  const deleteModal = useRef(null);
 
   if (loading) {
     return <h1>LOADING...</h1>;
@@ -32,17 +34,19 @@ export default function TableRows({ rows, loading, handleUpdate }) {
       });
   };
   
-  const toggleModal = (e, row) => {
+  const toggleEditModal = (e, row) => {
     e.preventDefault();
     console.log("Sending row for editing", row);
     setRowState(row);
-    modal.current.open()
+    editModal.current.open()
   }
 
-  const handleDeleteBtn = (e, id) => {
+  const toggleDeleteModal = (e, row) => {
     e.preventDefault();
-    alert(`Delete button with tag ID "${id}" was clicked!`);
-  };
+    console.log("Sending row for deleting", row);
+    setRowState(row);
+    deleteModal.current.open()
+  }
 
   const handleStatusBtn = (e, row) => {
     e.preventDefault();
@@ -82,7 +86,9 @@ export default function TableRows({ rows, loading, handleUpdate }) {
                 />
                 <span className='switch__slider'></span>
               </label>
+              <div>
               {row.is_private && <span class="table__item-state--block"></span>}
+              </div>
             </div>
             <form className='table__item-actions'>
               <button
@@ -90,14 +96,14 @@ export default function TableRows({ rows, loading, handleUpdate }) {
                 className='table__item-btn table__item-btn--diagram'>
                 analytics
               </button>
-              <button onClick={(e) => toggleModal(e, row)} className='table__item-btn table__item-btn--edit'>
+              <button onClick={(e) => toggleEditModal(e, row)} className='table__item-btn table__item-btn--edit'>
                 edit
               </button>
               <button onClick={(e) => handlePrivateBtn(e, row)} className='table__item-btn table__item-btn--lock'>
                 lock
               </button>
               <button
-                onClick={(e) => handleDeleteBtn(e, row.tag_id)}
+                onClick={(e) => toggleDeleteModal(e, row)}
                 className='table__item-btn table__item-btn--delete'>
                 delete
               </button>
@@ -106,7 +112,10 @@ export default function TableRows({ rows, loading, handleUpdate }) {
           </li>
         ))}
       </ul>
-      <ModalWrapper header={"Edit tag"} ref={modal}>
+      <ModalWrapper header={"Delete tag"} ref={deleteModal}>
+        <ModalDeleteTag data={rowState} handleUpdate={handleUpdate}/>
+      </ModalWrapper>
+      <ModalWrapper header={"Edit tag"} ref={editModal}>
         <ModalEditTag data={rowState}/>
       </ModalWrapper>
     </>

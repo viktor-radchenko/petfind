@@ -53,7 +53,8 @@ def registered_lookup(tag_id):
 @tag_blueprint.route('/api/registered_tag/details')
 @auth_required
 def get_registered_tags():
-    tags = [tag.to_json() for tag in RegisteredTag.query.filter_by(user_id=current_user().id).all()]
+    user = current_user()
+    tags = [tag.to_json() for tag in user.tags if not tag.deleted]
     if not tags:
         return {"message": "No tags found"}
     return jsonify(tags), 200
@@ -63,6 +64,8 @@ def get_registered_tags():
 @auth_required
 def modify_tag(tag_id):
     tag = RegisteredTag.query.get_or_404(tag_id)
+    if tag.user_id != current_user().id:
+        return {"message": "You are not authorized to edit this tag"}, 401
 
     tag_image = request.files.get("tag_image")
     if tag_image:
@@ -75,5 +78,17 @@ def modify_tag(tag_id):
             setattr(tag, key, value)
         if value != "undefined":
             setattr(tag, key, value)
+    tag.save()
+    return jsonify(tag.to_json()), 200
+
+
+@tag_blueprint.route('/api/registered_tag/delete/<tag_id>', methods=['DELETE'])
+@auth_required
+def delete_tag(tag_id):
+    tag = RegisteredTag.query.get_or_404(tag_id)
+    if tag.user_id != current_user().id:
+        return {"message": "You are not authorized to delete this tag"}, 401
+
+    tag.deleted = True
     tag.save()
     return jsonify(tag.to_json()), 200

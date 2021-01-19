@@ -31,6 +31,7 @@ class RegisteredTag(db.Model, ModelMixin):
     available = db.Column(db.Boolean, default=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     searches = db.relationship("Search", lazy=True)
+    deleted = db.Column(db.Boolean, default=False)
     created_on = db.Column(db.DateTime, default=datetime.now)
 
     def to_json(self):

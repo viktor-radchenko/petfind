@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useReducer, useEffect } from "react";
 import { updateRegisteredTag } from "../../services";
 
 import imagePlaceholder from "../../images/icons/add-photo.svg";
@@ -71,18 +71,7 @@ export default function ModalEditTag({ data }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitting updated state", handleSubmit);
     updateRegisteredTag(tagId, state);
-    // tagName: data.tag_name,
-    // tagImage: data.tag_image,
-    // phone: data.phone,
-    // email: data.email,
-    // address: data.address,
-    // city: data.city,
-    // country: data.country,
-    // zipCode: data.zip_code,
-    // userState: data.state,
-    // })
   };
 
   return (
