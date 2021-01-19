@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
+import { authFetch } from '../../services';
 
 import DashboardTable from "../dashboard-table";
 import DashboardSidebar from "../dashboard-sidebar";
@@ -9,25 +10,23 @@ import merchImg from "../../images/tag-img.jpg";
 
 export default function Dasboard() {
 
-  // useEffect(() => {
-  //   authFetch("/api/protected")
-  //     .then((response) => {
-  //       if (response.status === 401) {
-  //         setMessage("Sorry you aren't authorized!");
-  //         return null;
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((response) => {
-  //       if (response && response.message) {
-  //         setMessage(response.message);
-  //       }
-  //     });
-  // }, []);
+  const [userData, setUserData] = useState();
+
+  useEffect(() => {
+    authFetch("/api/auth/get_user_data")
+      .then((response) => {
+        if (response.status === 401) {
+          console.error("Sorry you aren't authorized!");
+          return null;
+        }
+        return response.json();
+      })
+      .then((response) => setUserData(response));
+  }, []);
 
   return (
     <section className='dashboard'>
-      <DashboardSidebar />
+      {userData && <DashboardSidebar userData={userData} />}
       <div className='dashboard__content'>
         
         <DashboardTable />

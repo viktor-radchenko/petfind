@@ -13,7 +13,7 @@ export default function DashboardTable() {
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowPerPage, setRowPerPage] = useState(8);
+  const [rowPerPage] = useState(8);
 
   // Populate table with authFetch for current user
   useEffect(() => {

@@ -8,6 +8,7 @@ import {
   lookUpTagId,
   updateRegisteredTag,
   deleteRegisteredTag,
+  getUserData
 } from "./trace-return-services";
 
 export {
@@ -20,4 +21,5 @@ export {
   lookUpTagId,
   updateRegisteredTag,
   deleteRegisteredTag,
+  getUserData
 };

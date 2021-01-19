@@ -76,9 +76,12 @@ export const updateRegisteredTag = async (tagId, options) => {
   });
 };
 
-
 export const deleteRegisteredTag = async (tagId) => {
   return await authFetch(`/api/registered_tag/delete/${tagId}`, {
-    method: "DELETE"
+    method: "DELETE",
   });
+};
+
+export const getUserData = async () => {
+  return await authFetch(`/api/auth/get_user_data`);
 };

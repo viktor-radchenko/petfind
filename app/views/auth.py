@@ -1,6 +1,7 @@
 import secrets
 
 from flask import request, Blueprint, jsonify
+from flask_praetorian import auth_required, current_user
 
 from app import guard, db
 from app.logger import log
@@ -104,7 +105,7 @@ def register():
     return jsonify(response), 200
 
 
-@auth_blueprint.route('/auth/set-password/<token>', methods=['GET'])
+@auth_blueprint.route('/auth/set_password/<token>', methods=['GET'])
 def test_verify(token):
     return None
 
@@ -172,7 +173,7 @@ def refresh():
     return response, 200
 
 
-@auth_blueprint.route("/api/auth/resend-registration-email", methods=["POST"])
+@auth_blueprint.route("/api/auth/resend_registration_email", methods=["POST"])
 def resend_email():
     req = request.get_json(force=True)
     email = req.get("email", None)
@@ -191,3 +192,10 @@ def resend_email():
     new_message.save()
     response = {"message": "Activation email succesfully sent. Check your inbox."}
     return jsonify(response), 200
+
+
+@auth_blueprint.route("/api/auth/get_user_data")
+@auth_required
+def get_user_data():
+    user = current_user()
+    return jsonify(user.to_json()), 200
