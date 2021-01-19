@@ -29,7 +29,7 @@ class BaseConfig(object):
     PRAETORIAN_CONFIRMATION_URI = "http://localhost:5000/api/verify"
     MAIL_SUBJECT_PREFIX = "User Registration"
 
-    SERVER_NAME = 'localhost:5000'
+    # SERVER_NAME = 'localhost:5000'
 
     @staticmethod
     def configure(app):
