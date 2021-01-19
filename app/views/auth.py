@@ -105,11 +105,6 @@ def register():
     return jsonify(response), 200
 
 
-@auth_blueprint.route('/auth/set_password/<token>', methods=['GET'])
-def test_verify(token):
-    return None
-
-
 @auth_blueprint.route('/api/auth/verify', methods=['POST'])
 def verify():
     """
