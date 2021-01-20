@@ -76,6 +76,28 @@ export const updateRegisteredTag = async (tagId, options) => {
   });
 };
 
+export const addRegisteredTag = async (options) => {
+  console.log("Preparing state to add new tag", options);
+  const formData = new FormData();
+  formData.append("tag_id", options.tagId.toUpperCase());
+  formData.append("tag_name", options.tagName);
+  formData.append("tag_image", options.tagImage);
+  formData.append("phone", options.phone);
+  formData.append("email", options.email);
+  formData.append("address", options.address);
+  formData.append("city", options.city);
+  formData.append("country", options.country);
+  formData.append("zip_code", options.zipCode);
+  formData.append("state", options.userState);
+  formData.append("status", options.tagStatus);
+
+
+  return await authFetch(`/api/registered_tag/add_new`, {
+    method: "POST",
+    body: formData,
+  });
+};
+
 export const deleteRegisteredTag = async (tagId) => {
   return await authFetch(`/api/registered_tag/delete/${tagId}`, {
     method: "DELETE",

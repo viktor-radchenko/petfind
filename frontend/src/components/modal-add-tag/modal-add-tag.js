@@ -1,5 +1,5 @@
 import React, { useReducer, useEffect, useState } from "react";
-import { updateRegisteredTag, authFetch } from "../../services";
+import { authFetch, addRegisteredTag } from "../../services";
 
 import imagePlaceholder from "../../images/icons/add-photo.svg";
 
@@ -25,7 +25,7 @@ function reducer(state, { field, value }) {
   };
 }
 
-export default function ModalAddTag() {
+export default function ModalAddTag({ handleNewTag }) {
   const [state, dispatch] = useReducer(reducer, initialFormState);
 
   const {
@@ -117,7 +117,22 @@ export default function ModalAddTag() {
     e.preventDefault();
 
     console.log("Submitting FORM:", state);
+
+    addRegisteredTag(state)
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.error) {
+          console.log("Error detected")
+          throw Error(res.error);
+        }
+        window.location.reload();
+      })
+      .catch((e) => alert(e));
     // updateRegisteredTag(tagId, state);
+
+    // send data to server
+    // receive confirmation from server
+    // close modal
   };
 
   return (
@@ -223,7 +238,7 @@ export default function ModalAddTag() {
                 className='select edit-tag__input'
                 type='text'
                 name='zipCode'
-                value={zipCode ? zipCode : ""}
+                value={zipCode}
                 onChange={onChange}
               />
             </label>

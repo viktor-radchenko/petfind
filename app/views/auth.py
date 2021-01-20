@@ -5,7 +5,7 @@ from flask_praetorian import auth_required, current_user
 
 from app import guard, db
 from app.logger import log
-from app.models import User, RegisteredTag
+from app.models import User, RegisteredTag, Tag
 from app.controllers import save_picture
 from app.models import MessageQueue
 
@@ -75,7 +75,6 @@ def register():
 
     new_user = User.query.filter_by(email=email).first()
     # Create new Registered Tag
-
     new_tag = RegisteredTag(
         tag_id=tag_id,
         tag_name=tag_name,
@@ -84,13 +83,20 @@ def register():
         country=country,
         zip_code=zip_code,
         state=state,
-        user_id=new_user.id
+        user_id=new_user.id,
+        email=user.email,
+        phone=user.phone
     )
     if tag_image:
         picture_file = save_picture(tag_image)
         new_tag.tag_image = picture_file
 
     db.session.add(new_tag)
+
+    # Update is_registered status for Tag
+    tag = Tag.query.get(tag_id)
+    tag.is_registered = True
+    tag.save()
 
     new_message = MessageQueue(
         recipient_id=new_user.id,

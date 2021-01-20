@@ -77,6 +77,12 @@ export default function DashboardTable() {
     );
   };
 
+  const handleNewTag = (row) => {
+    console.log('Handling closing add new tag modal');
+    addModalTag.current.close();
+    setTableData([...tableData, row]);
+  }
+
   const handleAddModalTag = (e) => {
     e.preventDefault();
     addModalTag.current.open();
@@ -137,7 +143,7 @@ export default function DashboardTable() {
         </div>
       </div>
       <ModalWrapper header={"Add New Tag"} ref={addModalTag}>
-        <ModalAddTag />
+        <ModalAddTag handleNewTag={handleNewTag}/>
       </ModalWrapper>
     </>
   );

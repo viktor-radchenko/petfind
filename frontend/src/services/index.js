@@ -7,6 +7,7 @@ import {
   fetchLocation,
   lookUpTagId,
   updateRegisteredTag,
+  addRegisteredTag,
   deleteRegisteredTag,
   getUserData
 } from "./trace-return-services";
@@ -20,6 +21,7 @@ export {
   fetchLocation,
   lookUpTagId,
   updateRegisteredTag,
+  addRegisteredTag,
   deleteRegisteredTag,
   getUserData
 };
