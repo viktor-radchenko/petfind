@@ -61,7 +61,7 @@ export default function Home() {
             <li className='mode__item'>Founder would message you and you find your lost item!!</li>
           </ul>
 
-          <Link className='mode__video'>
+          <Link className='mode__video' to="/">
             <img src={videoPlaceholder} alt='video' />
           </Link>
 

@@ -1,5 +1,4 @@
 const validateForm = (values) => {
-  console.log("Validating following", values);
   let errors = {};
 
   // Tag ID

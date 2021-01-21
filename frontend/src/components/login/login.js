@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { login, useAuth } from "../../services";
-import validateForm from './validator';
 
 import logo from "../../images/logo.png";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
   const [serverFeedback, setServerFeedback] = useState("");
 
   const [logged] = useAuth();
@@ -22,8 +20,6 @@ export default function Login() {
       username: username,
       password: password,
     };
-    // const validatedForm = validateForm(opts)
-    // if (Object.keys(validatedForm).length === 0 && validatedForm.constructor === Object) {
     fetch("/api/auth/login", {
       method: "post",
       body: JSON.stringify(opts),
@@ -68,7 +64,7 @@ export default function Login() {
             <input className='input auth__input' type='password' onChange={handlePasswordChange} value={password} />
           </label>
 
-          {serverFeedback && <span>{serverFeedback.message}</span>}
+          {serverFeedback && <div class="input-error">{serverFeedback.message}</div>}
 
           <div className='auth__password'>
             <label className='label auth__label'>

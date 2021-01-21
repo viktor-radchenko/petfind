@@ -1,5 +1,4 @@
 const validateTagForm = (values) => {
-  console.log("Validating following", values);
   let errors = {};
 
   // Tag ID
@@ -17,7 +16,6 @@ const validateTagForm = (values) => {
 
 
 const validateUserForm = (values) => {
-  console.log("Validating following", values);
   let errors = {};
 
   // User Name

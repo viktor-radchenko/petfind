@@ -45,7 +45,6 @@ export default function ModalAddTag({ handleNewTag }) {
     zipCode,
     userState,
   } = state;
-  console.log("Moda state:", state);
 
   useEffect(() => {
     authFetch("/api/auth/get_user_data")
@@ -124,7 +123,6 @@ export default function ModalAddTag({ handleNewTag }) {
         .then((res) => res.json())
         .then((res) => {
           if (res.error) {
-            console.log("Error detected");
             throw Error(res.error);
           }
           window.location.reload();

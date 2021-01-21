@@ -23,7 +23,6 @@ export default function SetPassword() {
 
   const onSubmitClick = (e) => {
     e.preventDefault();
-    console.log("You pressed submit passwords");
     let opts = {
       oldPassword: oldPassword,
       newPassword: newPassword,
@@ -39,13 +38,10 @@ export default function SetPassword() {
         .then((token) => {
           if (token.access_token) {
             login(token);
-            console.log(token);
           } else {
-            console.log("Please check if your passwords are correct password");
           }
         });
     } else {
-      console.log('Passwords: updating errors:', validatedForm)
       setErrors(validatedForm);
     }
   };
@@ -73,8 +69,8 @@ export default function SetPassword() {
               onChange={handleOldPassChange}
               value={oldPassword}
             />
+          {errors.oldPassword && <div className="input-error">{errors.oldPassword}</div>}
           </label>
-          {errors.oldPassword && <span>{errors.oldPassword}</span>}
 
           <label className='label'>
             <span>New Password</span>
@@ -85,8 +81,8 @@ export default function SetPassword() {
               onChange={handleNewPassChange}
               value={newPassword}
             />
+          {errors.newPassword && <div className="input-error">{errors.newPassword}</div>}
           </label>
-          {errors.newPassword && <span>{errors.newPassword}</span>}
 
 
           <button className='button set-password__btn' type='submit' onClick={onSubmitClick}>

@@ -5,7 +5,6 @@ import ModalWrapper from "../modal-wrapper";
 import ModalEditTag from "../modal-edit-tag";
 import ModalDeleteTag from "../modal-delete-tag";
 
-import icon from "../../images/pet-avatar.jpg";
 
 export default function TableRows({ rows, loading, handleUpdate }) {
   const [rowState, setRowState] = useState({});
@@ -17,7 +16,6 @@ export default function TableRows({ rows, loading, handleUpdate }) {
     return <h1>LOADING...</h1>;
   }
 
-  console.log(rows);
 
   const handleAnalyticsBtn = (e, id) => {
     e.preventDefault();
@@ -37,14 +35,12 @@ export default function TableRows({ rows, loading, handleUpdate }) {
   
   const toggleEditModal = (e, row) => {
     e.preventDefault();
-    console.log("Sending row for editing", row);
     setRowState(row);
     editModal.current.open()
   }
 
   const toggleDeleteModal = (e, row) => {
     e.preventDefault();
-    console.log("Sending row for deleting", row);
     setRowState(row);
     deleteModal.current.open()
   }
@@ -109,7 +105,7 @@ export default function TableRows({ rows, loading, handleUpdate }) {
                 delete
               </button>
             </form>
-            <button className='dropdown' onClick={() => setActiveRowId(row.tag_id)}>dropdown</button>
+            <button className={  activeRowId === row.tag_id ? 'dropdown dropdown--active' : 'dropdown'} onClick={() => activeRowId ? setActiveRowId('') : setActiveRowId(row.tag_id)}>dropdown</button>
           </li>
         ))}
       </ul>

@@ -12,13 +12,11 @@ export function ModalWrapper({ children, header, defaultOpened = false}, ref) {
   }));
 
   const handleCloseBtn = () => {
-    console.log("Closing modal");
     setIsOpen(false);
   };
 
   const handleEscape = useCallback((event) => {
     if (event.keyCode === 27) {
-      console.log("Esc event detected")
       setIsOpen(false)
     };
   }, []);

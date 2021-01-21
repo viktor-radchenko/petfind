@@ -1,6 +1,6 @@
 import { createAuthProvider } from "react-token-auth";
 
-const _geolocationDbKey = process.env.GEOLOCATION_DB_KEY || "";
+// const _geolocationDbKey = process.env.GEOLOCATION_DB_KEY || "";
 
 export const [useAuth, authFetch, login, logout] = createAuthProvider({
   accessTokenKey: "access_token",
@@ -96,7 +96,6 @@ export const updateRegisteredTag = async (tagId, options) => {
 };
 
 export const addRegisteredTag = async (options) => {
-  console.log("Preparing state to add new tag", options);
   const formData = new FormData();
   formData.append("tag_id", options.tagId.toUpperCase());
   formData.append("tag_name", options.tagName);

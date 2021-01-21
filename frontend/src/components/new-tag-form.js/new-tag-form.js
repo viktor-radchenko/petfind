@@ -8,6 +8,7 @@ import tooltip from '../../images/tooltip-img.jpg';
 export default function NewTagForm() {
   const [tagId, setTagId] = useState("");
   const [tooltipActive, setTooltipActive] = useState(false);
+  // eslint-disable-next-line
   const [state, dispatch] = useAppContext();
   const history = useHistory();
 

@@ -37,10 +37,7 @@ export default function RegisterTagForm() {
   // Initialise registration form state
   const [state, dispatch] = useReducer(reducer, initialFormState);
   const [errors, setErrors] = useState({});
-  console.log(state);
   const [appState] = useAppContext();
-
-  console.log("APPSTATE", appState);
 
   const {
     tagIdMessage,
@@ -60,8 +57,8 @@ export default function RegisterTagForm() {
     userState,
   } = state;
 
+  
   useEffect(() => {
-    console.log("found appstate id", appState.registerTagId)
     if (appState.registerTagId)
       dispatch({
         field: "tagId",
@@ -124,7 +121,6 @@ export default function RegisterTagForm() {
         });
       }
     } else {
-      console.log("Setting erros for tag form", validatedForm);
       setErrors(validatedForm);
     }
   };
@@ -155,7 +151,6 @@ export default function RegisterTagForm() {
       )
         .then((res) => res.json())
         .then((res) => {
-          console.log(res);
           if (res.confirmed) {
             dispatch({
               field: "currentStep",
@@ -225,7 +220,7 @@ export default function RegisterTagForm() {
               />
               {tagIdMessage && <span className='register-item__message'>{tagIdMessage}</span>}
             </label>
-            {errors.tagId && <span>{errors.tagId}</span>}
+            {errors.tagId && <div className="input-error">{errors.tagId}</div>}
 
             <label className='label'>
               <span>Item Name</span>
@@ -237,7 +232,7 @@ export default function RegisterTagForm() {
                 onChange={onChange}
               />
             </label>
-            {errors.tagName && <span>{errors.tagName}</span>}
+            {errors.tagName && <div className="input-error">{errors.tagName}</div>}
 
             <button
               disabled={!tagIdIsValid}
@@ -270,7 +265,7 @@ export default function RegisterTagForm() {
                   value={firstName}
                   onChange={onChange}
                 />
-                {errors.firstName && <span>{errors.firstName}</span>}
+                {errors.firstName && <div className="input-error">{errors.firstName}</div>}
               </label>
 
               <label className='label'>
@@ -283,7 +278,7 @@ export default function RegisterTagForm() {
                   value={lastName}
                   onChange={onChange}
                 />
-                {errors.lastName && <span>{errors.lastName}</span>}
+                {errors.lastName && <div className="input-error">{errors.lastName}</div>}
               </label>
 
               <label className='label'>
@@ -296,7 +291,7 @@ export default function RegisterTagForm() {
                   value={phone}
                   onChange={onChange}
                 />
-                {errors.phone && <span>{errors.phone}</span>}
+                {errors.phone && <div className="input-error">{errors.phone}</div>}
               </label>
 
               <label className='label'>
@@ -309,7 +304,7 @@ export default function RegisterTagForm() {
                   value={email}
                   onChange={onChange}
                 />
-                {errors.email && <span>{errors.email}</span>}
+                {errors.email && <div className="input-error">{errors.email}</div>}
               </label>
             </div>
 

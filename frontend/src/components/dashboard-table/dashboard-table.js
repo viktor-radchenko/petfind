@@ -26,7 +26,7 @@ export default function DashboardTable() {
       setLoading(true);
       return authFetch(`/api/registered_tag/details`).then((response) => {
         if (response.status === 401) {
-          console.log("Sorry you aren't authorized!");
+          console.error("Sorry you aren't authorized!");
           return null;
         }
         setLoading(false);
@@ -78,7 +78,6 @@ export default function DashboardTable() {
   };
 
   const handleNewTag = (row) => {
-    console.log("Handling closing add new tag modal");
     addModalTag.current.close();
     setTableData([...tableData, row]);
   };

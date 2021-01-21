@@ -3,13 +3,10 @@ import { updateRegisteredTag } from "../../services";
 
 import validateForm from "./validator";
 
-import imagePlaceholder from "../../images/icons/add-photo.svg";
-
 const initialFormState = {
   tagId: "",
   tagName: "",
   tagImage: null,
-  tagPreview: false,
   phone: "",
   email: "",
   address: "",
@@ -30,7 +27,7 @@ export default function ModalEditTag({ data }) {
   const [state, dispatch] = useReducer(reducer, initialFormState);
   const [errors, setErrors] = useState({});
 
-  const { tagId, tagName, tagImage, tagPreview, phone, email, address, city, country, zipCode, userState } = state;
+  const { tagId, tagName, tagImage, phone, email, address, city, country, zipCode, userState } = state;
 
   const updateInitialState = (data) => {
     return {
@@ -49,7 +46,6 @@ export default function ModalEditTag({ data }) {
 
   useEffect(() => {
     const new_data = updateInitialState(data);
-    console.log(new_data);
     for (const property in new_data) {
       dispatch({
         field: property,
@@ -66,10 +62,6 @@ export default function ModalEditTag({ data }) {
   };
 
   const onFileChange = (e) => {
-    dispatch({
-      field: "tagPreview",
-      value: true,
-    });
     dispatch({
       field: e.target.name,
       value: e.target.files[0],

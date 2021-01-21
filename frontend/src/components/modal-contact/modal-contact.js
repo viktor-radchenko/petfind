@@ -13,7 +13,6 @@ export default function ModalContact({ tagId }) {
 
   const [state] = useAppContext();
 
-  console.log("Contact form ID", tagId);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -57,7 +56,7 @@ export default function ModalContact({ tagId }) {
               onChange={(e) => setName(e.target.value)}
             />
           </label>
-          {errors.name && <span>{errors.name}</span>}
+          {errors.name && <div className="input-error">{errors.name}</div>}
 
           <label className='label contact-owner__label'>
             <span>Phone Number</span>
@@ -69,7 +68,7 @@ export default function ModalContact({ tagId }) {
               onChange={(e) => setPhone(e.target.value)}
             />
           </label>
-          {errors.phone && <span>{errors.phone}</span>}
+          {errors.phone && <div className="input-error">{errors.phone}</div>}
 
           <label className='label contact-owner__label'>
             <span>Message</span>
@@ -79,7 +78,7 @@ export default function ModalContact({ tagId }) {
               value={text}
               onChange={(e) => setText(e.target.value)}></textarea>
           </label>
-          {errors.text && <span>{errors.text}</span>}
+          {errors.text && <div className="input-error">{errors.text}</div>}
 
           {status && <div className='contac-owner__confirmation'>{status}</div>}
         </form>

@@ -47,7 +47,6 @@ export default function App() {
 
   useEffect(() => {
     fetchLocation().then((res) => {
-      console.log("Location response:", res);
       dispatch({
         type: "UPDATE_LOCATION",
         payload: res,

@@ -63,7 +63,6 @@ export default function TagForm() {
     setTimeout(() => setTooltipActive(false), 1500);
   };
 
-  console.log("Current Lookup State", lookUpResult);
   return (
     <>
       <form className='id-form' onSubmit={handleSubmit}>
