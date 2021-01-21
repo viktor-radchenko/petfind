@@ -12,11 +12,11 @@ export function ModalWrapper({ children, header, defaultOpened = false}, ref) {
   }));
 
   const handleCloseBtn = () => {
+    console.log("Closing modal");
     setIsOpen(false);
   };
 
   const handleEscape = useCallback((event) => {
-    console.log("some key event detected", event)
     if (event.keyCode === 27) {
       console.log("Esc event detected")
       setIsOpen(false)
@@ -24,12 +24,15 @@ export function ModalWrapper({ children, header, defaultOpened = false}, ref) {
   }, []);
 
   useEffect(() => {
+    const windowOffset = window.scrollY;
     if (isOpen) {
-      console.log("Esc event listener added")
       window.addEventListener("keydown", handleEscape, false);
+      document.body.setAttribute('style', `position: fixed; top: -${windowOffset}px; left: 0; right: 0;`)
     }
     return () => {
       window.removeEventListener("keydown", handleEscape, false);
+      document.body.setAttribute('style', '');
+      window.scrollTo(0, windowOffset)
     };
   }, [handleEscape, isOpen]);
 
@@ -43,6 +46,7 @@ export function ModalWrapper({ children, header, defaultOpened = false}, ref) {
           </div>
           {children}
         </div>
+        <div className="modal__overlay"></div>
       </div>
     ) : null,
     modalElement

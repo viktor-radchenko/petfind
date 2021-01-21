@@ -13,6 +13,8 @@ export default function ModalContact({ tagId }) {
 
   const [state] = useAppContext();
 
+  console.log("Contact form ID", tagId);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = {

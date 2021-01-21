@@ -1,23 +1,23 @@
 import React from "react";
 
-export default function ModalPublicContact() {
+export default function ModalPublicContact({ lookUpData, handleTransition }) {
+  const { tag_image, tag_id, tag_name, name, phone, email, address } = lookUpData.data;
+
   return (
-    <>
+    <div>
       <div className='search-enabled'>
         <span className='title title--modal search-enabled__title'>Found the Owner</span>
 
-        <button className='close'>close</button>
-
         <div className='search-enabled__box'>
           <div className='search-enabled__avatar'>
-            <img src='images/pet-avatar.jpg' alt='dog' />
+            <img src={`/uploads/tag_image/${tag_image}`} alt='' />
           </div>
 
           <div className='search-enabled__info'>
-            <span className='search-enabled__tag'>ghay12</span>
+            <span className='search-enabled__tag'>{tag_id}</span>
 
             <span className='search-enabled__name'>
-              Item name: <span>Marco</span>
+              Item name: <span>{tag_name}</span>
             </span>
           </div>
         </div>
@@ -25,33 +25,33 @@ export default function ModalPublicContact() {
         <ul className='search-enabled__list'>
           <li className='search-enabled__item'>
             <span className='search-enabled__cell search-enabled__cell--owner'>Owner Name</span>
-            <span className='search-enabled__content'>Riya Jain</span>
+            <span className='search-enabled__content'>{name}</span>
           </li>
 
           <li className='search-enabled__item'>
             <span className='search-enabled__cell search-enabled__cell--phone'>Phone Number</span>
-            <span className='search-enabled__content' href='tel:+1230000999'>
-              +123(0000)999
+            <span className='search-enabled__content'>
+              {phone}
             </span>
           </li>
 
           <li className='search-enabled__item'>
             <span className='search-enabled__cell search-enabled__cell--email'>Email Address</span>
-            <span className='search-enabled__content' href='mailto:ho@riyaja.in'>
-              ho@riyaja.in
+            <span className='search-enabled__content'>
+              {email}
             </span>
           </li>
 
           <li className='search-enabled__item'>
             <span className='search-enabled__cell search-enabled__cell--address'>Address</span>
-            <span className='search-enabled__content'>St Bernards 826400, San Diego California</span>
+            <span className='search-enabled__content'>{address}</span>
           </li>
         </ul>
-      </div>
 
-      <div className='modal__footer'>
-        <button className='button'>Contact Owner</button>
+        <div className='modal__footer'>
+          <button className='button' onClick={handleTransition}>Contact Owner</button>
+        </div>
       </div>
-    </>
+    </div>
   );
 }

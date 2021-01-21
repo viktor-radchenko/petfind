@@ -35,11 +35,10 @@ export default function TagForm() {
   useEffect(() => {
     if (lookUpResult) {
       if (lookUpResult.status === "found") {
-        contactPublicModal.current.open();
-        handleClear();
+        setTimeout(() => contactPublicModal.current.open(), 1000);
       }
     }
-  });
+  }, [lookUpResult]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -53,7 +52,12 @@ export default function TagForm() {
     setLookUpResult(null);
   };
 
-  console.log(lookUpResult);
+  const handleTransition = () => {
+    contactPublicModal.current.close();
+    contactPrivateModal.current.open();
+  }
+
+  console.log("Current Lookup State", lookUpResult);
   return (
     <>
       <form className='id-form' onSubmit={handleSubmit}>
@@ -95,10 +99,11 @@ export default function TagForm() {
       )}
 
       <ModalWrapper ref={contactPrivateModal} header={"Contact Owner"}>
-        <ModalContact data={lookUpResult} tagId={tagId} />
+        <ModalContact tagId={tagId} />
       </ModalWrapper>
+
       <ModalWrapper ref={contactPublicModal} header={"Contact Owner"}>
-        <ModalPublicContact data={lookUpResult} tagId={tagId} />
+        <ModalPublicContact lookUpData={lookUpResult} handleTransition={handleTransition}/>
       </ModalWrapper>
     </>
   );
