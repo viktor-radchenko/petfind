@@ -1,5 +1,7 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useReducer, useEffect, useState } from "react";
 import { updateRegisteredTag } from "../../services";
+
+import validateForm from "./validator";
 
 import imagePlaceholder from "../../images/icons/add-photo.svg";
 
@@ -26,6 +28,7 @@ function reducer(state, { field, value }) {
 
 export default function ModalEditTag({ data }) {
   const [state, dispatch] = useReducer(reducer, initialFormState);
+  const [errors, setErrors] = useState({});
 
   const { tagId, tagName, tagImage, tagPreview, phone, email, address, city, country, zipCode, userState } = state;
 
@@ -65,28 +68,36 @@ export default function ModalEditTag({ data }) {
   const onFileChange = (e) => {
     dispatch({
       field: "tagPreview",
-      value: true
+      value: true,
     });
     dispatch({
       field: e.target.name,
       value: e.target.files[0],
-    })
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateRegisteredTag(tagId, state);
+    const validatedForm = validateForm(state);
+    if (Object.keys(validatedForm).length === 0 && validatedForm.constructor === Object) {
+      updateRegisteredTag(tagId, state);
+    } else {
+      setErrors(validatedForm);
+    }
   };
 
   return (
     <>
       <div className='edit-tag__switch'>Item Details</div>
-      <form onSubmit={handleSubmit} autoComplete="off">
+      <form onSubmit={handleSubmit} autoComplete='off'>
         <div className='modal__content'>
           <div className='register-item__box'>
             <div className='register-item__img'>
               <span>Add an Image</span>
-              <img src={tagImage instanceof File ? URL.createObjectURL(tagImage) : `/uploads/tag_image/${tagImage}`} alt='img' />
+              <img
+                src={tagImage instanceof File ? URL.createObjectURL(tagImage) : `/uploads/tag_image/${tagImage}`}
+                alt='img'
+              />
             </div>
 
             <label className='register-item__label'>
@@ -117,6 +128,7 @@ export default function ModalEditTag({ data }) {
               value={tagName}
               onChange={onChange}
             />
+            {errors.tagName && <div input-error>{errors.tagName}</div>}
           </label>
         </div>
 
@@ -124,7 +136,7 @@ export default function ModalEditTag({ data }) {
 
         <div className='modal__content'>
           <div className='edit-tag__location'>
-            <label className='label edit-tag__label--input'>
+            <label className='label edit-tag__label'>
               <span>Address</span>
               <input
                 className='input edit-tag__input edit-tag__input--address'
@@ -137,13 +149,13 @@ export default function ModalEditTag({ data }) {
 
             <label className='label edit-tag__label--input'>
               <span>City</span>
-              <input className='select edit-tag__input' type='text' name='city' value={city} onChange={onChange} />
+              <input className='input edit-tag__input' type='text' name='city' value={city} onChange={onChange} />
             </label>
 
             <label className='label edit-tag__label--input'>
               <span>State</span>
               <input
-                className='select edit-tag__input'
+                className='input edit-tag__input'
                 type='text'
                 name='userState'
                 value={userState}
@@ -153,19 +165,13 @@ export default function ModalEditTag({ data }) {
 
             <label className='label edit-tag__label--input'>
               <span>Country</span>
-              <input
-                className='select edit-tag__input'
-                type='text'
-                name='country'
-                value={country}
-                onChange={onChange}
-              />
+              <input className='input edit-tag__input' type='text' name='country' value={country} onChange={onChange} />
             </label>
 
             <label className='label edit-tag__label--input'>
               <span>ZIP code</span>
               <input
-                className='select edit-tag__input'
+                className='input edit-tag__input'
                 type='text'
                 name='zipCode'
                 value={zipCode ? zipCode : ""}
@@ -176,11 +182,13 @@ export default function ModalEditTag({ data }) {
             <label className='label edit-tag__label--input'>
               <span>Phone Number</span>
               <input className='input edit-tag__input' type='tel' name='phone' value={phone} onChange={onChange} />
+              {errors.phone && <div className="input-error">{errors.tagId}</div>}
             </label>
 
             <label className='label edit-tag__label--input'>
               <span>Email Address</span>
               <input className='input edit-tag__input' type='email' name='email' value={email} onChange={onChange} />
+              {errors.email && <div className="input-error">{errors.email}</div>}
             </label>
           </div>
         </div>

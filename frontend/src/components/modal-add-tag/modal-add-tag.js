@@ -175,7 +175,7 @@ export default function ModalAddTag({ handleNewTag }) {
                 onChange={onChange}
               />
               {tagIdMessage && <span className='register-item__message'>{tagIdMessage}</span>}
-              {errors.tagId && <span>{errors.tagId}</span>}
+              {errors.tagId && <div input-error>{errors.tagId}</div>}
             </label>
           </div>
 
@@ -188,7 +188,7 @@ export default function ModalAddTag({ handleNewTag }) {
               value={tagName}
               onChange={onChange}
             />
-            {errors.tagName && <span>{errors.tagName}</span>}
+            {errors.tagName && <div className="input-error">{errors.tagName}</div>}
           </label>
         </div>
 
@@ -196,7 +196,7 @@ export default function ModalAddTag({ handleNewTag }) {
 
         <div className='modal__content'>
           <div className='edit-tag__location'>
-            <label className='label edit-tag__label--input'>
+            <label className='label edit-tag__label'>
               <span>Address</span>
               <input
                 className='input edit-tag__input edit-tag__input--address'
@@ -209,13 +209,13 @@ export default function ModalAddTag({ handleNewTag }) {
 
             <label className='label edit-tag__label--input'>
               <span>City</span>
-              <input className='select edit-tag__input' type='text' name='city' value={city} onChange={onChange} />
+              <input className='input edit-tag__input' type='text' name='city' value={city} onChange={onChange} />
             </label>
 
             <label className='label edit-tag__label--input'>
               <span>State</span>
               <input
-                className='select edit-tag__input'
+                className='input edit-tag__input'
                 type='text'
                 name='userState'
                 value={userState}
@@ -226,7 +226,7 @@ export default function ModalAddTag({ handleNewTag }) {
             <label className='label edit-tag__label--input'>
               <span>Country</span>
               <input
-                className='select edit-tag__input'
+                className='input edit-tag__input'
                 type='text'
                 name='country'
                 value={country}
@@ -237,7 +237,7 @@ export default function ModalAddTag({ handleNewTag }) {
             <label className='label edit-tag__label--input'>
               <span>ZIP code</span>
               <input
-                className='select edit-tag__input'
+                className='input edit-tag__input'
                 type='text'
                 name='zipCode'
                 value={zipCode ? zipCode : ""}
@@ -248,13 +248,13 @@ export default function ModalAddTag({ handleNewTag }) {
             <label className='label edit-tag__label--input'>
               <span>Phone Number</span>
               <input className='input edit-tag__input' type='tel' name='phone' value={phone} onChange={onChange} />
-              {errors.phone && <span>{errors.phone}</span>}
+              {errors.phone && <div className="input-error">{errors.phone}</div>}
             </label>
 
             <label className='label edit-tag__label--input'>
               <span>Email Address</span>
               <input className='input edit-tag__input' type='email' name='email' value={email} onChange={onChange} />
-              {errors.email && <span>{errors.email}</span>}
+              {errors.email && <div className='input-error'>{errors.email}</div>}
             </label>
           </div>
         </div>

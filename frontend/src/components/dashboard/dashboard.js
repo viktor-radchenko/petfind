@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import { authFetch } from '../../services';
+import React, { useEffect, useState } from "react";
+import { authFetch } from "../../services";
 
 import DashboardTable from "../dashboard-table";
 import DashboardSidebar from "../dashboard-sidebar";
@@ -7,10 +7,9 @@ import DashboardSidebar from "../dashboard-sidebar";
 import "./dashboard.css";
 import merchImg from "../../images/tag-img.jpg";
 
-
 export default function Dasboard() {
-
   const [userData, setUserData] = useState();
+  const [sideBarActive, setSideBarActive] = useState(false);
 
   useEffect(() => {
     authFetch("/api/auth/get_user_data")
@@ -26,11 +25,15 @@ export default function Dasboard() {
 
   return (
     <section className='dashboard'>
-      {userData && <DashboardSidebar userData={userData} />}
+      {userData && <DashboardSidebar active={sideBarActive} userData={userData} />}
       <div className='dashboard__content'>
-        
-        <DashboardTable />
-        
+        <div className='dashboard__inner'>
+          <div className='dashboard__box'>
+            <button className='burger-btn' onClick={() => setSideBarActive(!sideBarActive)} >Sidebar Button</button>
+            <span className='title dashboard__title'>Dashboard</span>
+          </div>
+          <DashboardTable />
+        </div>
         <div className='buy-tags'>
           <div className='buy-tags__top'>
             <span className='title buy-tags__title'>Buy Tags</span>

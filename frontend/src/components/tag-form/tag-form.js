@@ -8,6 +8,7 @@ import { useAppContext } from "../app";
 import { lookUpTagId } from "../../services";
 
 import "./tag-form.css";
+import tooltip from "../../images/tooltip-img.jpg";
 
 function LoaderDots() {
   return (
@@ -21,6 +22,7 @@ function LoaderDots() {
 
 export default function TagForm() {
   const [state] = useAppContext();
+  const [tooltipActive, setTooltipActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [lookUpResult, setLookUpResult] = useState(null);
   const [tagId, setTagId] = useState("");
@@ -35,7 +37,7 @@ export default function TagForm() {
   useEffect(() => {
     if (lookUpResult) {
       if (lookUpResult.status === "found") {
-        setTimeout(() => contactPublicModal.current.open(), 1000);
+        contactPublicModal.current.open();
       }
     }
   }, [lookUpResult]);
@@ -55,26 +57,62 @@ export default function TagForm() {
   const handleTransition = () => {
     contactPublicModal.current.close();
     contactPrivateModal.current.open();
-  }
+  };
+
+  const handleMouseLeave = () => {
+    setTimeout(() => setTooltipActive(false), 1500);
+  };
 
   console.log("Current Lookup State", lookUpResult);
   return (
     <>
       <form className='id-form' onSubmit={handleSubmit}>
-        <input
-          className='id-form__input'
-          maxLength='6'
-          type='text'
-          placeholder='Enter Tag ID'
-          value={tagId}
-          onChange={handleTagIdChange}
-        />
+        <div class='id-form__box'>
+          <input
+            className='id-form__input'
+            maxLength='6'
+            type='text'
+            placeholder='Enter Tag ID'
+            value={tagId}
+            onChange={handleTagIdChange}
+          />
+
+          <div className='tooltip-tag'>
+            <div
+              className='tooltip-tag__icon'
+              onMouseEnter={() => setTooltipActive(true)}
+              onMouseLeave={handleMouseLeave}></div>
+            {tooltipActive && (
+              <div className='tooltip-tag__id'>
+                <div className='tooltip-tag__text'>
+                  The <span>six digit number on the back of the tag</span> is your items unique code that is used to
+                  find it if it ever go missing
+                </div>
+
+                <div className='tooltip-tag__img'>
+                  <img src={tooltip} alt='' />
+                </div>
+
+                <span className='tooltip-tag__link'>Example of a 6 digit Tag-ID</span>
+              </div>
+            )}
+          </div>
+        </div>
 
         <button className='id-form__btn id-form__btn--search' type='submit'>
           {isLoading ? <LoaderDots /> : "Search the owner"}
         </button>
       </form>
-      {lookUpResult && lookUpResult.status === "found" && <div className=''>FOUND!!</div>}
+
+      {lookUpResult && lookUpResult.status === "na" && (
+        <div className='modal-disabled'>
+          <span className='modal-disabled__title'>No such Tag ID</span>
+          <button className='close modal-disabled__close' type='button' onClick={handleClear}>
+            Close
+          </button>
+          <span className='modal-disabled__desc'>Check your input and try again!</span>
+        </div>
+      )}
 
       {lookUpResult && lookUpResult.status === "private" && (
         <div className='modal-private'>
@@ -103,7 +141,7 @@ export default function TagForm() {
       </ModalWrapper>
 
       <ModalWrapper ref={contactPublicModal} header={"Contact Owner"}>
-        <ModalPublicContact lookUpData={lookUpResult} handleTransition={handleTransition}/>
+        <ModalPublicContact lookUpData={lookUpResult} handleTransition={handleTransition} />
       </ModalWrapper>
     </>
   );

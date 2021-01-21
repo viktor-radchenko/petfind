@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../services";
 
@@ -9,6 +9,7 @@ import homeLogo from "../../images/home-logo.png";
 
 export default function Header() {
   const [logged] = useAuth();
+  const [menuActive, setMenuActive] = useState(false);
 
   return (
     <header className='header'>
@@ -18,7 +19,7 @@ export default function Header() {
             <img src={homeLogo} alt='logotype' />
           </div>
 
-          <ul className='menu'>
+          <ul className={menuActive ? 'menu menu--active' : 'menu'}>
             <li className='menu__item'>
               <Link className='menu__link' to='/contact-us'>
                 Contact Us
@@ -45,7 +46,7 @@ export default function Header() {
             )}
           </ul>
 
-          <button className='burger-btn burger-btn--active'>Burger Button</button>
+          <button className={menuActive ? 'burger-btn burger-btn--active' : 'burger-btn'} onClick={() => setMenuActive(!menuActive)}>Burger Button</button>
         </nav>
       </div>
     </header>

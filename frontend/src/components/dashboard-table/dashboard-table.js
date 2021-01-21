@@ -78,15 +78,15 @@ export default function DashboardTable() {
   };
 
   const handleNewTag = (row) => {
-    console.log('Handling closing add new tag modal');
+    console.log("Handling closing add new tag modal");
     addModalTag.current.close();
     setTableData([...tableData, row]);
-  }
+  };
 
   const handleAddModalTag = (e) => {
     e.preventDefault();
     addModalTag.current.open();
-  }
+  };
 
   // Get current posts
   const indexOfLastRow = currentPage * rowPerPage;
@@ -95,55 +95,51 @@ export default function DashboardTable() {
 
   return (
     <>
-      <div className='dashboard__inner'>
-        <div className='dashboard__box'>
-          <button className='burger-btn'>Burger Button</button>
-          <span className='title dashboard__title'>Dashboard</span>
-        </div>
 
-        <form className='dashboard__search'>
-          <div className='dashboard__form'>
-            <input
-              className='input dashboard__input'
-              type='text'
-              placeholder='Search by tag ID, name'
-              value={filter}
-              onChange={handleFilter}
-            />
-            {filter && (
-              <button onClick={handleClearFilter} className='dashboard__input--clear' type='button'>
-                clear
-              </button>
-            )}
-          </div>
-          <button className='button dashboard__btn' onClick={(e) => handleAddModalTag(e)}>Add New Tag</button>
-        </form>
-
-        <div className='table'>
-          <div className='table__header'>
-            <div className='table__item-img'></div>
-            <div className='table__item-tag table__item-tag--title'>tag id</div>
-            <div className='table__item-name'>item name</div>
-            <div className='table__item-email'>email</div>
-            <div className='table__item-number'>number</div>
-            <div className='table__item-address'>address</div>
-            <div className='table__item-state table__item-state--title'>state</div>
-            <div className='table__item-actions'>actions</div>
-          </div>
-
-          <TableRows rows={currentRows} loading={loading} handleUpdate={handleUpdate} />
-          <TablePagination
-            rowPerPage={rowPerPage}
-            totalRows={filteredData.length}
-            paginate={paginate}
-            currentPage={currentPage}
-            previousPage={previousPage}
-            nextPage={nextPage}
+      <form className='dashboard__search'>
+        <div className='dashboard__form'>
+          <input
+            className='input dashboard__input'
+            type='text'
+            placeholder='Search by tag ID, name'
+            value={filter}
+            onChange={handleFilter}
           />
+          {filter && (
+            <button onClick={handleClearFilter} className='dashboard__input--clear' type='button'>
+              clear
+            </button>
+          )}
         </div>
+        <button className='button dashboard__btn' onClick={(e) => handleAddModalTag(e)}>
+          Add New Tag
+        </button>
+      </form>
+
+      <div className='table'>
+        <div className='table__header'>
+          <div className='table__item-img'></div>
+          <div className='table__item-tag table__item-tag--title'>tag id</div>
+          <div className='table__item-name'>item name</div>
+          <div className='table__item-email'>email</div>
+          <div className='table__item-number'>number</div>
+          <div className='table__item-address'>address</div>
+          <div className='table__item-state table__item-state--title'>state</div>
+          <div className='table__item-actions'>actions</div>
+        </div>
+
+        <TableRows rows={currentRows} loading={loading} handleUpdate={handleUpdate} />
+        <TablePagination
+          rowPerPage={rowPerPage}
+          totalRows={filteredData.length}
+          paginate={paginate}
+          currentPage={currentPage}
+          previousPage={previousPage}
+          nextPage={nextPage}
+        />
       </div>
       <ModalWrapper header={"Add New Tag"} ref={addModalTag}>
-        <ModalAddTag handleNewTag={handleNewTag}/>
+        <ModalAddTag handleNewTag={handleNewTag} />
       </ModalWrapper>
     </>
   );

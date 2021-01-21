@@ -3,8 +3,11 @@ import { useHistory } from "react-router-dom";
 
 import { useAppContext } from "../app";
 
+import tooltip from '../../images/tooltip-img.jpg';
+
 export default function NewTagForm() {
   const [tagId, setTagId] = useState("");
+  const [tooltipActive, setTooltipActive] = useState(false);
   const [state, dispatch] = useAppContext();
   const history = useHistory();
 
@@ -16,7 +19,10 @@ export default function NewTagForm() {
     history.push('/register_tag')
   }
 
-  
+  const handleMouseLeave = () => {
+    setTimeout(() => setTooltipActive(false), 1500);
+  }
+
   return (
     <>
       <form className='header__id-form id-form' onSubmit={customRedirect}>
@@ -31,18 +37,19 @@ export default function NewTagForm() {
           />
 
           <div className='tooltip-tag'>
-            <div className='tooltip-tag__id'>
+            <div className="tooltip-tag__icon" onMouseEnter={() => setTooltipActive(true)} onMouseLeave={handleMouseLeave}></div>
+            {tooltipActive && <div className='tooltip-tag__id'>
               <div className='tooltip-tag__text'>
                 The <span>six digit number on the back of the tag</span> is your items unique code that is used to find
                 it if it ever go missing
               </div>
 
               <div className='tooltip-tag__img'>
-                <img src='images/tooltip-img.jpg' alt='' />
+                <img src={tooltip} alt='' />
               </div>
 
               <span className='tooltip-tag__link'>Example of a 6 digit Tag-ID</span>
-            </div>
+            </div>}
           </div>
         </div>
         <button className='id-form__btn' type='submit'>

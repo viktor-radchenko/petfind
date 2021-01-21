@@ -9,6 +9,7 @@ import icon from "../../images/pet-avatar.jpg";
 
 export default function TableRows({ rows, loading, handleUpdate }) {
   const [rowState, setRowState] = useState({});
+  const [activeRowId, setActiveRowId] = useState();
   const editModal = useRef(null);
   const deleteModal = useRef(null);
 
@@ -90,7 +91,7 @@ export default function TableRows({ rows, loading, handleUpdate }) {
               {row.is_private && <span className="table__item-state--block"></span>}
               </div>
             </div>
-            <form className='table__item-actions'>
+            <form className={ activeRowId === row.tag_id ? 'table__item-actions table__item-actions--active' : 'table__item-actions' }>
               <button
                 onClick={(e) => handleAnalyticsBtn(e, row.tag_id)}
                 className='table__item-btn table__item-btn--diagram'>
@@ -108,7 +109,7 @@ export default function TableRows({ rows, loading, handleUpdate }) {
                 delete
               </button>
             </form>
-            <button className='dropdown'>dropdown</button>
+            <button className='dropdown' onClick={() => setActiveRowId(row.tag_id)}>dropdown</button>
           </li>
         ))}
       </ul>
