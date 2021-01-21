@@ -1,10 +1,12 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { completeRegistration } from "../../services";
+import { validateTagForm, validateUserForm } from "./validator";
 
 import logo from "../../images/logo.png";
 import imagePlaceholder from "../../images/icons/add-photo.svg";
+import validateForm from "../modal-add-tag/validator";
 
 const initialFormState = {
   tagIdMessage: "",
@@ -34,6 +36,7 @@ function reducer(state, { field, value }) {
 export default function RegisterTagForm() {
   // Initialise registration form state
   const [state, dispatch] = useReducer(reducer, initialFormState);
+  const [errors, setErrors] = useState({});
   console.log(state);
 
   const {
@@ -96,54 +99,62 @@ export default function RegisterTagForm() {
 
   const handleNextStep = () => {
     // submit first form and switch to the next
-    console.log(currentStep);
-    if (currentStep === 1) {
-      dispatch({
-        field: "currentStep",
-        value: 2,
-      });
+    const values = {
+      tagId: tagId,
+      tagName: tagName,
+    };
+    const validatedForm = validateTagForm(values);
+    if (Object.keys(validatedForm).length === 0 && validatedForm.constructor === Object) {
+      if (currentStep === 1) {
+        dispatch({
+          field: "currentStep",
+          value: 2,
+        });
+      }
+    } else {
+      console.log("Setting erros for tag form", validatedForm);
+      setErrors(validatedForm);
     }
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    completeRegistration(
-      tagId,
-      tagName,
-      tagImage,
-      firstName,
-      lastName,
-      phone,
-      email,
-      address,
-      city,
-      country,
-      zipCode,
-      userState
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        if (res.confirmed) {
-          dispatch({
-            field: "currentStep",
-            value: 3,
-          });
-        }
-      })
-      .catch((e) => console.error(e));
-  };
-
-  const resendRegistrationEmail = (e) => {
-    e.preventDefault();
-    console.log("RESENDING EMAIL");
-    // let opts = {
-    //   email: email,
-    // };
-    // fetch("/api/auth/resend-registration-email", {
-    //   method: "post",
-    //   body: JSON.stringify(opts),
-    // });
+    const values = {
+      firstName: firstName,
+      lastName: lastName,
+      phone: phone,
+      email: email,
+    };
+    const validatedForm = validateUserForm(values);
+    if (Object.keys(validatedForm).length === 0 && validatedForm.constructor === Object) {
+      completeRegistration(
+        tagId,
+        tagName,
+        tagImage,
+        firstName,
+        lastName,
+        phone,
+        email,
+        address,
+        city,
+        country,
+        zipCode,
+        userState
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          if (res.confirmed) {
+            dispatch({
+              field: "currentStep",
+              value: 3,
+            });
+          }
+        })
+        .catch((e) => console.error(e));
+    } else {
+      setErrors(validatedForm);
+    }
   };
 
   return (
@@ -202,6 +213,7 @@ export default function RegisterTagForm() {
               />
               {tagIdMessage && <span className='register-item__message'>{tagIdMessage}</span>}
             </label>
+            {errors.tagId && <span>{errors.tagId}</span>}
 
             <label className='label'>
               <span>Item Name</span>
@@ -213,6 +225,7 @@ export default function RegisterTagForm() {
                 onChange={onChange}
               />
             </label>
+            {errors.tagName && <span>{errors.tagName}</span>}
 
             <button
               disabled={!tagIdIsValid}
@@ -245,6 +258,7 @@ export default function RegisterTagForm() {
                   value={firstName}
                   onChange={onChange}
                 />
+              {errors.firstName && <span>{errors.firstName}</span>}
               </label>
 
               <label className='label'>
@@ -257,6 +271,7 @@ export default function RegisterTagForm() {
                   value={lastName}
                   onChange={onChange}
                 />
+              {errors.lastName && <span>{errors.lastName}</span>}
               </label>
 
               <label className='label'>
@@ -269,6 +284,7 @@ export default function RegisterTagForm() {
                   value={phone}
                   onChange={onChange}
                 />
+              {errors.phone && <span>{errors.phone}</span>}
               </label>
 
               <label className='label'>
@@ -281,6 +297,7 @@ export default function RegisterTagForm() {
                   value={email}
                   onChange={onChange}
                 />
+              {errors.email && <span>{errors.email}</span>}
               </label>
             </div>
 
@@ -366,9 +383,7 @@ export default function RegisterTagForm() {
 
           <p className='password-notify__text'>You need to set a password. We have sent you a link at {email}.</p>
 
-          <button className='password-notify__link' onClick={resendRegistrationEmail}>
-            Resend Link
-          </button>
+          <button className='password-notify__link'>Resend Link</button>
         </section>
       )}
 

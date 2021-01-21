@@ -14,6 +14,8 @@ class MessageQueue(db.Model, ModelMixin):
     class MessageType(enum.Enum):
         sms = 'sms'
         registration_email = 'registration_email'
+        contact_email = 'contact_email'
+        password_reset_email = 'password_reset_email'
 
     message_id = db.Column(db.Integer, primary_key=True)
     recipient_id = db.Column(db.Integer, nullable=False)

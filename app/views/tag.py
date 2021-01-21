@@ -106,19 +106,28 @@ def registered_lookup(tag_id):
     if not tag:
         return {"message": "No such tag", "status": "na"}, 200
     search = Search(
-        lat=location.get("latitude"),
-        lon=location.get("longitude"),
-        ip_address=location.get("IPv4"),
-        zip_code=location.get("postal"),
+        lat=location.get("lat"),
+        lon=location.get("lon"),
+        ip_address=location.get("query"),
+        zip_code=location.get("zip"),
         tag_id=tag.tag_id,
     )
     search.save()
     if tag.is_private:
-        return {"message": "This ID is Private", "status": "private"}, 200
+        return {"status": "private"}, 200
     if tag.status == RegisteredTag.StatusType.disabled:
-        return {"message": "This ID is Disabled", "status": "disabled"}, 200
+        return {"status": "disabled"}, 200
     user = User.query.filter_by(id=tag.user_id).first()
-    response = {"message": "Found The Owner", "status": "found", "user": user.to_json()}
+    user_data = {
+        'email': user.email,
+        'phone': user.phone,
+        'name': user.full_name,
+        'address': f"{user.address}, {user.city}, {user.state}",
+        'tag_id': tag.tag_id,
+        'tag_name': tag.tag_name,
+        'tag_image': tag.tag_image
+    }
+    response = {"status": "found", "data": user_data}
     return jsonify(response), 200
 
 

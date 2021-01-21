@@ -28,28 +28,47 @@ export default function Header() {
               </Link>
             </li>
 
-            {logged ? (
-              <li className='menu__item'>
-                <Link className='menu__link' to='/dashboard'>
-                  Dashboard
-                </Link>
-              </li>
-            ) : (
+            {logged ? null : (
               <li className='menu__item'>
                 <Link className='menu__link' to='/login'>
                   Login
                 </Link>
               </li>
             )}
+            {!logged ? (
+              <li className='menu__item menu__item--form'>
+                <div className='header__id-form id-form'>
+                  <div className='id-form__box'>
+                    <input className='id-form__input' type='text' placeholder='Enter Tag ID' />
+
+                    <div className='tooltip-tag'>
+                      <div className='tooltip-tag__id'>
+                        <div className='tooltip-tag__text'>
+                          The <span>six digit number on the back of the tag</span> is your items unique code that is
+                          used to find it if it ever go missing
+                        </div>
+
+                        <div className='tooltip-tag__img'>
+                          <img src='images/tooltip-img.jpg' alt='' />
+                        </div>
+
+                        <span className='tooltip-tag__link'>Example of a 6 digit Tag-ID</span>
+                      </div>
+                    </div>
+                  </div>
+                  <button className='id-form__btn' type='button' onClick={customRedirect}>
+                    Register item
+                  </button>
+                </div>
+              </li>
+            ) : (
+              <div className='menu-dashboard'>
+                <Link className='menu-dashboard__loggedin' to="/dashboard">
+                  Dashboard
+                </Link>
+              </div>
+            )}
           </ul>
-
-          <div className='header__id-form id-form'>
-            <input className='id-form__input' type='text' placeholder='Enter Tag ID' />
-
-            <button className='id-form__btn' type='button' onClick={customRedirect}>
-              Register item
-            </button>
-          </div>
 
           <button className='burger-btn burger-btn--active'>Burger Button</button>
         </nav>

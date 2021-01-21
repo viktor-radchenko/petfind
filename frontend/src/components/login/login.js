@@ -1,23 +1,20 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { login, useAuth } from "../../services";
+import validateForm from './validator';
 
 import logo from "../../images/logo.png";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
+  const [serverFeedback, setServerFeedback] = useState("");
 
   const [logged] = useAuth();
   const history = useHistory();
 
-  if (logged) {
-    const redirect = () => {
-      history.push("/");
-    };
-
-    redirect();
-  }
+  if (logged) history.push("/");
 
   const onSubmitClick = (e) => {
     e.preventDefault();
@@ -25,6 +22,8 @@ export default function Login() {
       username: username,
       password: password,
     };
+    // const validatedForm = validateForm(opts)
+    // if (Object.keys(validatedForm).length === 0 && validatedForm.constructor === Object) {
     fetch("/api/auth/login", {
       method: "post",
       body: JSON.stringify(opts),
@@ -34,10 +33,10 @@ export default function Login() {
         if (res.access_token) {
           login(res);
         } else {
-          console.log("Please type in correct username/password");
+          setServerFeedback(res)
         }
       })
-      .catch(e => console.log(e));
+      .catch((e) => console.log(e));
   };
 
   const handleUsernameChange = (e) => {
@@ -69,6 +68,8 @@ export default function Login() {
             <input className='input auth__input' type='password' onChange={handlePasswordChange} value={password} />
           </label>
 
+          {serverFeedback && <span>{serverFeedback.message}</span>}
+
           <div className='auth__password'>
             <label className='label auth__label'>
               <input className='input auth__input-checkbox' type='checkbox' />
@@ -86,12 +87,12 @@ export default function Login() {
           </button>
 
           <span className='auth__sign-up'>
-            No account yet?{" "}
+            No account yet?
             <Link className='auth__forgot' to='/register'>
               Sign up
             </Link>
           </span>
-        </form>
+        </form> 
       </div>
     </>
   );

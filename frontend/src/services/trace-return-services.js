@@ -46,7 +46,8 @@ export const completeRegistration = async (
 };
 
 export const fetchLocation = async () => {
-  return await fetch(`https://geolocation-db.com/json/${_geolocationDbKey}`).then((res) => res.json());
+  return await fetch(`http://ip-api.com/json/`).then((res) => res.json());
+  // return await fetch(`https://geolocation-db.com/json/${_geolocationDbKey}`).then((res) => res.json());
 };
 
 export const lookUpTagId = async (tagId, location) => {
@@ -54,6 +55,24 @@ export const lookUpTagId = async (tagId, location) => {
     method: "post",
     body: JSON.stringify(location),
   }).then((res) => res.json());
+};
+
+export const sendPrivateMessage = async (contactName, phone, text, tagId, location) => {
+  const formData = new FormData();
+  formData.append("name", contactName);
+  formData.append("phone_number", phone);
+  formData.append("text", text);
+  formData.append("tag_id", tagId.toUpperCase())
+  formData.append("ip_address", location.query)
+  formData.append("zip_code", location.postal)
+  formData.append("lat", location.lat)
+  formData.append("lon", location.lon)
+  formData.append("city", location.city)
+
+  return await fetch(`/api/send_private_message`, {
+    method: "post",
+    body: formData,
+  }).then(res => res.json());
 };
 
 export const updateRegisteredTag = async (tagId, options) => {
@@ -90,7 +109,6 @@ export const addRegisteredTag = async (options) => {
   formData.append("zip_code", options.zipCode);
   formData.append("state", options.userState);
   formData.append("status", options.tagStatus);
-
 
   return await authFetch(`/api/registered_tag/add_new`, {
     method: "POST",

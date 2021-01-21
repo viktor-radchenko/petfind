@@ -13,6 +13,7 @@ class Message(db.Model, ModelMixin):
     phone_number = db.Column(db.String(32), nullable=False)
     text = db.Column(db.Text, nullable=False)
     lat = db.Column(db.String(32))
+    city = db.Column(db.String(32))
     lon = db.Column(db.String(32))
     ip_address = db.Column(db.String(16))
     zip_code = db.Column(db.String(16))

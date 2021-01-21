@@ -9,7 +9,8 @@ import {
   updateRegisteredTag,
   addRegisteredTag,
   deleteRegisteredTag,
-  getUserData
+  getUserData,
+  sendPrivateMessage,
 } from "./trace-return-services";
 
 export {
@@ -23,5 +24,6 @@ export {
   updateRegisteredTag,
   addRegisteredTag,
   deleteRegisteredTag,
-  getUserData
+  getUserData,
+  sendPrivateMessage
 };

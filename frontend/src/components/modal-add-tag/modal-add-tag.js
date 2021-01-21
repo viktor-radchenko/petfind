@@ -1,6 +1,8 @@
 import React, { useReducer, useEffect, useState } from "react";
 import { authFetch, addRegisteredTag } from "../../services";
 
+import validateForm from './validator';
+
 import imagePlaceholder from "../../images/icons/add-photo.svg";
 
 const initialFormState = {
@@ -27,6 +29,7 @@ function reducer(state, { field, value }) {
 
 export default function ModalAddTag({ handleNewTag }) {
   const [state, dispatch] = useReducer(reducer, initialFormState);
+  const [errors, setErrors] = useState({});
 
   const {
     tagId,
@@ -115,24 +118,21 @@ export default function ModalAddTag({ handleNewTag }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    console.log("Submitting FORM:", state);
-
-    addRegisteredTag(state)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) {
-          console.log("Error detected")
-          throw Error(res.error);
-        }
-        window.location.reload();
-      })
-      .catch((e) => alert(e));
-    // updateRegisteredTag(tagId, state);
-
-    // send data to server
-    // receive confirmation from server
-    // close modal
+    const validatedForm = validateForm(state);
+    if (Object.keys(validatedForm).length === 0 && validatedForm.constructor === Object) {
+      addRegisteredTag(state)
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.error) {
+            console.log("Error detected");
+            throw Error(res.error);
+          }
+          window.location.reload();
+        })
+        .catch((e) => alert(e));
+    } else {
+      setErrors(validatedForm);
+    }
   };
 
   return (
@@ -175,6 +175,7 @@ export default function ModalAddTag({ handleNewTag }) {
                 onChange={onChange}
               />
               {tagIdMessage && <span className='register-item__message'>{tagIdMessage}</span>}
+              {errors.tagId && <span>{errors.tagId}</span>}
             </label>
           </div>
 
@@ -187,6 +188,7 @@ export default function ModalAddTag({ handleNewTag }) {
               value={tagName}
               onChange={onChange}
             />
+            {errors.tagName && <span>{errors.tagName}</span>}
           </label>
         </div>
 
@@ -238,7 +240,7 @@ export default function ModalAddTag({ handleNewTag }) {
                 className='select edit-tag__input'
                 type='text'
                 name='zipCode'
-                value={zipCode}
+                value={zipCode ? zipCode : ""}
                 onChange={onChange}
               />
             </label>
@@ -246,11 +248,13 @@ export default function ModalAddTag({ handleNewTag }) {
             <label className='label edit-tag__label--input'>
               <span>Phone Number</span>
               <input className='input edit-tag__input' type='tel' name='phone' value={phone} onChange={onChange} />
+              {errors.phone && <span>{errors.phone}</span>}
             </label>
 
             <label className='label edit-tag__label--input'>
               <span>Email Address</span>
               <input className='input edit-tag__input' type='email' name='email' value={email} onChange={onChange} />
+              {errors.email && <span>{errors.email}</span>}
             </label>
           </div>
         </div>
