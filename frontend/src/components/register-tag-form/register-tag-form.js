@@ -1,12 +1,12 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { Link } from "react-router-dom";
+import { useAppContext } from "../app";
 
 import { completeRegistration } from "../../services";
 import { validateTagForm, validateUserForm } from "./validator";
 
 import logo from "../../images/logo.png";
 import imagePlaceholder from "../../images/icons/add-photo.svg";
-import validateForm from "../modal-add-tag/validator";
 
 const initialFormState = {
   tagIdMessage: "",
@@ -38,6 +38,9 @@ export default function RegisterTagForm() {
   const [state, dispatch] = useReducer(reducer, initialFormState);
   const [errors, setErrors] = useState({});
   console.log(state);
+  const [appState] = useAppContext();
+
+  console.log("APPSTATE", appState);
 
   const {
     tagIdMessage,
@@ -56,6 +59,15 @@ export default function RegisterTagForm() {
     zipCode,
     userState,
   } = state;
+
+  useEffect(() => {
+    console.log("found appstate id", appState.registerTagId)
+    if (appState.registerTagId)
+      dispatch({
+        field: "tagId",
+        value: appState.registerTagId,
+      });
+  }, []);
 
   const onChange = (e) => {
     dispatch({
@@ -258,7 +270,7 @@ export default function RegisterTagForm() {
                   value={firstName}
                   onChange={onChange}
                 />
-              {errors.firstName && <span>{errors.firstName}</span>}
+                {errors.firstName && <span>{errors.firstName}</span>}
               </label>
 
               <label className='label'>
@@ -271,7 +283,7 @@ export default function RegisterTagForm() {
                   value={lastName}
                   onChange={onChange}
                 />
-              {errors.lastName && <span>{errors.lastName}</span>}
+                {errors.lastName && <span>{errors.lastName}</span>}
               </label>
 
               <label className='label'>
@@ -284,7 +296,7 @@ export default function RegisterTagForm() {
                   value={phone}
                   onChange={onChange}
                 />
-              {errors.phone && <span>{errors.phone}</span>}
+                {errors.phone && <span>{errors.phone}</span>}
               </label>
 
               <label className='label'>
@@ -297,7 +309,7 @@ export default function RegisterTagForm() {
                   value={email}
                   onChange={onChange}
                 />
-              {errors.email && <span>{errors.email}</span>}
+                {errors.email && <span>{errors.email}</span>}
               </label>
             </div>
 

@@ -29,7 +29,7 @@ export default function TagForm() {
   const contactPublicModal = useRef(null);
 
   const handleTagIdChange = (e) => {
-    setTagId(e.target.value);
+    setTagId(e.target.value.toUpperCase());
   };
 
   useEffect(() => {

@@ -7,6 +7,7 @@ const initialFormState = {
   tagId: "",
   tagName: "",
   tagImage: null,
+  tagPreview: false,
   phone: "",
   email: "",
   address: "",
@@ -26,8 +27,7 @@ function reducer(state, { field, value }) {
 export default function ModalEditTag({ data }) {
   const [state, dispatch] = useReducer(reducer, initialFormState);
 
-  const { tagId, tagName, tagImage, phone, email, address, city, country, zipCode, userState } = state;
-  console.log("Moda state:", state);
+  const { tagId, tagName, tagImage, tagPreview, phone, email, address, city, country, zipCode, userState } = state;
 
   const updateInitialState = (data) => {
     return {
@@ -64,9 +64,13 @@ export default function ModalEditTag({ data }) {
 
   const onFileChange = (e) => {
     dispatch({
+      field: "tagPreview",
+      value: true
+    });
+    dispatch({
       field: e.target.name,
       value: e.target.files[0],
-    });
+    })
   };
 
   const handleSubmit = (e) => {
@@ -82,7 +86,7 @@ export default function ModalEditTag({ data }) {
           <div className='register-item__box'>
             <div className='register-item__img'>
               <span>Add an Image</span>
-              <img src={imagePlaceholder} alt='img' />
+              <img src={tagImage instanceof File ? URL.createObjectURL(tagImage) : `/uploads/tag_image/${tagImage}`} alt='img' />
             </div>
 
             <label className='register-item__label'>

@@ -16,13 +16,20 @@ export function ModalWrapper({ children, header, defaultOpened = false}, ref) {
   };
 
   const handleEscape = useCallback((event) => {
-    if (event.keykode === 27) setIsOpen(false);
+    console.log("some key event detected", event)
+    if (event.keyCode === 27) {
+      console.log("Esc event detected")
+      setIsOpen(false)
+    };
   }, []);
 
   useEffect(() => {
-    if (isOpen) document.addEventListener("keydown", handleEscape, false);
+    if (isOpen) {
+      console.log("Esc event listener added")
+      window.addEventListener("keydown", handleEscape, false);
+    }
     return () => {
-      document.removeEventListener("keydown", handleEscape, false);
+      window.removeEventListener("keydown", handleEscape, false);
     };
   }, [handleEscape, isOpen]);
 

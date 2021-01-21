@@ -17,6 +17,10 @@ class BaseConfig(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     WTF_CSRF_ENABLED = False
 
+    UPLOAD_FOLDER = os.path.join(os.getcwd(), os.environ.get("UPLOAD_FOLDER", "tag_image"))
+    ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+    MAX_CONTENT_LENGTH = 2 * 1024 * 1024
+
     MAILJET_API_KEY = os.environ.get("MAILJET_API_KEY", None)
     MAILJET_SECRET_KEY = os.environ.get("MAILJET_SECRET_KEY", None)
 
@@ -27,7 +31,6 @@ class BaseConfig(object):
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD", None)
     PRAETORIAN_CONFIRMATION_SENDER = os.environ.get("MAIL_USERNAME", None)
     PRAETORIAN_CONFIRMATION_URI = "http://localhost:5000/api/verify"
-    MAIL_SUBJECT_PREFIX = "User Registration"
 
     SERVER_NAME = os.environ.get("SERVER_NAME")
 

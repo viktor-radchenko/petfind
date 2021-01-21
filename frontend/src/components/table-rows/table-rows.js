@@ -52,7 +52,7 @@ export default function TableRows({ rows, loading, handleUpdate }) {
     e.preventDefault();
     const statusRes = row.status === "enabled" ? "disabled" : "enabled";
 
-    updateRegisteredTag(row.tag_id, { tagStatus: statusRes })
+    updateRegisteredTag(row.tag_id, { tagStatus: statusRes, isPrivate: row.is_private })
       .then((res) => res.json())
       .then((res) => {
         handleUpdate(res);
@@ -65,7 +65,7 @@ export default function TableRows({ rows, loading, handleUpdate }) {
         {rows.map((row) => (
           <li key={row.tag_id} className='table__row'>
             <div className='table__item-img'>
-              <img src={icon} alt='pet' />
+              <img src={`/uploads/tag_image/${row.tag_image}`} alt='pet' />
             </div>
             <span className='table__item-tag'>{row.tag_id}</span>
             <span className='table__item-name'>{row.tag_name}</span>

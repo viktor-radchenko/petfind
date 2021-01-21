@@ -22,11 +22,7 @@ export function useAppContext() {
 
 const initialState = {
   location: null,
-  foundOwnerModal: {isOpen: false, data: []},
-  contactOwnerModal: {isOpen: false, data: []},
-  editTagModal: {isOpen: false, data: []},
-  deleteTagModal: {isOpen: false, data: []},
-  addTagModal: {isOpen: false, data: []}
+  registerTagId: "",
 };
 
 function reducer(state, action) {
@@ -36,30 +32,10 @@ function reducer(state, action) {
         ...state,
         location: action.payload,
       };
-    case "TOGGLE_FOUND_OWNER":
+    case "REGISTER_TAG_ID":
       return {
         ...state,
-        foundOwnerModal: action.payload,
-      }
-    case "TOGGLE_CONTACT_OWNER":
-      return {
-        ...state,
-        contactOwnerModal: action.payload,
-      }
-    case "TOGGLE_EDIT_TAG":
-      return {
-        ...state,
-        editTagModal: action.payload,
-      }
-    case "TOGGLE_DELETE_TAG":
-      return {
-        ...state,
-        deleteTagModal: action.payload,
-      }
-    case "TOGGLE_ADD_TAG":
-      return {
-        ...state,
-        addTagModal: action.payload,
+        registerTagId: action.payload
       }
     default:
       return state;

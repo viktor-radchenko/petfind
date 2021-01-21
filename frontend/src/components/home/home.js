@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from 'react-router-dom';
 
 import TagForm from '../tag-form';
+import NewTagForm from '../new-tag-form.js';
 
 import videoPlaceholder from "../../images/video.jpg";
 import tagImg from "../../images/tag-img.jpg";
@@ -64,13 +65,8 @@ export default function Home() {
             <img src={videoPlaceholder} alt='video' />
           </Link>
 
-          <div className='id-form'>
-            <input className='id-form__input' type='text' placeholder='Enter Tag ID' />
+          <NewTagForm />
 
-            <button className='id-form__btn' type='submit'>
-              Register item
-            </button>
-          </div>
         </div>
       </section>
 
