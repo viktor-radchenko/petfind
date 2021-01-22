@@ -84,8 +84,8 @@ def register():
         zip_code=zip_code,
         state=state,
         user_id=new_user.id,
-        email=user.email,
-        phone=user.phone
+        email=new_user.email,
+        phone=new_user.phone
     )
     if tag_image:
         picture_file = save_picture(tag_image)
@@ -207,8 +207,8 @@ def forgot_password():
     return jsonify(response), 200
 
 
-@auth_blueprint.route("/api/auth/verify_reset/<token>", methods=['POST'])
-def verify_reset(token):
+@auth_blueprint.route("/api/auth/verify_reset", methods=['POST'])
+def verify_reset():
     log(log.INFO, '/verify_reset')
     token = request.form.get("token", None)
     password = request.form.get("password", None)
