@@ -1,11 +1,8 @@
 import json
 
-from flask import Blueprint, request, jsonify
-from flask_praetorian import auth_required, current_user
+from flask import Blueprint, request
 
-from app import db
 from app.models import Message, MessageQueue, RegisteredTag
-from app.controllers import save_picture
 
 message_blueprint = Blueprint("message", __name__)
 
@@ -27,15 +24,10 @@ def send_private_message():
             setattr(message, key, value)
     message.save()
 
-    new_message = MessageQueue()
+    new_email = MessageQueue()
+    new_sms = MessageQueue()
 
-    # TODO: decide on SMS logic
-    # if len(text) < 150:
-    #     new_message.message_type = MessageQueue.MessageType.sms
-    # else:
-    new_message.message_type = MessageQueue.MessageType.contact_email
-    new_message.recipient_id = RegisteredTag.query.get(tag_id).user_id
-    new_message.temp_data = json.dumps({
+    data = json.dumps({
         'name': message.name,
         'tag_id': message.tag_id,
         'phone_number': message.phone_number,
@@ -46,6 +38,15 @@ def send_private_message():
         'ip_address': message.ip_address,
         'text': message.text
     })
-    new_message.save()
+
+    new_email.message_type = MessageQueue.MessageType.contact_email
+    new_email.recipient_id = RegisteredTag.query.get(tag_id).user_id
+    new_email.temp_data = data
+    new_email.save()
+
+    new_sms.message_type = MessageQueue.MessageType.sms
+    new_sms.recipient_id = RegisteredTag.query.get(tag_id).user_id
+    new_sms.temp_data = data
+    new_sms.save()
 
     return {"status": "ok"}

@@ -24,6 +24,10 @@ class BaseConfig(object):
     MAILJET_API_KEY = os.environ.get("MAILJET_API_KEY", None)
     MAILJET_SECRET_KEY = os.environ.get("MAILJET_SECRET_KEY", None)
 
+    TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID", None)
+    TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN", None)
+    TWILIO_SERVICE_SID = os.environ.get("TWILIO_SERVICE_SID", None)
+
     MAIL_SERVER = "smtp.googlemail.com"
     MAIL_PORT = 587
     MAIL_USE_TLS = True

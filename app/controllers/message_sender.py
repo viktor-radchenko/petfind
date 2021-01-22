@@ -2,7 +2,8 @@ import pendulum
 import json
 
 from flask import current_app, render_template
-from mailjet_rest import Client
+from mailjet_rest import Client as mail_client
+from twilio.rest import Client as sms_client
 
 from app import guard
 from ..models import User, MessageQueue
@@ -19,12 +20,16 @@ class MessageSender:
 
         if self.messages:
             log(log.INFO, "New messages detected")
-            self.mailjet = Client(
+            self.mailjet = mail_client(
                 auth=(
                     current_app.config["MAILJET_API_KEY"],
                     current_app.config["MAILJET_SECRET_KEY"],
                 ),
                 version="v3.1",
+            )
+            self.twilio_client = sms_client(
+                current_app.config["TWILIO_ACCOUNT_SID"],
+                current_app.config["TWILIO_AUTH_TOKEN"],
             )
         else:
             log(log.INFO, "No new messages")
@@ -37,7 +42,18 @@ class MessageSender:
             if message.message_type == MessageQueue.MessageType.contact_email:
                 self.prepare_contact_email(message)
             if message.message_type == MessageQueue.MessageType.sms:
-                pass
+                self.prepare_sms(message)
+
+    def prepare_sms(self, message):
+        log(log.INFO, "Preparing sms")
+        recipient = User.query.get(message.recipient_id)
+        if not recipient:
+            log(log.ERROR, "No such user to send sms notification")
+            return
+        data = json.loads(message.temp_data)
+        body = f"You have a new message for tag: {data.tag_id}. Visit http://165.227.70.167/dashboard for details"
+        sms_template = {"body": body, "to": recipient.phone}
+        self.sms_messages.append(sms_template)
 
     def prepare_registration_email(self, message):
         log(log.INFO, "Preparing registration email")
@@ -92,30 +108,30 @@ class MessageSender:
         msg_body = render_template(
             template + ".txt",
             user=recipient,
-            name=data.get('name'),
-            tag_id=data.get('tag_id'),
-            phone_number=data.get('phone_number'),
-            lat=data.get('lat'),
-            lon=data.get('lon'),
-            zip_code=data.get('zip_code'),
-            city=data.get('city'),
-            ip_address=data.get('ip_address'),
-            text=data.get('text'),
-            time=message.created_on.strftime("%m/%d/%Y, ,%H:%M:%S")
+            name=data.get("name"),
+            tag_id=data.get("tag_id"),
+            phone_number=data.get("phone_number"),
+            lat=data.get("lat"),
+            lon=data.get("lon"),
+            zip_code=data.get("zip_code"),
+            city=data.get("city"),
+            ip_address=data.get("ip_address"),
+            text=data.get("text"),
+            time=message.created_on.strftime("%m/%d/%Y, ,%H:%M:%S"),
         )
         msg_html = render_template(
             template + ".html",
             user=recipient,
-            name=data.get('name'),
-            tag_id=data.get('tag_id'),
-            phone_number=data.get('phone_number'),
-            lat=data.get('lat'),
-            lon=data.get('lon'),
-            zip_code=data.get('zip_code'),
-            city=data.get('city'),
-            ip_address=data.get('ip_address'),
-            text=data.get('text'),
-            time=message.created_on.strftime("%m/%d/%Y, ,%H:%M:%S")
+            name=data.get("name"),
+            tag_id=data.get("tag_id"),
+            phone_number=data.get("phone_number"),
+            lat=data.get("lat"),
+            lon=data.get("lon"),
+            zip_code=data.get("zip_code"),
+            city=data.get("city"),
+            ip_address=data.get("ip_address"),
+            text=data.get("text"),
+            time=message.created_on.strftime("%m/%d/%Y, ,%H:%M:%S"),
         )
         email_template = {
             "To": [{"Email": recipient.email, "Name": recipient.full_name}],
@@ -152,4 +168,6 @@ class MessageSender:
             }
             result = self.mailjet.send.create(data=data)
         if self.sms_messages:
-            pass
+            for message in self.sms_messages:
+                result = self.twilio_client.messages.create(current_app.config["TWILIO_SERVICE_SID"], body=message.get('body'), to=message.get('to'))
+
