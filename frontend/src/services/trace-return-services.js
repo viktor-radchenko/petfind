@@ -134,3 +134,15 @@ export const requestPasswordReset = async (email) => {
     body: formData,
   });
 };
+
+export const resetPassword = async (password, passwordConfirmation, token) => {
+  const formData = new FormData();
+  formData.append("token", token);
+  formData.append("password", password);
+  formData.append("password_confirmation", passwordConfirmation);
+
+  return await fetch("/api/verify_reset/", {
+    method: "POST",
+    body: formData,
+  });
+};

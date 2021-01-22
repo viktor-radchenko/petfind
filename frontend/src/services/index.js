@@ -12,6 +12,7 @@ import {
   getUserData,
   sendPrivateMessage,
   requestPasswordReset,
+  resetPassword,
 } from "./trace-return-services";
 
 export {
@@ -28,4 +29,5 @@ export {
   getUserData,
   sendPrivateMessage,
   requestPasswordReset,
+  resetPassword,
 };

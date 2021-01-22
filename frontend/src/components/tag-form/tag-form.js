@@ -66,7 +66,7 @@ export default function TagForm() {
   return (
     <>
       <form className='id-form' onSubmit={handleSubmit}>
-        <div class='id-form__box'>
+        <div className='id-form__box'>
           <input
             className='id-form__input'
             maxLength='6'

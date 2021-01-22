@@ -64,7 +64,7 @@ export default function Login() {
             <input className='input auth__input' type='password' onChange={handlePasswordChange} value={password} />
           </label>
 
-          {serverFeedback && <div class="input-error">{serverFeedback.message}</div>}
+          {serverFeedback && <div className="input-error">{serverFeedback.message}</div>}
 
           <div className='auth__password'>
             <label className='label auth__label'>

@@ -588,6 +588,10 @@ body {
   color: #FE4A59;
 }
 
+.input-error--main {
+  margin-bottom: 20px;
+}
+
 .auth {
   margin: 0 auto;
   max-width: 520px;

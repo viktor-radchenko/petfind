@@ -12,6 +12,7 @@ import RegisterTagForm from "../register-tag-form";
 import Footer from "../footer";
 import PrivateRoute from "../hoc";
 import ForgotPassword from "../forgot-password";
+import ResetPassword from "../reset-password";
 
 import "./app.css";
 
@@ -76,7 +77,7 @@ export default function App() {
             <ForgotPassword />
           </Route>
           <Route path='/auth/reset_password/:token'>
-
+            <ResetPassword />
           </Route>
           <Route path='/'>
             <Header />
