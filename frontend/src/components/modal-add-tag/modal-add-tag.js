@@ -168,11 +168,12 @@ export default function ModalAddTag({ handleNewTag }) {
                     : "input register-item__input-id"
                 }
                 type='text'
+                maxLength="6"
                 name='tagId'
                 value={tagId}
                 onChange={onChange}
               />
-              {tagIdMessage && <span className='register-item__message'>{tagIdMessage}</span>}
+              {tagIdMessage && <div className='input-error register-item__message'>{tagIdMessage}</div>}
               {errors.tagId && <div input-error>{errors.tagId}</div>}
             </label>
           </div>

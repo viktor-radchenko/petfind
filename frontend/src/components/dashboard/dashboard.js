@@ -29,7 +29,7 @@ export default function Dasboard() {
       <div className='dashboard__content'>
         <div className='dashboard__inner'>
           <div className='dashboard__box'>
-            <button className='burger-btn' onClick={() => setSideBarActive(!sideBarActive)} >Sidebar Button</button>
+            <button className={sideBarActive ? 'burger-btn burger-btn--active' : 'burger-btn'} onClick={() => setSideBarActive(!sideBarActive)} >Sidebar Button</button>
             <span className='title dashboard__title'>Dashboard</span>
           </div>
           <DashboardTable />

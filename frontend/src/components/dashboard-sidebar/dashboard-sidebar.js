@@ -7,8 +7,6 @@ import logo from "../../images/logo-noword.png";
 
 export default function DashboardSidebar({ active, userData }) {
 
-  const [sidebarVisible, setSidebarVisible] = useState(active);
-
   const getInitials = (string) => {
     let names = string.split(" "),
       initials = names[0].substring(0, 1).toUpperCase();
@@ -21,12 +19,9 @@ export default function DashboardSidebar({ active, userData }) {
 
   return (
     <div className={active ? "dashboard__nav dashboard__nav--active" : "dashboard__nav"}>
-      <div className='dashboard__nav-box'>
         <Link className='logo-noword' to='/'>
           <img src={logo} alt='logo' />
         </Link>
-        <button class='close dashboard__close' onClick={() => setSidebarVisible(!sidebarVisible)}>close</button>
-      </div>
 
       <ul className='dashboard__tabs'>
         <li className='dashboard__tab dashboard__tab--dashboard dashboard__tab--active'>Dashboard</li>
