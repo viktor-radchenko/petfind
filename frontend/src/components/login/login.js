@@ -73,7 +73,7 @@ export default function Login() {
               <span>Remember me</span>
             </label>
 
-            <Link className='auth__forgot' to='/forgot-password'>
+            <Link className='auth__forgot' to='/auth/forgot_password'>
               Forgot your password?
             </Link>
           </div>
@@ -83,9 +83,9 @@ export default function Login() {
           </button>
 
           <span className='auth__sign-up'>
-            No account yet?
+            No account yet? 
             <Link className='auth__forgot' to='/register'>
-              Sign up
+              {' Sign up'}
             </Link>
           </span>
         </form> 

@@ -11,6 +11,7 @@ import {
   deleteRegisteredTag,
   getUserData,
   sendPrivateMessage,
+  requestPasswordReset,
 } from "./trace-return-services";
 
 export {
@@ -25,5 +26,6 @@ export {
   addRegisteredTag,
   deleteRegisteredTag,
   getUserData,
-  sendPrivateMessage
+  sendPrivateMessage,
+  requestPasswordReset,
 };

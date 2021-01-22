@@ -120,8 +120,6 @@ def verify():
        $ curl http://localhost:5000/api/v1/auth/verify -X GET \
          -H "Authorization: Bearer <your_token>"
     """
-    # registration_token = guard.read_token_from_header()
-    # print("TOKEN_: ", registration_token)
     req = request.get_json(force=True)
     token = req.get("token", None)
     old_password = req.get("oldPassword", None)
@@ -136,9 +134,7 @@ def verify():
     user.password = guard.hash_password(new_password)
     user.activated = True
     user.save()
-    # perform 'activation' of user here...like setting 'active' or something
     ret = {'access_token': guard.encode_jwt_token(user)}
-    log(log.DEBUG, "ENCODED NEW TOKEN")
     return jsonify(ret), 200
 
 
@@ -192,6 +188,41 @@ def resend_email():
     )
     new_message.save()
     response = {"message": "Activation email succesfully sent. Check your inbox."}
+    return jsonify(response), 200
+
+
+@auth_blueprint.route("/api/auth/forgot_password", methods=['POST'])
+def forgot_password():
+    log(log.INFO, '/forgot_password')
+    email = request.form.get('email')
+    if not email:
+        return {"error": "No email provided. Check your input and try again"}
+    user = User.query.filter_by(email=email).first_or_404()
+    new_message = MessageQueue(
+        recipient_id=user.id,
+        message_type=MessageQueue.MessageType.password_reset_email
+    )
+    new_message.save()
+    response = {"message": "We have sent you an email to confirm password reset. Check your inbox", "status": 'ok'}
+    return jsonify(response), 200
+
+
+@auth_blueprint.route("/api/auth/verify_reset/<token>", methods=['POST'])
+def verify_reset(token):
+    log(log.INFO, '/verify_reset')
+    token = request.form.get("token", None)
+    password = request.form.get("password", None)
+    password_confirmation = request.form.get("password_confirmation", None)
+    if not password or not password_confirmation:
+        return {"error": "Password credentials are missing. Check your data and try again"}
+    if password != password_confirmation:
+        return {"error": "Passwords do not match. Please try again"}
+    user = guard.validate_reset_token(token)
+    if not user:
+        return {"error": "No such user. Check your user credentials and try again"}
+    user.password = guard.hash_password(password)
+    user.save()
+    response = {'access_token': guard.encode_jwt_token(user)}
     return jsonify(response), 200
 
 

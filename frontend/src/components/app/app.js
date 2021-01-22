@@ -11,6 +11,7 @@ import SetPassword from "../set-password";
 import RegisterTagForm from "../register-tag-form";
 import Footer from "../footer";
 import PrivateRoute from "../hoc";
+import ForgotPassword from "../forgot-password";
 
 import "./app.css";
 
@@ -71,6 +72,12 @@ export default function App() {
             <SetPassword />
           </Route>
           <PrivateRoute path='/dashboard' component={Dasboard} />
+          <Route path='/auth/forgot_password'>
+            <ForgotPassword />
+          </Route>
+          <Route path='/auth/reset_password/:token'>
+
+          </Route>
           <Route path='/'>
             <Header />
             <Home />

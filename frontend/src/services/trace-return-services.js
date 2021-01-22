@@ -62,17 +62,17 @@ export const sendPrivateMessage = async (contactName, phone, text, tagId, locati
   formData.append("name", contactName);
   formData.append("phone_number", phone);
   formData.append("text", text);
-  formData.append("tag_id", tagId.toUpperCase())
-  formData.append("ip_address", location.query)
-  formData.append("zip_code", location.postal)
-  formData.append("lat", location.lat)
-  formData.append("lon", location.lon)
-  formData.append("city", location.city)
+  formData.append("tag_id", tagId.toUpperCase());
+  formData.append("ip_address", location.query);
+  formData.append("zip_code", location.postal);
+  formData.append("lat", location.lat);
+  formData.append("lon", location.lon);
+  formData.append("city", location.city);
 
   return await fetch(`/api/send_private_message`, {
     method: "post",
     body: formData,
-  }).then(res => res.json());
+  }).then((res) => res.json());
 };
 
 export const updateRegisteredTag = async (tagId, options) => {
@@ -123,4 +123,14 @@ export const deleteRegisteredTag = async (tagId) => {
 
 export const getUserData = async () => {
   return await authFetch(`/api/auth/get_user_data`);
+};
+
+export const requestPasswordReset = async (email) => {
+  const formData = new FormData();
+  formData.append("email", email);
+
+  return await fetch("/api/auth/forgot_password", {
+    method: "POST",
+    body: formData,
+  });
 };
