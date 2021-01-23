@@ -181,7 +181,7 @@ body {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  padding: 60px 0 20px;
+  padding: 30px 0 20px;
 }
 
 @media (max-width: 600px) {
@@ -433,15 +433,15 @@ body {
 .register-item__input-id--active {
   background-color: rgb(192, 221, 134);
   position: relative;
-  border-color: rgb(192, 221, 134);
+  border-color: rgb(137, 192, 18);
 }
 
 .register-item__input-id--active:focus {
-  border-color: rgb(192, 221, 134);
+  border-color: rgb(137, 192, 18);
 }
 
 .register-item__message {
-  color: rgb(192, 221, 134) !important;
+  color: rgb(137, 192, 18) !important;
 }
 
 .dropdown--active::before {
@@ -584,12 +584,13 @@ body {
 
 .input-error {
   margin-top: -15px;
+  margin-bottom: 5px;
   display: block;
   color: #FE4A59;
 }
 
 .input-error--main {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .auth {
@@ -1341,7 +1342,7 @@ body {
 .id-form__input {
   width: 202px;
   border: none;
-  padding: 14px 18px;
+  padding: 13.5px 18px;
   font-size: 14px;
   outline: transparent;
   border-radius: 20px 0 0 20px;
@@ -1413,9 +1414,6 @@ body {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
 }
 
 @media (max-width: 900px) {
@@ -3376,6 +3374,12 @@ ul.tabs {
   top: -43px;
   right: 15px;
   cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  outline: transparent;
+  
 }
 
 .tooltip-tag__icon::before {
@@ -3383,10 +3387,12 @@ ul.tabs {
   content: '';
   background-image: url("images/icons/info-icon.svg");
   background-repeat: no-repeat;
-  background-position: center;
   background-size: cover;
   width: 20px;
   height: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 @media (max-width: 600px) {

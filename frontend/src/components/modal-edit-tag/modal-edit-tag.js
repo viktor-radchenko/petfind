@@ -14,6 +14,8 @@ const initialFormState = {
   country: "",
   zipCode: "",
   userState: "",
+  status: "",
+  isPrivate: ""
 };
 
 function reducer(state, { field, value }) {
@@ -41,6 +43,8 @@ export default function ModalEditTag({ data }) {
       country: data.country,
       zipCode: data.zip_code,
       userState: data.state,
+      tagStatus: data.status,
+      isPrivate: data.is_private
     };
   };
 
@@ -72,7 +76,9 @@ export default function ModalEditTag({ data }) {
     e.preventDefault();
     const validatedForm = validateForm(state);
     if (Object.keys(validatedForm).length === 0 && validatedForm.constructor === Object) {
-      updateRegisteredTag(tagId, state);
+      updateRegisteredTag(tagId, state).then((res) => {
+        if (res.ok) window.location.reload();
+      });
     } else {
       setErrors(validatedForm);
     }
@@ -120,7 +126,7 @@ export default function ModalEditTag({ data }) {
               value={tagName}
               onChange={onChange}
             />
-            {errors.tagName && <div input-error>{errors.tagName}</div>}
+            {errors.tagName && <div className='input-error'>{errors.tagName}</div>}
           </label>
         </div>
 
@@ -174,13 +180,13 @@ export default function ModalEditTag({ data }) {
             <label className='label edit-tag__label--input'>
               <span>Phone Number</span>
               <input className='input edit-tag__input' type='tel' name='phone' value={phone} onChange={onChange} />
-              {errors.phone && <div className="input-error">{errors.tagId}</div>}
+              {errors.phone && <div className='input-error'>{errors.tagId}</div>}
             </label>
 
             <label className='label edit-tag__label--input'>
               <span>Email Address</span>
               <input className='input edit-tag__input' type='email' name='email' value={email} onChange={onChange} />
-              {errors.email && <div className="input-error">{errors.email}</div>}
+              {errors.email && <div className='input-error'>{errors.email}</div>}
             </label>
           </div>
         </div>

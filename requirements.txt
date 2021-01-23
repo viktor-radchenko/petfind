@@ -18,3 +18,4 @@ flask-praetorian
 flask-cors
 Pillow
 mailjet_rest
+twilio

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory, useParams, Link } from "react-router-dom";
 import { useAuth, login } from "../../services";
 
+import logo from "../../images/logo.png";
 import validateForm from "./validator";
 
 export default function SetPassword() {
@@ -10,18 +11,18 @@ export default function SetPassword() {
   const { token } = useParams();
   const [logged] = useAuth();
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState();
+
+  console.log(serverError);
 
   const history = useHistory();
 
   if (logged) {
-    const redirect = () => {
-      history.push("/");
-    };
-
-    redirect();
+    console.log("You are logged");
+    history.push("/dashboard");
   }
 
-  const onSubmitClick = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     let opts = {
       oldPassword: oldPassword,
@@ -34,13 +35,17 @@ export default function SetPassword() {
         method: "post",
         body: JSON.stringify(opts),
       })
-        .then((r) => r.json())
-        .then((token) => {
-          if (token.access_token) {
-            login(token);
-          } else {
-          }
-        });
+        .then((res) => {
+          if (!res.ok)
+            throw new Error(
+              "We were unable to authorise your account. This might be caused by a server error. Please contact support to resolve this issue"
+            );
+          return res.json();
+        })
+        .then((res) => { 
+          if (res.access_token) login(res)
+        })
+        .catch((e) => setServerError(e.message));
     } else {
       setErrors(validatedForm);
     }
@@ -56,10 +61,14 @@ export default function SetPassword() {
 
   return (
     <>
+      <Link className='full-logo' to='/'>
+        <img src={logo} alt='full logo' />
+      </Link>
+
       <section className='set-password'>
         <span className='title auth__title'>Set Your Password</span>
 
-        <form className='auth__form' action='#'>
+        <form className='auth__form' onSubmit={handleSubmit}>
           <label className='label'>
             <span>Old Password</span>
             <input
@@ -69,7 +78,7 @@ export default function SetPassword() {
               onChange={handleOldPassChange}
               value={oldPassword}
             />
-          {errors.oldPassword && <div className="input-error">{errors.oldPassword}</div>}
+            {errors.oldPassword && <div className='input-error input-error--main'>{errors.oldPassword}</div>}
           </label>
 
           <label className='label'>
@@ -81,11 +90,12 @@ export default function SetPassword() {
               onChange={handleNewPassChange}
               value={newPassword}
             />
-          {errors.newPassword && <div className="input-error">{errors.newPassword}</div>}
+            {errors.newPassword && <div className='input-error input-error--main'>{errors.newPassword}</div>}
           </label>
 
+          {serverError && <div className='input-error input-error--main'>{serverError}</div>}
 
-          <button className='button set-password__btn' type='submit' onClick={onSubmitClick}>
+          <button className='button set-password__btn' type='submit'>
             Change Password
           </button>
         </form>

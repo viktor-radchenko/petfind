@@ -15,7 +15,7 @@ export default function ResetPassword() {
   const [logged] = useAuth();
   const history = useHistory();
 
-  if (logged) history.push("/");
+  if (logged) history.push("/dashboard");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,20 +26,18 @@ export default function ResetPassword() {
     };
 
     const validatedForm = validateForm(values);
+    console.log(validatedForm);
     if (Object.keys(validatedForm).length === 0 && validatedForm.constructor === Object) {
+      console.log("Calling API")
       resetPassword(password, passwordConfirmation, token)
         .then((res) => {
-          if (!res.ok) throw Error(res);
-          res.json();
+          if (!res.ok) throw new Error("We were unable to validate your token: token is invalid or expired. Request a new token and try again");
+          return res.json();
         })
-        .then((res) => {
-          console.log("Received RES", res);
-          if (!res.access_token) throw Error(res.error);
-          login(res.access_token);
+        .then((res) => { 
+          if (res.access_token) login(res)
         })
-        .catch((e) => {
-          console.log(e);
-        });
+        .catch((e) => setServerError(e.message));
     } else {
       setErrors(validatedForm);
     }
@@ -55,16 +53,16 @@ export default function ResetPassword() {
 
   return (
     <>
-      <div className='full-logo'>
+      <Link className='full-logo' to='/'>
         <img src={logo} alt='full logo' />
-      </div>
+      </Link>
 
       <section className='set-password'>
-        <span className='title auth__title'>Set Your Password</span>
+        <span className='title auth__title'>Set Your New Password</span>
 
         <form className='auth__form' onSubmit={handleSubmit}>
           <label className='label'>
-            <span>Old Password</span>
+            <span>Password</span>
             <input
               className='input auth__input'
               name='password'
@@ -76,7 +74,7 @@ export default function ResetPassword() {
           </label>
 
           <label className='label'>
-            <span>New Password</span>
+            <span>Confirm password</span>
             <input
               className='input auth__input'
               name='passwordConfirmation'
@@ -89,12 +87,13 @@ export default function ResetPassword() {
             )}
           </label>
 
-          {/* {serverError && <div className='input-error'>{serverError}</div>} */}
+          {serverError && <div className='input-error input-error--main'>{serverError}</div>}
 
           <button className='button set-password__btn' type='submit'>
             Set New Password
           </button>
         </form>
+
       </section>
       <div className='go-home'>
         <small>

@@ -85,7 +85,7 @@ export const updateRegisteredTag = async (tagId, options) => {
   formData.append("city", options.city);
   formData.append("country", options.country);
   formData.append("zip_code", options.zipCode);
-  formData.append("state", options.tagState);
+  formData.append("state", options.userState);
   formData.append("status", options.tagStatus);
   formData.append("is_private", options.isPrivate);
 
@@ -141,7 +141,7 @@ export const resetPassword = async (password, passwordConfirmation, token) => {
   formData.append("password", password);
   formData.append("password_confirmation", passwordConfirmation);
 
-  return await fetch("/api/verify_reset/", {
+  return await fetch("/api/auth/verify_reset", {
     method: "POST",
     body: formData,
   });

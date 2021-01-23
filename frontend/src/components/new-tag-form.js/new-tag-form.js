@@ -21,7 +21,7 @@ export default function NewTagForm() {
   }
 
   const handleMouseLeave = () => {
-    setTimeout(() => setTooltipActive(false), 1500);
+    setTooltipActive(false);
   }
 
   return (
@@ -38,7 +38,7 @@ export default function NewTagForm() {
           />
 
           <div className='tooltip-tag'>
-            <div className="tooltip-tag__icon" onMouseEnter={() => setTooltipActive(true)} onMouseLeave={handleMouseLeave}></div>
+            <button className="tooltip-tag__icon" type="button" onFocus={() => setTooltipActive(true)} onBlur={handleMouseLeave}></button>
             {tooltipActive && <div className='tooltip-tag__id'>
               <div className='tooltip-tag__text'>
                 The <span>six digit number on the back of the tag</span> is your items unique code that is used to find

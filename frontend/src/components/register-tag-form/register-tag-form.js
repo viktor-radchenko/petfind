@@ -218,7 +218,7 @@ export default function RegisterTagForm() {
                 value={tagId}
                 onChange={onChange}
               />
-              {tagIdMessage && <div className='input-error register-item__message'>{tagIdMessage}</div>}
+              {tagIdMessage && <div className='input-error input-error--main register-item__message'>{tagIdMessage}</div>}
             {errors.tagId && <div className="input-error">{errors.tagId}</div>}
             </label>
 

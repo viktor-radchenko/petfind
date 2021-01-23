@@ -84,7 +84,7 @@ export default function Login() {
 
           <span className='auth__sign-up'>
             No account yet? 
-            <Link className='auth__forgot' to='/register'>
+            <Link className='auth__forgot' to='/register_tag'>
               {' Sign up'}
             </Link>
           </span>

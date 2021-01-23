@@ -13,7 +13,7 @@ const validateForm = (values) => {
     errors.passwordConfirmation = "Password confirmation is required";
   } else if (values.password !== values.passwordConfirmation) {
     errors.passwordConfirmation =
-      "Password and password confirmation do not match. Check your input and try again";
+      "Passwords do not match. Check your input and try again";
   }
 
   return errors;

@@ -58,7 +58,7 @@ export default function App() {
 
   return (
     <AppContext.Provider value={[state, dispatch]}>
-      <Router>
+      <Router basename="/">
         <Switch>
           <Route path='/contact-us'>Contact us Page coming soon</Route>
           <Route path='/terms-and-conditions'>Terms and conditions page coming soon</Route>

@@ -44,9 +44,13 @@ export default function TagForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    lookUpTagId(tagId.toUpperCase(), state.location).then((res) => setLookUpResult(res));
-    setIsLoading(false);
+    if (tagId.length === 6) {
+      setIsLoading(true);
+      lookUpTagId(tagId.toUpperCase(), state.location).then((res) => setLookUpResult(res));
+      setIsLoading(false);
+    } else {
+      setLookUpResult({message: "No such tag", status: "na"})
+    }
   };
 
   const handleClear = () => {
@@ -60,7 +64,7 @@ export default function TagForm() {
   };
 
   const handleMouseLeave = () => {
-    setTimeout(() => setTooltipActive(false), 1500);
+    setTooltipActive(false);
   };
 
   return (
@@ -77,10 +81,10 @@ export default function TagForm() {
           />
 
           <div className='tooltip-tag'>
-            <div
+            <button type="button"
               className='tooltip-tag__icon'
-              onMouseEnter={() => setTooltipActive(true)}
-              onMouseLeave={handleMouseLeave}></div>
+              onFocus={() => setTooltipActive(true)}
+              onBlur={handleMouseLeave}></button>
             {tooltipActive && (
               <div className='tooltip-tag__id'>
                 <div className='tooltip-tag__text'>
