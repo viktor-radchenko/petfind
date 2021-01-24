@@ -43,7 +43,10 @@ export default function SetPassword() {
           return res.json();
         })
         .then((res) => { 
-          if (res.access_token) login(res)
+          if (res.access_token) {
+            if (localStorage.getItem('confirmation_pending')) localStorage.removeItem('confirmation_pending');
+            login(res)
+          }
         })
         .catch((e) => setServerError(e.message));
     } else {

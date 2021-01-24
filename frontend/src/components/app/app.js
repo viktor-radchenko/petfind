@@ -13,6 +13,7 @@ import Footer from "../footer";
 import PrivateRoute from "../hoc";
 import ForgotPassword from "../forgot-password";
 import ResetPassword from "../reset-password";
+import ConfirmationPending from "../confirmation-pending";
 
 import "./app.css";
 
@@ -68,6 +69,9 @@ export default function App() {
           </Route>
           <Route path='/register_tag'>
             <RegisterTagForm />
+          </Route>
+          <Route path='/activate_your_account'>
+            <ConfirmationPending />
           </Route>
           <Route path='/auth/set_password/:token'>
             <SetPassword />

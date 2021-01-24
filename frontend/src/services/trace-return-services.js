@@ -146,3 +146,22 @@ export const resetPassword = async (password, passwordConfirmation, token) => {
     body: formData,
   });
 };
+
+export const updateProfile = async (data) => {
+  const formData = new FormData();
+  formData.append("first_name", data.firstName);
+  formData.append("last_name", data.lastName);
+  formData.append("phone", data.phone);
+  formData.append("address", data.address);
+  formData.append("city", data.city);
+  formData.append("country", data.country);
+  formData.append("zip_code", data.zipCode);
+  formData.append("state", data.userState);
+  formData.append("old_password", data.oldPassword);
+  formData.append("new_password", data.newPassword)
+
+  return await authFetch("/api/auth/update_profile", {
+    method: "POST",
+    body: formData,
+  });
+};

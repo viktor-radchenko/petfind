@@ -1,5 +1,5 @@
 import React, { useReducer, useEffect, useState } from "react";
-import { authFetch, addRegisteredTag } from "../../services";
+import { authFetch, addRegisteredTag, logout } from "../../services";
 
 import validateForm from './validator';
 
@@ -27,7 +27,7 @@ function reducer(state, { field, value }) {
   };
 }
 
-export default function ModalAddTag({ handleNewTag }) {
+export default function ModalAddTag() {
   const [state, dispatch] = useReducer(reducer, initialFormState);
   const [errors, setErrors] = useState({});
 
@@ -48,22 +48,19 @@ export default function ModalAddTag({ handleNewTag }) {
 
   useEffect(() => {
     authFetch("/api/auth/get_user_data")
-      .then((response) => {
-        if (response.status === 401) {
-          console.error("Sorry you aren't authorized!");
-          return null;
-        }
-        return response.json();
+      .then((res) => {
+        if (res.status === 401) throw new Error("Sorry you aren't authorized!");
+        return res.json();
       })
-      .then((response) => {
+      .then((res) => {
         const new_state = {
-          phone: response.phone,
-          email: response.email,
-          address: response.address,
-          city: response.city,
-          country: response.country,
-          zipCode: response.zip_code,
-          userState: response.state,
+          phone: res.phone,
+          email: res.email,
+          address: res.address,
+          city: res.city,
+          country: res.country,
+          zipCode: res.zip_code,
+          userState: res.state,
         };
 
         for (const property in new_state) {
@@ -72,6 +69,10 @@ export default function ModalAddTag({ handleNewTag }) {
             value: new_state[property],
           });
         }
+      })
+      .catch(e => {
+        alert(e.message)
+        logout();
       });
   }, []);
 

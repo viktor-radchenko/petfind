@@ -2,6 +2,7 @@ import secrets
 
 from flask import request, Blueprint, jsonify
 from flask_praetorian import auth_required, current_user
+from sqlalchemy import or_
 
 from app import guard, db
 from app.logger import log
@@ -43,16 +44,20 @@ def register():
 
     # Validate request data on server side and return error messages
     if not email:
-        return {"error": "Email is missing. Please provide your email and try again"}, 406
-    user = User.query.filter_by(email=email).first()
+        return {"error": "Email is missing. Please provide your email and try again"}
+    user = User.query.filter(or_(User.email == email, User.phone == phone)).first()
     if user:
-        return {"error": "This user is already registered. Please log in"}, 406
+        return {"error": "This user is already registered. Please log in"}
     if not phone:
-        return {"error": "Phone number is missing. Please provide your phone number and try again"}, 406
+        return {
+            "error": "Phone number is missing. Please provide your phone number and try again"
+        }
     if not tag_id:
-        return {"error": "Tag ID is missing. Please provide your tag ID and try again"}, 406
+        return {"error": "Tag ID is missing. Please provide your tag ID and try again"}
     if not tag_name:
-        return {"error": "Tag Name is missing. Please provide your tag ID and try again"}, 406
+        return {
+            "error": "Tag Name is missing. Please provide your tag ID and try again"
+        }
 
     temp_user_password = secrets.token_urlsafe(8)
 
@@ -85,7 +90,7 @@ def register():
         state=state,
         user_id=new_user.id,
         email=new_user.email,
-        phone=new_user.phone
+        phone=new_user.phone,
     )
     if tag_image:
         picture_file = save_picture(tag_image)
@@ -101,17 +106,15 @@ def register():
     new_message = MessageQueue(
         recipient_id=new_user.id,
         message_type=MessageQueue.MessageType.registration_email,
-        temp_data=temp_user_password
+        temp_data=temp_user_password,
     )
     db.session.add(new_message)
     db.session.commit()
-    response = {
-        "confirmed": True
-    }
+    response = {"confirmed": True}
     return jsonify(response), 200
 
 
-@auth_blueprint.route('/api/auth/verify', methods=['POST'])
+@auth_blueprint.route("/api/auth/verify", methods=["POST"])
 def verify():
     """
     Finalizes a user registration with the token that they were issued in their
@@ -125,16 +128,20 @@ def verify():
     old_password = req.get("oldPassword", None)
     new_password = req.get("newPassword", None)
     if not old_password:
-        return {"message": "Password credentials are invalid. Check your data and try again"}, 401
+        return {
+            "message": "Password credentials are invalid. Check your data and try again"
+        }, 401
     if not new_password:
-        return {"message": "Password credentials are invalid. Check your data and try again"}, 401
+        return {
+            "message": "Password credentials are invalid. Check your data and try again"
+        }, 401
     user = guard.get_user_from_registration_token(token)
     if not guard.authenticate(user.email, old_password):
         return {"message": "Passwords do not match"}, 401
     user.password = guard.hash_password(new_password)
     user.activated = True
     user.save()
-    ret = {'access_token': guard.encode_jwt_token(user)}
+    ret = {"access_token": guard.encode_jwt_token(user)}
     return jsonify(ret), 200
 
 
@@ -184,37 +191,41 @@ def resend_email():
     new_message = MessageQueue(
         recipient_id=user.id,
         message_type=MessageQueue.MessageType.registration_email,
-        temp_data=temp_user_password
+        temp_data=temp_user_password,
     )
     new_message.save()
     response = {"message": "Activation email succesfully sent. Check your inbox."}
     return jsonify(response), 200
 
 
-@auth_blueprint.route("/api/auth/forgot_password", methods=['POST'])
+@auth_blueprint.route("/api/auth/forgot_password", methods=["POST"])
 def forgot_password():
-    log(log.INFO, '/forgot_password')
-    email = request.form.get('email')
+    log(log.INFO, "/forgot_password")
+    email = request.form.get("email")
     if not email:
         return {"error": "No email provided. Check your input and try again"}
     user = User.query.filter_by(email=email).first_or_404()
     new_message = MessageQueue(
-        recipient_id=user.id,
-        message_type=MessageQueue.MessageType.password_reset_email
+        recipient_id=user.id, message_type=MessageQueue.MessageType.password_reset_email
     )
     new_message.save()
-    response = {"message": "We have sent you an email to confirm password reset. Check your inbox", "status": 'ok'}
+    response = {
+        "message": "We have sent you an email to confirm password reset. Check your inbox",
+        "status": "ok",
+    }
     return jsonify(response), 200
 
 
-@auth_blueprint.route("/api/auth/verify_reset", methods=['POST'])
+@auth_blueprint.route("/api/auth/verify_reset", methods=["POST"])
 def verify_reset():
-    log(log.INFO, '/verify_reset')
+    log(log.INFO, "/verify_reset")
     token = request.form.get("token", None)
     password = request.form.get("password", None)
     password_confirmation = request.form.get("password_confirmation", None)
     if not password or not password_confirmation:
-        return {"error": "Password credentials are missing. Check your data and try again"}
+        return {
+            "error": "Password credentials are missing. Check your data and try again"
+        }
     if password != password_confirmation:
         return {"error": "Passwords do not match. Please try again"}
     user = guard.validate_reset_token(token)
@@ -222,7 +233,7 @@ def verify_reset():
         return {"error": "No such user. Check your user credentials and try again"}
     user.password = guard.hash_password(password)
     user.save()
-    response = {'access_token': guard.encode_jwt_token(user)}
+    response = {"access_token": guard.encode_jwt_token(user)}
     return jsonify(response), 200
 
 
@@ -231,3 +242,18 @@ def verify_reset():
 def get_user_data():
     user = current_user()
     return jsonify(user.to_json()), 200
+
+
+@auth_blueprint.route("/api/auth/update_profile", methods=["POST"])
+@auth_required
+def update_profile():
+    user = current_user()
+    for key, value in request.form.items():
+        if key == "old_password" or key == "new_password":
+            continue
+        if value == "":
+            setattr(user, key, None)
+        setattr(user, key, value)
+    user.save()
+    response = {"message": "Successfully update"}
+    return jsonify(response), 200

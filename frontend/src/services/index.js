@@ -13,6 +13,7 @@ import {
   sendPrivateMessage,
   requestPasswordReset,
   resetPassword,
+  updateProfile,
 } from "./trace-return-services";
 
 export {
@@ -30,4 +31,5 @@ export {
   sendPrivateMessage,
   requestPasswordReset,
   resetPassword,
+  updateProfile,
 };

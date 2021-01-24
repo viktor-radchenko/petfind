@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { authFetch } from "../../services";
+import { authFetch, logout } from "../../services";
 
 import ModalWrapper from "../modal-wrapper";
 import ModalAddTag from "../modal-add-tag";
@@ -22,18 +22,22 @@ export default function DashboardTable() {
 
   // Populate table with authFetch for current user
   useEffect(() => {
-    const fetchTableData = () => {
-      setLoading(true);
-      return authFetch(`/api/registered_tag/details`).then((response) => {
-        if (response.status === 401) {
-          console.error("Sorry you aren't authorized!");
-          return null;
-        }
-        setLoading(false);
-        return response.json();
+    setLoading(true);
+
+    authFetch(`/api/registered_tag/details`)
+      .then((res) => {
+        if (!res.ok) throw new Error("We could not authorize your request. Try log in to the system and try again");
+        return res.json();
+      })
+      .then((res) => {
+        if (res.message) return;
+        setTableData(res);
+      })
+      .catch((e) => {
+        alert(e.message);
+        logout();
       });
-    };
-    fetchTableData().then((res) => setTableData(res));
+    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -94,7 +98,6 @@ export default function DashboardTable() {
 
   return (
     <>
-
       <form className='dashboard__search'>
         <div className='dashboard__form'>
           <input

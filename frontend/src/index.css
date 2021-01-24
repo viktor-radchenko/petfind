@@ -2756,9 +2756,7 @@ ul.tabs {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: center;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
       -ms-flex-flow: row wrap;
@@ -3332,6 +3330,30 @@ ul.tabs {
 
 .edit-tag__input, .edit-tag__select {
   width: 100%;
+}
+
+.edit-tag__input:read-only {
+  color: #424141;
+}
+
+.profile__form {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  margin: 0 auto;
+}
+
+.profile__form-group {
+  width: 45%;
+}
+
+.profile__reset-password {
+  margin-top: 40px;
+  max-width: 300px;
+}
+
+.profile__reset-password-btn {
+  margin-top: 20px;
 }
 
 .delete-tag__message {

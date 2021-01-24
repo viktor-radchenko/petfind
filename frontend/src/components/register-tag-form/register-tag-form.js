@@ -38,6 +38,7 @@ export default function RegisterTagForm() {
   const [state, dispatch] = useReducer(reducer, initialFormState);
   const [errors, setErrors] = useState({});
   const [appState] = useAppContext();
+  const [serverError, setServerError] = useState('');
 
   const {
     tagIdMessage,
@@ -149,16 +150,20 @@ export default function RegisterTagForm() {
         zipCode,
         userState
       )
-        .then((res) => res.json())
         .then((res) => {
+          if (!res.ok) throw new Error("Internal server error. Please try again or contact support for help")
+          return res.json()})
+        .then((res) => {
+          if (res.error) setServerError(res.error)
           if (res.confirmed) {
+            localStorage.setItem("confirmation_pending", email);
             dispatch({
               field: "currentStep",
               value: 3,
             });
           }
         })
-        .catch((e) => console.error(e));
+        .catch((e) => alert(e));
     } else {
       setErrors(validatedForm);
     }
@@ -219,7 +224,7 @@ export default function RegisterTagForm() {
                 onChange={onChange}
               />
               {tagIdMessage && <div className='input-error input-error--main register-item__message'>{tagIdMessage}</div>}
-            {errors.tagId && <div className="input-error">{errors.tagId}</div>}
+              {errors.tagId && <div className="input-error input-error--main">{errors.tagId}</div>}
             </label>
 
             <label className='label'>
@@ -370,6 +375,8 @@ export default function RegisterTagForm() {
                 />
               </label>
             </div>
+
+            {serverError && <div className="input-error input-error--main">{serverError}</div>}
 
             <div className='create-account__bottom'>
               <button className='button create-account__btn' type='submit' onClick={handleSubmit}>

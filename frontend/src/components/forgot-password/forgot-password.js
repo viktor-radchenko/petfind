@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { useAuth, requestPasswordReset } from "../../services";
 
@@ -17,6 +17,10 @@ export default function ForgotPassword() {
   // Redirect logged users
   if (logged) history.push("/dashboard");
 
+  useEffect(() => {
+    if (email.length === 0) setServerError("");
+  }, [email])
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -24,12 +28,14 @@ export default function ForgotPassword() {
     const validatedForm = validateForm(values);
     if (Object.keys(validatedForm).length === 0 && validatedForm.constructor === Object) {
       requestPasswordReset(email)
-        .then((res) => res.json())
         .then((res) => {
-          if (!res.status === "ok") throw Error(res.error);
+          if (!res.ok) throw new Error("Sorry, this email is not associated with any account");
+          return res.json();
+        })
+        .then((res) => {
           setMessage(res.message);
         })
-        .catch((e) => setServerError(e));
+        .catch((e) => setServerError(e.message));
     } else {
       setErrors(validatedForm);
     }
@@ -59,7 +65,7 @@ export default function ForgotPassword() {
                 value={email}
               />
               {errors.email && <div className='input-error'>{errors.email}</div>}
-              {serverError && <div className='input-error'>{serverError}</div>}
+              {serverError && <div className='input-error input-error--main'>{serverError}</div>}
             </label>
 
             <button className='button set-password__btn' type='submit'>
@@ -76,7 +82,7 @@ export default function ForgotPassword() {
           <p className='password-notify__text'>{message}</p>
         </div>
       )}
-      
+
       <div className='go-home'>
         <small>
           <Link className='go-home__link' to='/'>

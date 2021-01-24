@@ -93,7 +93,7 @@ export default function ModalEditTag({ data }) {
             <div className='register-item__img'>
               <span>Add an Image</span>
               <img
-                src={tagImage instanceof File ? URL.createObjectURL(tagImage) : `/uploads/tag_image/${tagImage}`}
+                src={tagImage instanceof File ? URL.createObjectURL(tagImage) : tagImage ? `/uploads/tag_image/${tagImage}` : null}
                 alt='img'
               />
             </div>
