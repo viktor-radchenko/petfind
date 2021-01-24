@@ -57,6 +57,8 @@ export default function App() {
     });
   }, []);
 
+  console.log(state.location);
+
   return (
     <AppContext.Provider value={[state, dispatch]}>
       <Router basename="/">

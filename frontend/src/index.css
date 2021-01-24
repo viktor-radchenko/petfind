@@ -422,7 +422,7 @@ body {
 
 .dropdown--active {
   display: block;
-  z-index: 10;
+  z-index: 5;
 }
 
 .register-item__input-id {

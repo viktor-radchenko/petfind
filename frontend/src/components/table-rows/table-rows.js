@@ -4,23 +4,18 @@ import { updateRegisteredTag } from "../../services";
 import ModalWrapper from "../modal-wrapper";
 import ModalEditTag from "../modal-edit-tag";
 import ModalDeleteTag from "../modal-delete-tag";
-
+import ModalAnalytics from "../modal-analytics";
 
 export default function TableRows({ rows, loading, handleUpdate }) {
   const [rowState, setRowState] = useState({});
   const [activeRowId, setActiveRowId] = useState();
   const editModal = useRef(null);
   const deleteModal = useRef(null);
+  const analyticsModal = useRef(null);
 
   if (loading) {
     return <h1>LOADING...</h1>;
   }
-
-
-  const handleAnalyticsBtn = (e, id) => {
-    e.preventDefault();
-    alert(`Analytics button with tag ID "${id}" was clicked!`);
-  };
 
   const handlePrivateBtn = (e, row) => {
     e.preventDefault();
@@ -32,18 +27,24 @@ export default function TableRows({ rows, loading, handleUpdate }) {
         handleUpdate(res);
       });
   };
-  
+
+  const toggleAnalyticsModal = (e, row) => {
+    e.preventDefault();
+    setRowState(row);
+    analyticsModal.current.open();
+  };
+
   const toggleEditModal = (e, row) => {
     e.preventDefault();
     setRowState(row);
-    editModal.current.open()
-  }
+    editModal.current.open();
+  };
 
   const toggleDeleteModal = (e, row) => {
     e.preventDefault();
     setRowState(row);
-    deleteModal.current.open()
-  }
+    deleteModal.current.open();
+  };
 
   const handleStatusBtn = (e, row) => {
     e.preventDefault();
@@ -83,13 +84,14 @@ export default function TableRows({ rows, loading, handleUpdate }) {
                 />
                 <span className='switch__slider'></span>
               </label>
-              <div>
-              {row.is_private && <span className="table__item-state--block"></span>}
-              </div>
+              <div>{row.is_private && <span className='table__item-state--block'></span>}</div>
             </div>
-            <form className={ activeRowId === row.tag_id ? 'table__item-actions table__item-actions--active' : 'table__item-actions' }>
+            <form
+              className={
+                activeRowId === row.tag_id ? "table__item-actions table__item-actions--active" : "table__item-actions"
+              }>
               <button
-                onClick={(e) => handleAnalyticsBtn(e, row.tag_id)}
+                onClick={(e) => toggleAnalyticsModal(e, row)}
                 className='table__item-btn table__item-btn--diagram'>
                 analytics
               </button>
@@ -99,21 +101,26 @@ export default function TableRows({ rows, loading, handleUpdate }) {
               <button onClick={(e) => handlePrivateBtn(e, row)} className='table__item-btn table__item-btn--lock'>
                 lock
               </button>
-              <button
-                onClick={(e) => toggleDeleteModal(e, row)}
-                className='table__item-btn table__item-btn--delete'>
+              <button onClick={(e) => toggleDeleteModal(e, row)} className='table__item-btn table__item-btn--delete'>
                 delete
               </button>
             </form>
-            <button className={  activeRowId === row.tag_id ? 'dropdown dropdown--active' : 'dropdown'} onClick={() => activeRowId ? setActiveRowId('') : setActiveRowId(row.tag_id)}>dropdown</button>
+            <button
+              className={activeRowId === row.tag_id ? "dropdown dropdown--active" : "dropdown"}
+              onClick={() => (activeRowId ? setActiveRowId("") : setActiveRowId(row.tag_id))}>
+              dropdown
+            </button>
           </li>
         ))}
       </ul>
       <ModalWrapper header={"Delete tag"} ref={deleteModal}>
-        <ModalDeleteTag data={rowState} handleUpdate={handleUpdate}/>
+        <ModalDeleteTag data={rowState} handleUpdate={handleUpdate} />
       </ModalWrapper>
       <ModalWrapper header={"Edit tag"} ref={editModal}>
-        <ModalEditTag data={rowState}/>
+        <ModalEditTag data={rowState} />
+      </ModalWrapper>
+      <ModalWrapper header={"Tag search history"} ref={analyticsModal}>
+        <ModalAnalytics data={rowState} />
       </ModalWrapper>
     </>
   );

@@ -110,6 +110,7 @@ def registered_lookup(tag_id):
         lon=location.get("lon"),
         ip_address=location.get("query"),
         zip_code=location.get("zip"),
+        city=location.get("city"),
         tag_id=tag.tag_id,
     )
     search.save()
@@ -174,3 +175,11 @@ def delete_tag(tag_id):
     deleted_tag.save()
 
     return jsonify(deleted_tag.to_json()), 200
+
+
+@tag_blueprint.route('/api/registered_tag/search_history/<tag_id>')
+@auth_required
+def search_history(tag_id):
+    tag = RegisteredTag.query.get_or_404(tag_id)
+    searches = [search.to_json() for search in tag.searches]
+    return jsonify(searches), 200
