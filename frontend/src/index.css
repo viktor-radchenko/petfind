@@ -3573,6 +3573,11 @@ ul.tabs {
   height: 18px;
 }
 
+.PhoneInputInput {
+  border: none;
+  outline: transparent;
+}
+
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 
 /* Document

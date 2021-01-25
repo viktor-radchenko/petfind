@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { Link } from "react-router-dom";
+import PhoneInput from 'react-phone-number-input'
 import { useAppContext } from "../app";
 
 import { completeRegistration } from "../../services";
@@ -7,6 +8,7 @@ import { validateTagForm, validateUserForm } from "./validator";
 
 import logo from "../../images/logo.png";
 import imagePlaceholder from "../../images/icons/add-photo.svg";
+import 'react-phone-number-input/style.css'
 
 const initialFormState = {
   tagIdMessage: "",
@@ -39,6 +41,7 @@ export default function RegisterTagForm() {
   const [errors, setErrors] = useState({});
   const [appState] = useAppContext();
   const [serverError, setServerError] = useState('');
+  const [phoneValue, setPhoneValue] = useState('');
 
   const {
     tagIdMessage,
@@ -131,7 +134,7 @@ export default function RegisterTagForm() {
     const values = {
       firstName: firstName,
       lastName: lastName,
-      phone: phone,
+      phone: phoneValue,
       email: email,
     };
     const validatedForm = validateUserForm(values);
@@ -168,6 +171,14 @@ export default function RegisterTagForm() {
       setErrors(validatedForm);
     }
   };
+
+  const onPhoneChange = (e) => {
+    console.log(e.target.value);
+    dispatch({
+      field: "phone",
+      value: e.target.value
+    })
+  }
 
   return (
     <>
@@ -288,13 +299,14 @@ export default function RegisterTagForm() {
 
               <label className='label'>
                 <span>Phone Number</span>
-                <input
+                <PhoneInput
                   required='required'
                   className='input create-account__input'
                   type='tel'
                   name='phone'
-                  value={phone}
-                  onChange={onChange}
+                  defaultCountry='US'
+                  value={phoneValue}
+                  onChange={setPhoneValue}
                 />
                 {errors.phone && <div className="input-error">{errors.phone}</div>}
               </label>
