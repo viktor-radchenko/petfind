@@ -3,10 +3,10 @@ import { authFetch, logout } from "../../services";
 
 import DashboardTable from "../dashboard-table";
 import DashboardSidebar from "../dashboard-sidebar";
+import ShopifyCard from '../shopify-card';
 import Profile from "../profile";
 
 import "./dashboard.css";
-import merchImg from "../../images/tag-img.jpg";
 
 export default function Dasboard() {
   const [userData, setUserData] = useState();
@@ -78,89 +78,12 @@ export default function Dasboard() {
         <div className='buy-tags'>
           <div className='buy-tags__top'>
             <span className='title buy-tags__title'>Buy Tags</span>
-
             <a className='tags__more buy-tags__more' href='!#'>
               See all
             </a>
           </div>
-
-          <div className='buy-tags__content'>
-            <article className='tag-card'>
-              <div className='tag-card__top'>
-                <div className='tag-card__img'>
-                  <img src={merchImg} alt='tag' />
-                </div>
-
-                <div className='tag-card__details'>
-                  <a className='tag-card__title' href='!#'>
-                    Bow Tie Pet Tag
-                  </a>
-
-                  <button className='tag-card__btn' type='button'>
-                    $100
-                  </button>
-                </div>
-
-                <span className='tag-card__desc'>Engrave - Memories, Etched Forever!</span>
-              </div>
-            </article>
-            <article className='tag-card'>
-              <div className='tag-card__top'>
-                <div className='tag-card__img'>
-                  <img src={merchImg} alt='tag' />
-                </div>
-
-                <div className='tag-card__details'>
-                  <a className='tag-card__title' href='!#'>
-                    Bow Tie Pet Tag
-                  </a>
-
-                  <button className='tag-card__btn' type='button'>
-                    $100
-                  </button>
-                </div>
-
-                <span className='tag-card__desc'>Engrave - Memories, Etched Forever!</span>
-              </div>
-            </article>
-            <article className='tag-card'>
-              <div className='tag-card__top'>
-                <div className='tag-card__img'>
-                  <img src={merchImg} alt='tag' />
-                </div>
-
-                <div className='tag-card__details'>
-                  <a className='tag-card__title' href='!#'>
-                    Bow Tie Pet Tag
-                  </a>
-
-                  <button className='tag-card__btn' type='button'>
-                    $100
-                  </button>
-                </div>
-
-                <span className='tag-card__desc'>Engrave - Memories, Etched Forever!</span>
-              </div>
-            </article>
-            <article className='tag-card'>
-              <div className='tag-card__top'>
-                <div className='tag-card__img'>
-                  <img src={merchImg} alt='tag' />
-                </div>
-
-                <div className='tag-card__details'>
-                  <a className='tag-card__title' href='!#'>
-                    Bow Tie Pet Tag
-                  </a>
-
-                  <button className='tag-card__btn' type='button'>
-                    $100
-                  </button>
-                </div>
-
-                <span className='tag-card__desc'>Engrave - Memories, Etched Forever!</span>
-              </div>
-            </article>
+          <div className='buy-tags__content' id="buy-tags__content">
+            <ShopifyCard wrapper={'buy-tags__content'} />
           </div>
         </div>
       </div>

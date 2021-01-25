@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 
-import './shopify-card.css';
+import "./shopify-card.css";
 
-export const ShopifyCard = () => {
+export const ShopifyCard = ({ wrapper }) => {
   useEffect(() => {
     const s = document.createElement("script");
     s.type = "text/javascript";
@@ -33,7 +33,7 @@ export const ShopifyCard = () => {
         ShopifyBuy.UI.onReady(client).then(function (ui) {
           ui.createComponent("product", {
             id: "11074072132",
-            node: document.getElementById("tags__bottom"),
+            node: document.getElementById("${wrapper}"),
             moneyFormat: "%24%7B%7Bamount%7D%7D",
             options: {
               product: {

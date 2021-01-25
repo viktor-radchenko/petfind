@@ -105,23 +105,7 @@ export default function Home() {
             </div>
 
             <div className='tags__bottom' id="tags__bottom">
-
-              <ShopifyCard />
-              {/* <article className='tag-card'>
-                <div className='tag-card__top'>
-                  <div className='tag-card__img'>
-                    <img src={tagImg} alt='tag' />
-                  </div>
-
-                  <span className='tag-card__title'>Bow Tie Pet Tag</span>
-
-                  <span className='tag-card__desc'>Engrave - Memories, Etched Forever!</span>
-                </div>
-
-                <button className='tag-card__btn' type='button'>
-                  Buy for $100
-                </button>
-              </article> */}
+              <ShopifyCard wrapper={'tags__bottom'}/>
             </div>
 
             <Link className='tags__more' to='/'>

@@ -27,11 +27,12 @@ class MessageSender:
                 ),
                 version="v3.1",
             )
-            self.twilio_client = sms_client(
-                current_app.config["TWILIO_ACCOUNT_SID"],
-                current_app.config["TWILIO_AUTH_TOKEN"],
-            )
-            
+            if current_app.config["TWILIO_ACCOUNT_SID"]:
+                self.twilio_client = sms_client(
+                    current_app.config["TWILIO_ACCOUNT_SID"],
+                    current_app.config["TWILIO_AUTH_TOKEN"],
+                )
+
     def prepare_messages(self):
         if not self.messages:
             log(log.INFO, "No new messages")
@@ -220,7 +221,7 @@ class MessageSender:
                 "Messages": self.password_reset_emails,
             }
             result = self.mailjet.send.create(data=data)
-        if self.sms_messages:
+        if current_app.config["TWILIO_ACCOUNT_SID"] and self.sms_messages:
             for message in self.sms_messages:
                 result = self.twilio_client.messages.create(
                     current_app.config["TWILIO_SERVICE_SID"],
