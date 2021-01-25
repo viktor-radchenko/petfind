@@ -15,9 +15,9 @@ export default function Header() {
     <header className='header'>
       <div className='container'>
         <nav className='header__inner'>
-          <div className='logo'>
+          <Link className='logo' to='/'>
             <img src={homeLogo} alt='logotype' />
-          </div>
+          </Link>
 
           <ul className={menuActive ? 'menu menu--active' : 'menu'}>
             <li className='menu__item'>

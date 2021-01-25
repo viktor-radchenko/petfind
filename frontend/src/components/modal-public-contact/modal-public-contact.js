@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ModalPublicContact({ lookUpData, handleTransition }) {
+export default function ModalPublicContact({ lookUpData }) {
   const { tag_image, tag_id, tag_name, name, phone, email, address } = lookUpData.data;
 
   return (
@@ -47,10 +47,6 @@ export default function ModalPublicContact({ lookUpData, handleTransition }) {
             <span className='search-enabled__content'>{address}</span>
           </li>
         </ul>
-
-        <div className='modal__footer'>
-          <button className='button' onClick={handleTransition}>Contact Owner</button>
-        </div>
       </div>
     </div>
   );

@@ -33,9 +33,11 @@ export default function Profile({ userData }) {
   const { firstName, lastName, phone, address, city, country, zipCode, userState } = state;
 
   const handlePasswordReset = () => {
-    logout();
-    history.push('/auth/forgot_password');
-  }
+    if (window.confirm("Are you sure you want to reset password?")) {
+      logout();
+      history.push("/auth/forgot_password");
+    }
+  };
 
   const updateInitialState = (data) => {
     console.log("Updating initial state", data);
@@ -177,7 +179,7 @@ export default function Profile({ userData }) {
       </form>
 
       <div className='profile__reset-password'>
-        <span className="label">Password:</span>
+        <span className='label'>Password:</span>
         <button className='button profile__reset-password-btn' type='button' onClick={handlePasswordReset}>
           Update password
         </button>

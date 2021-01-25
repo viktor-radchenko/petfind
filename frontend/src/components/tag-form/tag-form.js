@@ -58,14 +58,14 @@ export default function TagForm() {
     setLookUpResult(null);
   };
 
-  const handleTransition = () => {
-    contactPublicModal.current.close();
-    contactPrivateModal.current.open();
-  };
-
   const handleMouseLeave = () => {
     setTooltipActive(false);
   };
+
+  const handleFocus = (e) => {
+    e.target.focus();
+    setTooltipActive(true)
+  }
 
   return (
     <>
@@ -83,7 +83,7 @@ export default function TagForm() {
           <div className='tooltip-tag'>
             <button type="button"
               className='tooltip-tag__icon'
-              onFocus={() => setTooltipActive(true)}
+              onClick={(e) => handleFocus(e)}
               onBlur={handleMouseLeave}></button>
             {tooltipActive && (
               <div className='tooltip-tag__id'>
@@ -144,7 +144,7 @@ export default function TagForm() {
       </ModalWrapper>
 
       <ModalWrapper ref={contactPublicModal} header={"Contact Owner"}>
-        <ModalPublicContact lookUpData={lookUpResult} handleTransition={handleTransition} />
+        <ModalPublicContact lookUpData={lookUpResult} />
       </ModalWrapper>
     </>
   );

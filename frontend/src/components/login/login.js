@@ -25,12 +25,14 @@ export default function Login() {
       method: "post",
       body: JSON.stringify(opts),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        return res.json();
+      })
       .then((res) => {
         if (res.access_token) {
           login(res);
         } else {
-          setServerFeedback(res)
+          setServerFeedback(res);
         }
       })
       .catch((e) => console.log(e));
@@ -46,9 +48,9 @@ export default function Login() {
 
   return (
     <>
-      <div className='full-logo'>
+      <Link className='full-logo' to='/'>
         <img src={logo} alt='full logo' />
-      </div>
+      </Link>
 
       <div className='auth'>
         <span className='auth__subtitle'>Welcome back!</span>
@@ -65,7 +67,7 @@ export default function Login() {
             <input className='input auth__input' type='password' onChange={handlePasswordChange} value={password} />
           </label>
 
-          {serverFeedback && <div className="input-error">{serverFeedback.message}</div>}
+          {serverFeedback && <div className='input-error'>{serverFeedback.message}</div>}
 
           <div className='auth__password'>
             <label className='label auth__label'>
@@ -84,12 +86,12 @@ export default function Login() {
           </button>
 
           <span className='auth__sign-up'>
-            No account yet? 
+            No account yet?
             <Link className='auth__forgot' to='/register_tag'>
-              {' Sign up'}
+              {" Sign up"}
             </Link>
           </span>
-        </form> 
+        </form>
       </div>
     </>
   );
