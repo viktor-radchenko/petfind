@@ -8,13 +8,12 @@ import { validateTagForm, validateUserForm } from "./validator";
 
 import logo from "../../images/logo.png";
 import imagePlaceholder from "../../images/icons/add-photo.svg";
-import "react-phone-number-input/style.css";
 import "./register-tag-form.css";
 
 const initialFormState = {
   tagIdMessage: "",
   tagIdIsValid: false,
-  currentStep: 1,
+  currentStep: 2,
   tagId: "",
   tagName: "",
   tagImage: null,
@@ -175,9 +174,9 @@ export default function RegisterTagForm() {
 
   return (
     <>
-      <div className='full-logo'>
+      <Link className='full-logo' to='/'>
         <img src={logo} alt='full logo' />
-      </div>
+      </Link>
 
       {currentStep !== 3 ? (
         <ul className='breadcrumbs'>
