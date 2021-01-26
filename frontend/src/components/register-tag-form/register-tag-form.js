@@ -145,7 +145,7 @@ export default function RegisterTagForm() {
         tagImage,
         firstName,
         lastName,
-        phone,
+        phoneValue,
         email,
         address,
         city,
@@ -171,14 +171,6 @@ export default function RegisterTagForm() {
       setErrors(validatedForm);
     }
   };
-
-  const onPhoneChange = (e) => {
-    console.log(e.target.value);
-    dispatch({
-      field: "phone",
-      value: e.target.value
-    })
-  }
 
   return (
     <>
