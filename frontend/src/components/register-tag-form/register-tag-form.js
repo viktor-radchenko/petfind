@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { Link } from "react-router-dom";
-import PhoneInput from 'react-phone-number-input'
+import PhoneInput from "react-phone-number-input";
 import { useAppContext } from "../app";
 
 import { completeRegistration } from "../../services";
@@ -8,7 +8,8 @@ import { validateTagForm, validateUserForm } from "./validator";
 
 import logo from "../../images/logo.png";
 import imagePlaceholder from "../../images/icons/add-photo.svg";
-import 'react-phone-number-input/style.css'
+import "react-phone-number-input/style.css";
+import "./register-tag-form.css";
 
 const initialFormState = {
   tagIdMessage: "",
@@ -40,8 +41,8 @@ export default function RegisterTagForm() {
   const [state, dispatch] = useReducer(reducer, initialFormState);
   const [errors, setErrors] = useState({});
   const [appState] = useAppContext();
-  const [serverError, setServerError] = useState('');
-  const [phoneValue, setPhoneValue] = useState('');
+  const [serverError, setServerError] = useState("");
+  const [phoneValue, setPhoneValue] = useState("");
 
   const {
     tagIdMessage,
@@ -61,7 +62,6 @@ export default function RegisterTagForm() {
     userState,
   } = state;
 
-  
   useEffect(() => {
     if (appState.registerTagId)
       dispatch({
@@ -154,10 +154,11 @@ export default function RegisterTagForm() {
         userState
       )
         .then((res) => {
-          if (!res.ok) throw new Error("Internal server error. Please try again or contact support for help")
-          return res.json()})
+          if (!res.ok) throw new Error("Internal server error. Please try again or contact support for help");
+          return res.json();
+        })
         .then((res) => {
-          if (res.error) setServerError(res.error)
+          if (res.error) setServerError(res.error);
           if (res.confirmed) {
             localStorage.setItem("confirmation_pending", email);
             dispatch({
@@ -180,7 +181,9 @@ export default function RegisterTagForm() {
 
       {currentStep !== 3 ? (
         <ul className='breadcrumbs'>
-          <li className='breadcrumbs__item breadcrumbs__item--active'>Register item</li>
+          <li className={`breadcrumbs__item ${currentStep === 2 ? "breadcrumbs__item--active" : null}`}>
+            Register item
+          </li>
           <li className='breadcrumbs__item'>Create Account</li>
         </ul>
       ) : null}
@@ -226,8 +229,10 @@ export default function RegisterTagForm() {
                 value={tagId}
                 onChange={onChange}
               />
-              {tagIdMessage && <div className='input-error input-error--main register-item__message'>{tagIdMessage}</div>}
-              {errors.tagId && <div className="input-error input-error--main">{errors.tagId}</div>}
+              {tagIdMessage && (
+                <div className='input-error input-error--main register-item__message'>{tagIdMessage}</div>
+              )}
+              {errors.tagId && <div className='input-error input-error--main'>{errors.tagId}</div>}
             </label>
 
             <label className='label'>
@@ -239,7 +244,7 @@ export default function RegisterTagForm() {
                 value={tagName}
                 onChange={onChange}
               />
-            {errors.tagName && <div className="input-error">{errors.tagName}</div>}
+              {errors.tagName && <div className='input-error'>{errors.tagName}</div>}
             </label>
 
             <button
@@ -273,7 +278,7 @@ export default function RegisterTagForm() {
                   value={firstName}
                   onChange={onChange}
                 />
-                {errors.firstName && <div className="input-error">{errors.firstName}</div>}
+                {errors.firstName && <div className='input-error'>{errors.firstName}</div>}
               </label>
 
               <label className='label'>
@@ -286,7 +291,7 @@ export default function RegisterTagForm() {
                   value={lastName}
                   onChange={onChange}
                 />
-                {errors.lastName && <div className="input-error">{errors.lastName}</div>}
+                {errors.lastName && <div className='input-error'>{errors.lastName}</div>}
               </label>
 
               <label className='label'>
@@ -296,11 +301,12 @@ export default function RegisterTagForm() {
                   className='input create-account__input'
                   type='tel'
                   name='phone'
+                  placeholder='(123) 456 78 90 '
                   defaultCountry='US'
                   value={phoneValue}
                   onChange={setPhoneValue}
                 />
-                {errors.phone && <div className="input-error">{errors.phone}</div>}
+                {errors.phone && <div className='input-error'>{errors.phone}</div>}
               </label>
 
               <label className='label'>
@@ -313,7 +319,7 @@ export default function RegisterTagForm() {
                   value={email}
                   onChange={onChange}
                 />
-                {errors.email && <div className="input-error">{errors.email}</div>}
+                {errors.email && <div className='input-error'>{errors.email}</div>}
               </label>
             </div>
 
@@ -380,7 +386,7 @@ export default function RegisterTagForm() {
               </label>
             </div>
 
-            {serverError && <div className="input-error input-error--main">{serverError}</div>}
+            {serverError && <div className='input-error input-error--main'>{serverError}</div>}
 
             <div className='create-account__bottom'>
               <button className='button create-account__btn' type='submit' onClick={handleSubmit}>
