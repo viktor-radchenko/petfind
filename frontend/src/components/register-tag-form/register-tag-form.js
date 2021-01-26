@@ -13,7 +13,7 @@ import "./register-tag-form.css";
 const initialFormState = {
   tagIdMessage: "",
   tagIdIsValid: false,
-  currentStep: 2,
+  currentStep: 1,
   tagId: "",
   tagName: "",
   tagImage: null,
@@ -52,7 +52,6 @@ export default function RegisterTagForm() {
     tagImage,
     firstName,
     lastName,
-    phone,
     email,
     address,
     city,
@@ -180,7 +179,14 @@ export default function RegisterTagForm() {
 
       {currentStep !== 3 ? (
         <ul className='breadcrumbs'>
-          <li className={`breadcrumbs__item ${currentStep === 2 ? "breadcrumbs__item--active" : null}`}>
+          <li
+            className={`breadcrumbs__item ${currentStep === 2 ? "breadcrumbs__item--active" : null}`}
+            onClick={() =>
+              dispatch({
+                field: "currentStep",
+                value: 1,
+              })
+            }>
             Register item
           </li>
           <li className='breadcrumbs__item'>Create Account</li>
