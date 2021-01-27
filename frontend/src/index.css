@@ -3532,11 +3532,11 @@ ul.tabs {
   text-transform: none;
 }
 
-@media (max-width: 600px) {
+/* @media (max-width: 600px) {
   .tooltip-tag__id {
     width: 50%;
   }
-}
+} */
 
 .tooltip-tag__text {
   white-space: normal;
