@@ -5,7 +5,7 @@ import { logout } from "../../services";
 import "./dashboard-sidebar.css";
 import logo from "../../images/logo-noword.png";
 
-export default function DashboardSidebar({ active, userData, handleTabChange, currentTab }) {
+export default function DashboardSidebar({ active, userData, handleTabChange, currentTab, handleSidebarActive }) {
   const getInitials = (string) => {
     let names = string.split(" "),
       initials = names[0].substring(0, 1).toUpperCase();
@@ -21,6 +21,8 @@ export default function DashboardSidebar({ active, userData, handleTabChange, cu
       <Link className='logo-noword' to='/'>
         <img src={logo} alt='logo' />
       </Link>
+
+      {active && <button className='burger-btn burger-btn--active' onClick={handleSidebarActive}></button>}
 
       <ul className='dashboard__tabs'>
         <li

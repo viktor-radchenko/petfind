@@ -1,7 +1,7 @@
 import React, { useReducer, useEffect, useState } from "react";
 import { authFetch, addRegisteredTag, logout } from "../../services";
 
-import validateForm from './validator';
+import validateForm from "./validator";
 
 import imagePlaceholder from "../../images/icons/add-photo.svg";
 
@@ -70,8 +70,8 @@ export default function ModalAddTag() {
           });
         }
       })
-      .catch(e => {
-        alert(e.message)
+      .catch((e) => {
+        alert(e.message);
         logout();
       });
   }, []);
@@ -169,12 +169,19 @@ export default function ModalAddTag() {
                     : "input register-item__input-id"
                 }
                 type='text'
-                maxLength="6"
+                maxLength='6'
                 name='tagId'
                 value={tagId}
                 onChange={onChange}
               />
-              {tagIdMessage && <div className='input-error register-item__message'>{tagIdMessage}</div>}
+              {tagIdMessage && (
+                <div
+                  className={`input-error input-error--main ${
+                    tagIdMessage.includes("Available") ? "register-item__message" : null
+                  }`}>
+                  {tagIdMessage}
+                </div>
+              )}
               {errors.tagId && <div input-error>{errors.tagId}</div>}
             </label>
           </div>
@@ -188,7 +195,7 @@ export default function ModalAddTag() {
               value={tagName}
               onChange={onChange}
             />
-            {errors.tagName && <div className="input-error">{errors.tagName}</div>}
+            {errors.tagName && <div className='input-error'>{errors.tagName}</div>}
           </label>
         </div>
 
@@ -225,13 +232,7 @@ export default function ModalAddTag() {
 
             <label className='label edit-tag__label--input'>
               <span>Country</span>
-              <input
-                className='input edit-tag__input'
-                type='text'
-                name='country'
-                value={country}
-                onChange={onChange}
-              />
+              <input className='input edit-tag__input' type='text' name='country' value={country} onChange={onChange} />
             </label>
 
             <label className='label edit-tag__label--input'>
@@ -248,7 +249,7 @@ export default function ModalAddTag() {
             <label className='label edit-tag__label--input'>
               <span>Phone Number</span>
               <input className='input edit-tag__input' type='tel' name='phone' value={phone} onChange={onChange} />
-              {errors.phone && <div className="input-error">{errors.phone}</div>}
+              {errors.phone && <div className='input-error'>{errors.phone}</div>}
             </label>
 
             <label className='label edit-tag__label--input'>

@@ -235,7 +235,12 @@ export default function RegisterTagForm() {
                 onChange={onChange}
               />
               {tagIdMessage && (
-                <div className='input-error input-error--main register-item__message'>{tagIdMessage}</div>
+                <div
+                  className={`input-error input-error--main ${
+                    tagIdMessage.includes("Available") ? "register-item__message" : null
+                  }`}>
+                  {tagIdMessage}
+                </div>
               )}
               {errors.tagId && <div className='input-error input-error--main'>{errors.tagId}</div>}
             </label>

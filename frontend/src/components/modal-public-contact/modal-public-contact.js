@@ -30,16 +30,16 @@ export default function ModalPublicContact({ lookUpData }) {
 
           <li className='search-enabled__item'>
             <span className='search-enabled__cell search-enabled__cell--phone'>Phone Number</span>
-            <span className='search-enabled__content'>
+            <a className='search-enabled__content' href={`tel:${phone}`}>
               {phone}
-            </span>
+            </a>
           </li>
 
           <li className='search-enabled__item'>
             <span className='search-enabled__cell search-enabled__cell--email'>Email Address</span>
-            <span className='search-enabled__content'>
+            <a className='search-enabled__content' href={`mailto:${email}`}>
               {email}
-            </span>
+            </a>
           </li>
 
           <li className='search-enabled__item'>

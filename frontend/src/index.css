@@ -214,6 +214,7 @@ body {
   height: 124px;
   -o-object-fit: cover;
   object-fit: cover;
+  transform: translateX(-30px);
 }
 
 @media (max-width: 600px) {
@@ -1376,6 +1377,7 @@ body {
 .id-form {
   max-width: 355px;
   height: 43px;
+  position: relative;
   border-radius: 20px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1395,7 +1397,7 @@ body {
 
 .id-form__box {
   position: relative;
-  z-index: 10;
+  overflow: hidden;
 }
 
 .id-form__input {
@@ -2072,6 +2074,7 @@ ul.tabs {
   .dashboard__nav--active {
     left: 0;
     z-index: 10;
+    box-shadow: 0 0 30px 2px #36363656;
   }
   .dashboard__nav .dashboard__close {
     display: block;
@@ -2272,9 +2275,9 @@ ul.tabs {
   }
   .dashboard .burger-btn--active {
     position: fixed;
-    -webkit-transform: translate(197px, 0);
-    -ms-transform: translate(197px, 0);
-    transform: translate(197px, 0);
+    -webkit-transform: translate(180px, 10px);
+    -ms-transform: translate(180px, 10px);
+    transform: translate(180px, 10px);
   }
 }
 
@@ -2937,8 +2940,13 @@ ul.tabs {
   text-align: left;
 }
 
-.modal-private {
+.modal__wrapper {
   position: relative;
+  margin-top: 20px;
+}
+
+.modal-private {
+  position: absolute;
   max-width: 425px;
   width: 100%;
   min-height: 105px;
@@ -3005,7 +3013,7 @@ ul.tabs {
 }
 
 .modal-disabled {
-  position: relative;
+  position: absolute;
   max-width: 425px;
   width: 100%;
   min-height: 67px;
@@ -3047,7 +3055,7 @@ ul.tabs {
 .modal {
   display: block;
   position: fixed;
-  z-index: 1;
+  z-index: 11;
   left: 0;
   top: 0;
   width: 100%;
@@ -3089,8 +3097,8 @@ ul.tabs {
 }
 
 @media (max-width: 600px) {
-  .modal__inner {
-    top: 52px;
+  .modal-disabled, .modal-private {
+    top: -50px;
   }
 }
 
@@ -3485,7 +3493,7 @@ ul.tabs {
   height: 20px;
   position: absolute;
   top: -43px;
-  right: 15px;
+  right: 163px;
   cursor: pointer;
   border: none;
   background: none;
@@ -3510,11 +3518,12 @@ ul.tabs {
 @media (max-width: 600px) {
   .tooltip-tag__icon {
     top: -103px;
+    right: 15px;
   }
 }
 
 .tooltip-tag__id {
-  width: 100%;
+  width: 65%;
   padding: 21px 17px 25px;
   background: #fff;
   -webkit-box-shadow: 0px 0.5px 2px rgba(0, 0, 0, 0.3);
@@ -3522,6 +3531,12 @@ ul.tabs {
   border-radius: 6px;
   font-size: 14px;
   text-transform: none;
+}
+
+@media (max-width: 600px) {
+  .tooltip-tag__id {
+    width: 50%;
+  }
 }
 
 .tooltip-tag__text {

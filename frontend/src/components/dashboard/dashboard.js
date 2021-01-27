@@ -3,7 +3,7 @@ import { authFetch, logout } from "../../services";
 
 import DashboardTable from "../dashboard-table";
 import DashboardSidebar from "../dashboard-sidebar";
-import ShopifyCard from '../shopify-card';
+import ShopifyCard from "../shopify-card";
 import Profile from "../profile";
 
 import "./dashboard.css";
@@ -15,6 +15,10 @@ export default function Dasboard() {
 
   const handleTabChange = (tab) => {
     setCurrentTab(tab);
+  };
+
+  const handleSidebarActive = () => {
+    setSideBarActive(!sideBarActive);
   };
 
   const transformUserData = (data) => {
@@ -55,6 +59,7 @@ export default function Dasboard() {
           active={sideBarActive}
           userData={userData}
           handleTabChange={handleTabChange}
+          handleSidebarActive={handleSidebarActive}
           currentTab={currentTab}
         />
       )}
@@ -63,8 +68,8 @@ export default function Dasboard() {
         <div className='dashboard__inner'>
           <div className='dashboard__box'>
             <button
-              className={sideBarActive ? "burger-btn burger-btn--active" : "burger-btn"}
-              onClick={() => setSideBarActive(!sideBarActive)}>
+              className="burger-btn"
+              onClick={handleSidebarActive}>
               Sidebar Button
             </button>
             <span className='title dashboard__title'>Dashboard</span>
@@ -82,8 +87,8 @@ export default function Dasboard() {
               See all
             </a>
           </div>
-          <div className='buy-tags__content' id="buy-tags__content">
-            <ShopifyCard wrapper={'buy-tags__content'} />
+          <div className='buy-tags__content' id='buy-tags__content'>
+            <ShopifyCard wrapper={"buy-tags__content"} />
           </div>
         </div>
       </div>

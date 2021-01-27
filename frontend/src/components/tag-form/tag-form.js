@@ -49,7 +49,7 @@ export default function TagForm() {
       lookUpTagId(tagId.toUpperCase(), state.location).then((res) => setLookUpResult(res));
       setIsLoading(false);
     } else {
-      setLookUpResult({message: "No such tag", status: "na"})
+      setLookUpResult({ message: "No such tag", status: "na" });
     }
   };
 
@@ -64,8 +64,8 @@ export default function TagForm() {
 
   const handleFocus = (e) => {
     e.target.focus();
-    setTooltipActive(true)
-  }
+    setTooltipActive(true);
+  };
 
   return (
     <>
@@ -79,65 +79,67 @@ export default function TagForm() {
             value={tagId}
             onChange={handleTagIdChange}
           />
+        </div>
 
-          <div className='tooltip-tag'>
-            <button type="button"
-              className='tooltip-tag__icon'
-              onClick={(e) => handleFocus(e)}
-              onBlur={handleMouseLeave}></button>
-            {tooltipActive && (
-              <div className='tooltip-tag__id'>
-                <div className='tooltip-tag__text'>
-                  The <span>six digit number on the back of the tag</span> is your items unique code that is used to
-                  find it if it ever go missing
-                </div>
-
-                <div className='tooltip-tag__img'>
-                  <img src={tooltip} alt='' />
-                </div>
-
-                <span className='tooltip-tag__link'>Example of a 6 digit Tag-ID</span>
+        <div className='tooltip-tag'>
+          <button
+            type='button'
+            className='tooltip-tag__icon'
+            onClick={(e) => handleFocus(e)}
+            onBlur={handleMouseLeave}></button>
+          {tooltipActive && (
+            <div className='tooltip-tag__id'>
+              <div className='tooltip-tag__text'>
+                The <span>six digit number on the back of the tag</span> is your items unique code that is used to find
+                it if it ever go missing
               </div>
-            )}
-          </div>
+
+              <div className='tooltip-tag__img'>
+                <img src={tooltip} alt='' />
+              </div>
+
+              <span className='tooltip-tag__link'>Example of a 6 digit Tag-ID</span>
+            </div>
+          )}
         </div>
 
         <button className='id-form__btn id-form__btn--search' type='submit'>
           {isLoading ? <LoaderDots /> : "Search the owner"}
         </button>
       </form>
+      <div className='modal__wrapper'>
+        {lookUpResult && lookUpResult.status === "na" && (
+          <div className='modal-disabled'>
+            <span className='modal-disabled__title'>No such Tag ID</span>
+            <button className='close modal-disabled__close' type='button' onClick={handleClear}>
+              Close
+            </button>
+            <span className='modal-disabled__desc'>Check your input and try again!</span>
+          </div>
+        )}
 
-      {lookUpResult && lookUpResult.status === "na" && (
-        <div className='modal-disabled'>
-          <span className='modal-disabled__title'>No such Tag ID</span>
-          <button className='close modal-disabled__close' type='button' onClick={handleClear}>
-            Close
-          </button>
-          <span className='modal-disabled__desc'>Check your input and try again!</span>
-        </div>
-      )}
-
-      {lookUpResult && lookUpResult.status === "private" && (
-        <div className='modal-private'>
-          <span className='modal-private__title'>This ID is Private</span>
-          <button className='close modal-private__сlose' type='button' onClick={handleClear}>
-            Close
-          </button>
-          <span className='modal-private__desc'>But you can always reach the owner through us!</span>
-          <button className='modal-private__btn' type='button' onClick={() => contactPrivateModal.current.open()}>
-            Contact Owner
-          </button>
-        </div>
-      )}
-      {lookUpResult && lookUpResult.status === "disabled" && (
-        <div className='modal-disabled'>
-          <span className='modal-disabled__title'>This ID is Disabled</span>
-          <button className='close modal-disabled__close' type='button' onClick={handleClear}>
-            Close
-          </button>
-          <span className='modal-disabled__desc'>Sorry! We will let the owner know</span>
-        </div>
-      )}
+        {lookUpResult && lookUpResult.status === "private" && (
+          <div className='modal-private'>
+            <span className='modal-private__title'>This ID is Private</span>
+            <button className='close modal-private__сlose' type='button' onClick={handleClear}>
+              Close
+            </button>
+            <span className='modal-private__desc'>But you can always reach the owner through us!</span>
+            <button className='modal-private__btn' type='button' onClick={() => contactPrivateModal.current.open()}>
+              Contact Owner
+            </button>
+          </div>
+        )}
+        {lookUpResult && lookUpResult.status === "disabled" && (
+          <div className='modal-disabled'>
+            <span className='modal-disabled__title'>This ID is Disabled</span>
+            <button className='close modal-disabled__close' type='button' onClick={handleClear}>
+              Close
+            </button>
+            <span className='modal-disabled__desc'>Sorry! We will let the owner know</span>
+          </div>
+        )}
+      </div>
 
       <ModalWrapper ref={contactPrivateModal} header={"Contact Owner"}>
         <ModalContact tagId={tagId} />

@@ -14,7 +14,7 @@ def lookup(tag_id):
     if not tag:
         return {"message": "No such tag"}
     if tag.is_registered:
-        return {"message": "Tag is already registered"}
+        return {"message": "Tag is taken, contact support if you think it's a mistake"}
     return {"message": "Available", "tagId": tag.tag_id}, 200
 
 
