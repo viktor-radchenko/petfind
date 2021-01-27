@@ -86,28 +86,29 @@ export default function TableRows({ rows, loading, handleUpdate }) {
               </label>
               <div>{row.is_private && <span className='table__item-state--block'></span>}</div>
             </div>
-            <form
+            <div
               className={
                 activeRowId === row.tag_id ? "table__item-actions table__item-actions--active" : "table__item-actions"
               }>
               <button
-                onClick={(e) => toggleAnalyticsModal(e, row)}
+                onMouseDown={(e) => toggleAnalyticsModal(e, row)}
                 className='table__item-btn table__item-btn--diagram'>
                 analytics
               </button>
-              <button onClick={(e) => toggleEditModal(e, row)} className='table__item-btn table__item-btn--edit'>
+              <button onMouseDown={(e) => toggleEditModal(e, row)} className='table__item-btn table__item-btn--edit'>
                 edit
               </button>
-              <button onClick={(e) => handlePrivateBtn(e, row)} className='table__item-btn table__item-btn--lock'>
+              <button onMouseDown={(e) => handlePrivateBtn(e, row)} className='table__item-btn table__item-btn--lock'>
                 lock
               </button>
-              <button onClick={(e) => toggleDeleteModal(e, row)} className='table__item-btn table__item-btn--delete'>
+              <button onMouseDown={(e) => toggleDeleteModal(e, row)} className='table__item-btn table__item-btn--delete'>
                 delete
               </button>
-            </form>
+            </div>
             <button
               className={activeRowId === row.tag_id ? "dropdown dropdown--active" : "dropdown"}
-              onClick={() => (activeRowId ? setActiveRowId("") : setActiveRowId(row.tag_id))}>
+              onClick={() => (activeRowId ? setActiveRowId("") : setActiveRowId(row.tag_id))}
+              onBlur={() => setActiveRowId("")}>
               dropdown
             </button>
           </li>

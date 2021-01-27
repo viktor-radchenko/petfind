@@ -11,6 +11,7 @@
     "node-sass": "^4.14.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-google-recaptcha": "^2.1.0",
     "react-modal-video": "^1.2.6",
     "react-phone-number-input": "^3.1.10",
     "react-player": "^2.8.1",

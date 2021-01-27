@@ -1,10 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { authFetch } from "../../services";
+import TablePagination from '../table-pagination';
 
 import "./modal-analytics.css";
 
 export default function ModalAnalytics({ data }) {
   const [searches, setSearches] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowPerPage] = useState(8);
+
+  // Get current posts
+  const indexOfLastRow = currentPage * rowPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowPerPage;
+  const currentRows = searches.slice(indexOfFirstRow, indexOfLastRow);
+
+  const paginate = (page) => {
+    setCurrentPage(page);
+  };
+
+  const previousPage = () => {
+    if (currentPage - 1 <= 0) return;
+    setCurrentPage(currentPage - 1);
+  };
+
+  const nextPage = () => {
+    if (currentPage + 1 > Math.ceil(searches.length / rowPerPage)) return;
+    setCurrentPage(currentPage + 1);
+  };
 
   useEffect(() => {
     authFetch(`/api/registered_tag/search_history/${data.tag_id}`)
@@ -34,7 +56,7 @@ export default function ModalAnalytics({ data }) {
           </div>
 
           <ul className='analytics__table-rows'>
-            {searches.length > 1 ? searches.map((row, index) => (
+            {currentRows.length > 1 ? currentRows.map((row, index) => (
               <li key={`row${index}`} className='analytics__table-row'>
                 <div className='cell analytics__date'>{row.date}</div>
                 <div className='cell analytics__city'>{row.city}</div>
@@ -53,6 +75,15 @@ export default function ModalAnalytics({ data }) {
               </li>
             )) : <div className="analytics__table-row">No searches results yet</div>}
           </ul>
+
+          <TablePagination 
+            rowPerPage={rowPerPage}
+            totalRows={searches.length}
+            paginate={paginate}
+            currentPage={currentPage}
+            previousPage={previousPage}
+            nextPage={nextPage}
+          />
         </div>
       </div>
     </>
