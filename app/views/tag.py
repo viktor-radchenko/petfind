@@ -7,7 +7,7 @@ from flask_login import login_required
 
 from app import db
 from app.logger import log
-from app.models import Tag, RegisteredTag, User, Search
+from app.models import Tag, RegisteredTag, User, Search, MessageQueue
 from app.controllers import save_picture
 
 tag_blueprint = Blueprint("tag_blueprint", __name__)
@@ -118,7 +118,13 @@ def registered_lookup(tag_id):
         city=location.get("city"),
         tag_id=tag.tag_id,
     )
-    search.save()
+    db.session.add(search)
+    new_message = MessageQueue(
+        recipient_id=tag.user_id,
+        message_type=MessageQueue.MessageType.search_notification_email
+    )
+    db.session.add(new_message)
+    db.session.commit()
     if tag.is_private:
         return {"status": "private"}, 200
     if tag.status == RegisteredTag.StatusType.disabled:

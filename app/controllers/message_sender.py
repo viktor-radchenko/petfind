@@ -15,6 +15,7 @@ class MessageSender:
         self.messages = messages
         self.registration_emails = []
         self.contact_emails = []
+        self.search_notification = []
         self.password_reset_emails = []
         self.sms_messages = []
 
@@ -45,6 +46,8 @@ class MessageSender:
                 self.prepare_sms(message)
             if message.message_type == MessageQueue.MessageType.password_reset_email:
                 self.prepare_password_reset_email(message)
+            if message.message_type == MessageQueue.MessageType.search_notification_email:
+                self.prepare_search_notification_email(message)
 
     def prepare_sms(self, message):
         log(log.INFO, "Preparing sms")
@@ -56,6 +59,36 @@ class MessageSender:
         body = f"You have a new message for tag: {data.tag_id}. Visit http://165.227.70.167/dashboard for details"
         sms_template = {"body": body, "to": recipient.phone}
         self.sms_messages.append(sms_template)
+
+    def prepare_search_notification_email(self, message):
+        log(log.INFO, "Preparing search notification email")
+        recipient = User.query.get(message.recipient_id)
+        if not recipient:
+            log(log.ERROR, "No such user to send registration email")
+            return
+
+        template = "email/search_notification"
+        callback_url = (
+            f"http://{current_app.config['SERVER_NAME']}/dashboard"
+        )
+        msg_body = render_template(
+            template + ".txt",
+            user=recipient,
+            callback_url=callback_url,
+        )
+        msg_html = render_template(
+            template + ".html",
+            user=recipient,
+            callback_url=callback_url,
+        )
+        email_template = {
+            "To": [{"Email": recipient.email, "Name": recipient.full_name}],
+            "TextPart": msg_body,
+            "HTMLPart": msg_html,
+        }
+        self.search_notification.append(email_template)
+        message.sent = True
+        message.save()
 
     def prepare_registration_email(self, message):
         log(log.INFO, "Preparing registration email")
@@ -204,9 +237,21 @@ class MessageSender:
                         "Email": current_app.config["MAIL_USERNAME"],
                         "Name": current_app.config["MAIL_USERNAME"],
                     },
-                    "Subject": "New PetFind App contact message",
+                    "Subject": "New message from Trace Return App",
                 },
                 "Messages": self.contact_emails,
+            }
+            result = self.mailjet.send.create(data=data)
+        if self.search_notification:
+            data = {
+                "Globals": {
+                    "From": {
+                        "Email": current_app.config["MAIL_USERNAME"],
+                        "Name": current_app.config["MAIL_USERNAME"],
+                    },
+                    "Subject": "People are looking for your Tag ID",
+                },
+                "Messages": self.search_notification,
             }
             result = self.mailjet.send.create(data=data)
         if self.password_reset_emails:

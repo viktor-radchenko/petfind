@@ -1,0 +1,12 @@
+Dear {{ user.full_name }},
+
+Someone has searched for your tag ID. You can review this activity using 
+the dashboard. Click this link to access the dashboard.
+
+{{ callback_url }}
+
+Sincerely,
+
+Trace Return Team
+
+Note: replies to this email address are not monitored.

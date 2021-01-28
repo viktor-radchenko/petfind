@@ -1,6 +1,8 @@
-from flask import render_template, Blueprint, send_from_directory, current_app
+from flask import render_template, Blueprint, send_from_directory, current_app, jsonify
 from flask_praetorian import auth_required, current_user
 
+from app.controllers import MessageSender
+from app.models import MessageQueue
 
 main_blueprint = Blueprint("main", __name__)
 
@@ -31,3 +33,12 @@ def protected():
 @main_blueprint.route("/uploads/tag_image/<string:filename>")
 def serve_tag_image(filename):
     return send_from_directory(current_app.config["UPLOAD_FOLDER"], filename)
+
+
+@main_blueprint.route("/api/test/send_messages")
+def test_messages():
+    messages = MessageQueue.query.filter_by(sent=False).all()
+    sender = MessageSender(messages)
+    sender.prepare_messages()
+    sender.send_messages()
+    return jsonify({"status": "ok"}), 200
