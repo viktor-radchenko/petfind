@@ -28,7 +28,6 @@ export default function Profile({ userData }) {
   const [serverError, setServerError] = useState("");
   const history = useHistory();
 
-  console.log(state);
 
   const { firstName, lastName, phone, address, city, country, zipCode, userState } = state;
 
@@ -40,7 +39,6 @@ export default function Profile({ userData }) {
   };
 
   const updateInitialState = (data) => {
-    console.log("Updating initial state", data);
     return {
       phone: data.phone,
       address: data.address,
@@ -80,7 +78,6 @@ export default function Profile({ userData }) {
           return res.json();
         })
         .then((res) => {
-          console.log(res);
           if (res.message) window.location.reload();
           if (res.error) setServerError(res.error);
         })

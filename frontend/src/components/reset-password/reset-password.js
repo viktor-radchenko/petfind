@@ -26,9 +26,7 @@ export default function ResetPassword() {
     };
 
     const validatedForm = validateForm(values);
-    console.log(validatedForm);
     if (Object.keys(validatedForm).length === 0 && validatedForm.constructor === Object) {
-      console.log("Calling API")
       resetPassword(password, passwordConfirmation, token)
         .then((res) => {
           if (!res.ok) throw new Error("We were unable to validate your token: token is invalid or expired. Request a new token and try again");

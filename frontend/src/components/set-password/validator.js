@@ -1,5 +1,4 @@
 const validateForm = (values) => {
-  console.log('Values', values);
   let errors = {};
 
   // Tag name
@@ -13,7 +12,6 @@ const validateForm = (values) => {
     errors.newPassword = "Password should be between 8 and 15 characters, contain at least one uppercase letter, special character and digit"
   }
 
-  console.log("Errors", errors);
   return errors;
 };
 

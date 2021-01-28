@@ -12,6 +12,11 @@ def index():
     return render_template("index.html")
 
 
+@main_blueprint.route("/dashboard")
+def dashboard():
+    return render_template("index.html")
+
+
 @main_blueprint.route("/api/")
 def home():
     return {"message": "Hello World"}, 200

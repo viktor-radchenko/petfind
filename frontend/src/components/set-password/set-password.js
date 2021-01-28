@@ -13,12 +13,10 @@ export default function SetPassword() {
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState();
 
-  console.log(serverError);
 
   const history = useHistory();
 
   if (logged) {
-    console.log("You are logged");
     history.push("/dashboard");
   }
 
