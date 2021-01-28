@@ -1,7 +1,12 @@
-from flask import Blueprint, request, jsonify
+import csv
+from io import TextIOWrapper
+
+from flask import Blueprint, request, jsonify, url_for, redirect, flash
 from flask_praetorian import auth_required, current_user
+from flask_login import login_required
 
 from app import db
+from app.logger import log
 from app.models import Tag, RegisteredTag, User, Search
 from app.controllers import save_picture
 
@@ -120,13 +125,13 @@ def registered_lookup(tag_id):
         return {"status": "disabled"}, 200
     user = User.query.filter_by(id=tag.user_id).first()
     user_data = {
-        'email': user.email,
-        'phone': user.phone,
-        'name': user.full_name,
-        'address': f"{user.address}, {user.city}, {user.state}",
-        'tag_id': tag.tag_id,
-        'tag_name': tag.tag_name,
-        'tag_image': tag.tag_image
+        "email": user.email,
+        "phone": user.phone,
+        "name": user.full_name,
+        "address": f"{user.address}, {user.city}, {user.state}",
+        "tag_id": tag.tag_id,
+        "tag_name": tag.tag_name,
+        "tag_image": tag.tag_image,
     }
     response = {"status": "found", "data": user_data}
     return jsonify(response), 200
@@ -177,9 +182,35 @@ def delete_tag(tag_id):
     return jsonify(deleted_tag.to_json()), 200
 
 
-@tag_blueprint.route('/api/registered_tag/search_history/<tag_id>')
+@tag_blueprint.route("/api/registered_tag/search_history/<tag_id>")
 @auth_required
 def search_history(tag_id):
     tag = RegisteredTag.query.get_or_404(tag_id)
     searches = [search.to_json() for search in tag.searches]
     return jsonify(searches), 200
+
+
+@tag_blueprint.route("/api/tag/import", methods=["POST"])
+@login_required
+def import_tags():
+    if "csv-file" not in request.files:
+        log(log.WARNING, "No file submitted in request")
+        return redirect(url_for("tag_blueprint.import_tags"))
+    csv_file = request.files["csv-file"]
+    with TextIOWrapper(csv_file, encoding="utf-8") as _file:
+        csv_reader = csv.DictReader(_file, delimiter=",")
+        for i, row in enumerate(csv_reader):
+            tag_id = row.get("tag_id")
+            if Tag.query.filter(Tag.tag_id == tag_id).first():
+                log(
+                    log.ERROR,
+                    "Tag ID [%s] is already taken, skipping row [%d]",
+                    tag_id,
+                    i + 1,
+                )
+                continue
+            new_tag = Tag(tag_id=tag_id)
+            db.session.add(new_tag)
+        db.session.commit()
+    flash("Tags imported succesfully", "success")
+    return redirect(url_for("admin.index"))

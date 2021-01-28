@@ -33,7 +33,8 @@ def create_app(environment='development'):
         UserView,
         RegisteredTagsView,
         TagsView,
-        MessageView
+        MessageView,
+        TagImportView
     )
     from app.models import (
         User,
@@ -80,31 +81,13 @@ def create_app(environment='development'):
         admin.add_view(RegisteredTagsView(RegisteredTag, db.session))
         admin.add_view(TagsView(Tag, db.session))
         admin.add_view(MessageView(MessageQueue, db.session))
-        admin.add_link(MenuLink(name="Back to website", category="", url=url_for("main.index")))
-    
+        admin.add_view(TagImportView(name="Tag Import", endpoint="import_tag"))
+        admin.add_link(MenuLink(name="Back to website", category="", url=url_for("auth.admin_logout")))
+
     # Set up flask login.
     @login_manager.user_loader
-    def get_user():
-        # first, try to login using the api_key url arg
-        api_key = request.args.get('api_key')
-        if api_key:
-            user = User.query.filter_by(api_key=api_key).first()
-            if user:
-                return user
-
-        # next, try to login using Basic Auth
-        api_key = request.headers.get('Authorization')
-        if api_key:
-            api_key = api_key.replace('Basic ', '', 1)
-            try:
-                api_key = base64.b64decode(api_key)
-            except TypeError:
-                pass
-            user = User.query.filter_by(api_key=api_key).first()
-            if user:
-                return user
-        # finally, return None if both methods did not login the user
-        return None
+    def load_user(user_id):
+        return User.query.get(int(user_id))
 
     login_manager.login_view = 'auth.login'
     login_manager.login_message_category = 'info'

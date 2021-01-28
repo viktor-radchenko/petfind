@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { logout } from "../../services";
+import { authFetch, logout } from "../../services";
 
 import "./dashboard-sidebar.css";
 import logo from "../../images/logo-noword.png";
@@ -14,6 +14,16 @@ export default function DashboardSidebar({ active, userData, handleTabChange, cu
       initials += names[names.length - 1].substring(0, 1).toUpperCase();
     }
     return initials;
+  };
+
+  const getToAdmin = () => {
+    authFetch("/admin/auth", { credentials: "include" })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === "ok") {
+          window.location.replace("/admin");
+        }
+      });
   };
 
   return (
@@ -50,7 +60,11 @@ export default function DashboardSidebar({ active, userData, handleTabChange, cu
               : "dashboard__tab dashboard__tab--account"
           }
           onClick={() => handleTabChange("profile")}>
-          Account Settings{" "}
+          Account Settings
+        </li>
+
+        <li className='dashboard__tab dashboard__tab--account' onClick={() => getToAdmin()} Admin>
+          Admin page
         </li>
       </ul>
 

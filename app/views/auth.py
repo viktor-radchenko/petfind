@@ -1,6 +1,8 @@
 import secrets
+import base64
 
-from flask import request, Blueprint, jsonify
+from flask import request, Blueprint, jsonify, redirect, make_response
+from flask_login import login_user, logout_user
 from flask_praetorian import auth_required, current_user
 from sqlalchemy import or_
 
@@ -12,6 +14,31 @@ from app.models import MessageQueue
 
 
 auth_blueprint = Blueprint("auth", __name__)
+
+
+@auth_blueprint.route("/admin/auth")
+def get_admin():
+    api_key = request.headers.get('Authorization')
+    if api_key:
+        api_key = api_key.replace('Bearer ', '', 1)
+        try:
+            api_key = guard.extract_jwt_token(api_key)
+        except TypeError:
+            pass
+        user = User.query.get(api_key.get('id'))
+        if user:
+            if 'admin' in user.rolenames:
+                login_user(user)
+                return {"status": "ok"}, 200
+    # finally, return None if both methods did not login the user
+    # return None
+    return {"status": "failed"}, 200
+
+
+@auth_blueprint.route('/admin/logout')
+def admin_logout():
+    logout_user()
+    return make_response("")
 
 
 @auth_blueprint.route("/api/auth/register", methods=["POST"])
