@@ -40,6 +40,7 @@ class User(db.Model, UserMixin, ModelMixin):
             "state": self.state,
             "zip_code": self.zip_code,
             "country": self.country,
+            "roles": self.roles
         }
 
     @property

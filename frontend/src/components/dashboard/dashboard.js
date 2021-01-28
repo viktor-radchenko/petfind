@@ -33,6 +33,7 @@ export default function Dasboard() {
       userState: data.state ? data.state : "",
       firstName: data.first_name ? data.first_name : "",
       lastName: data.last_name ? data.last_name : "",
+      roles: data.roles ? data.roles : "",
     };
   };
 
