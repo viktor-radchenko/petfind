@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.5be5a755.chunk.css",
-    "main.js": "/static/js/main.f57c5efc.chunk.js",
-    "main.js.map": "/static/js/main.f57c5efc.chunk.js.map",
+    "main.css": "/static/css/main.c544e2e7.chunk.css",
+    "main.js": "/static/js/main.1869343d.chunk.js",
+    "main.js.map": "/static/js/main.1869343d.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.c60b7f5c.js",
     "runtime-main.js.map": "/static/js/runtime-main.c60b7f5c.js.map",
     "static/js/2.235590c1.chunk.js": "/static/js/2.235590c1.chunk.js",
     "static/js/2.235590c1.chunk.js.map": "/static/js/2.235590c1.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/main.5be5a755.chunk.css.map": "/static/css/main.5be5a755.chunk.css.map",
+    "static/css/main.c544e2e7.chunk.css.map": "/static/css/main.c544e2e7.chunk.css.map",
     "static/js/2.235590c1.chunk.js.LICENSE.txt": "/static/js/2.235590c1.chunk.js.LICENSE.txt",
     "static/media/index.css": "/static/media/warning.745972d0.svg",
     "static/media/add-photo.8d5c6ed9.svg": "/static/media/add-photo.8d5c6ed9.svg",
@@ -23,7 +23,7 @@
   "entrypoints": [
     "static/js/runtime-main.c60b7f5c.js",
     "static/js/2.235590c1.chunk.js",
-    "static/css/main.5be5a755.chunk.css",
-    "static/js/main.f57c5efc.chunk.js"
+    "static/css/main.c544e2e7.chunk.css",
+    "static/js/main.1869343d.chunk.js"
   ]
 }
