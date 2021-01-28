@@ -1,5 +1,4 @@
 import secrets
-import base64
 
 from flask import request, Blueprint, jsonify, redirect, url_for
 from flask_login import login_user, logout_user
@@ -38,7 +37,7 @@ def get_admin():
 @auth_blueprint.route("/admin/logout")
 def admin_logout():
     logout_user()
-    return redirect(url_for("main.index"))
+    return redirect(url_for("main.dashboard"))
 
 
 @auth_blueprint.route("/api/auth/register", methods=["POST"])
