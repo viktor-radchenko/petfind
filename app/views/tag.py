@@ -5,7 +5,7 @@ from app import db
 from app.models import Tag, RegisteredTag, User, Search
 from app.controllers import save_picture
 
-tag_blueprint = Blueprint("tag", __name__)
+tag_blueprint = Blueprint("tag_blueprint", __name__)
 
 
 @tag_blueprint.route("/api/tag-id-lookup/<tag_id>")

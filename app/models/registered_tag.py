@@ -30,7 +30,7 @@ class RegisteredTag(db.Model, ModelMixin):
     zip_code = db.Column(db.String(16))
     available = db.Column(db.Boolean, default=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-    searches = db.relationship("Search", lazy=True)
+    searches = db.relationship("Search", backref="registered_tag", lazy=True)
     deleted = db.Column(db.Boolean, default=False)
     created_on = db.Column(db.DateTime, default=datetime.now)
 

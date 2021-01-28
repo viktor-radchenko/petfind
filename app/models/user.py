@@ -25,7 +25,7 @@ class User(db.Model, UserMixin, ModelMixin):
     roles = db.Column(db.Text, default="user")
     activated = db.Column(db.Boolean, default=False)
     created_on = db.Column(db.DateTime, default=datetime.now)
-    tags = db.relationship("RegisteredTag", lazy=True)
+    tags = db.relationship("RegisteredTag", backref="user", lazy=True)
 
     def to_json(self):
         return {
@@ -70,7 +70,7 @@ class User(db.Model, UserMixin, ModelMixin):
         return self.activated
 
     def __str__(self):
-        return "<User: %s %s>" % self.first_name, self.last_name
+        return "<User: %s %s>" % (self.first_name, self.last_name)
 
 
 class AnonymousUser(AnonymousUserMixin):

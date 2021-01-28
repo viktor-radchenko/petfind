@@ -5,7 +5,7 @@ from flask_praetorian import auth_required, current_user
 main_blueprint = Blueprint("main", __name__)
 
 
-@main_blueprint.route("/test-index")
+@main_blueprint.route("/")
 def index():
     return render_template("index.html")
 
