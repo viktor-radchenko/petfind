@@ -46,7 +46,10 @@ class MessageSender:
                 self.prepare_sms(message)
             if message.message_type == MessageQueue.MessageType.password_reset_email:
                 self.prepare_password_reset_email(message)
-            if message.message_type == MessageQueue.MessageType.search_notification_email:
+            if (
+                message.message_type
+                == MessageQueue.MessageType.search_notification_email
+            ):
                 self.prepare_search_notification_email(message)
 
     def prepare_sms(self, message):
@@ -56,7 +59,7 @@ class MessageSender:
             log(log.ERROR, "No such user to send sms notification")
             return
         data = json.loads(message.temp_data)
-        body = f"You have a new message for tag: {data.tag_id}. Visit http://165.227.70.167/dashboard for details"
+        body = f"You have a new message for tag: {data.tag_id}. Visit https://{current_app.config['SERVER_NAME']}/dashboard for details"
         sms_template = {"body": body, "to": recipient.phone}
         self.sms_messages.append(sms_template)
 
@@ -68,9 +71,7 @@ class MessageSender:
             return
 
         template = "email/search_notification"
-        callback_url = (
-            f"http://{current_app.config['SERVER_NAME']}/dashboard"
-        )
+        callback_url = f"https://{current_app.config['SERVER_NAME']}/dashboard"
         msg_body = render_template(
             template + ".txt",
             user=recipient,
@@ -105,7 +106,7 @@ class MessageSender:
             is_registration_token=True,
         )
         callback_url = (
-            f"http://{current_app.config['SERVER_NAME']}/auth/set_password/{token}"
+            f"https://{current_app.config['SERVER_NAME']}/auth/set_password/{token}"
         )
         msg_body = render_template(
             template + ".txt",
