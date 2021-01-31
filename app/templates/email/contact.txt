@@ -1,0 +1,22 @@
+Dear {{ user.full_name }},
+
+You have a new message for {{ tag_id }} tag from {{ name }}
+
+Message:
+{{ text }}
+
+Message details:
+- Name: {{ name }}
+- Phone: {{ phone_number }}
+- Location: latitude:{{ lat }}; longitude:{{ lon }}
+- City: {{ city }}
+- IP: {{ ip_address }}
+- Time: {{ time }}
+
+NOTE! If you received this message by accident, simply ignore it
+
+Sincerely,
+
+Trace Return Team
+
+Note: replies to this email address are not monitored.

@@ -1,20 +1,14 @@
-import React from "react";
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import ReactPlayer from "react-player/youtube";
 
-import TagForm from '../tag-form';
+import ShopifyCard from "../shopify-card";
+import TagForm from "../tag-form";
+import NewTagForm from "../new-tag-form.js";
 
-import videoPlaceholder from "../../images/video.jpg";
-import headerBg from "../../images/main-img.png";
-import tagImg from "../../images/tag-img.jpg";
 
 export default function Home() {
-  // const [message, setMessage] = useState("");
-
-  // useEffect(() => {
-  //   fetch("/api")
-  //     .then((resp) => resp.json())
-  //     .then((resp) => setMessage(resp.message));
-  // }, []);
+  const [currentTab, setCurrentTab] = useState(1);
 
   return (
     <main>
@@ -35,12 +29,9 @@ export default function Home() {
               <span className='connect__label'>Enter the unique code on the back of the tag</span>
 
               <TagForm />
-
             </div>
 
-            <div className='connect__img'>
-              <img src={headerBg} alt='found my pet' />
-            </div>
+            <div className='connect__img'></div>
           </div>
         </div>
       </section>
@@ -49,32 +40,51 @@ export default function Home() {
         <span className='title mode__title'>Here’s how it works</span>
 
         <ul className='tabs'>
-          <li className='tabs__item tabs__item--active'>For owner</li>
-
-          <li className='tabs__item '>for founder</li>
+          <li
+            className={`tabs__item ${currentTab === 1 ? "tabs__item--active" : null}`}
+            onClick={() => setCurrentTab(1)}>
+            for owner
+          </li>
+          <li
+            className={`tabs__item ${currentTab === 2 ? "tabs__item--active" : null}`}
+            onClick={() => setCurrentTab(2)}>
+            for founder
+          </li>
         </ul>
 
         <div className='tabs__content'>
-          <ul className='mode__advantages'>
-            <li className='mode__item'>Register your items Tag ID with trace and return</li>
+          {currentTab === 1 && (
+            <ul className='mode__advantages'>
+              <li className='mode__item'>Register your items Tag ID with trace and return</li>
 
-            <li className='mode__item'>Track the lost items</li>
+              <li className='mode__item'>Track the lost items</li>
 
-            <li className='mode__item'>Founder would message you and you find your lost item!!</li>
-          </ul>
+              <li className='mode__item'>Founder would message you and you find your lost item!!</li>
+            </ul>
+          )}
 
-          <Link className='mode__video'>
-            <img src={videoPlaceholder} alt='video' />
-          </Link>
+          {currentTab === 2 && (
+            <ul className='mode__advantages'>
+              <li className='mode__item'>Lorem ipsum, dolor sit amet consectetur adipisicing</li>
 
-          <div className='id-form'>
-            <input className='id-form__input' type='text' placeholder='Enter Tag ID' />
+              <li className='mode__item'>Lorem ipsum dolor sit amet consectetur.</li>
 
-            <button className='id-form__btn' type='submit'>
-              Register item
-            </button>
-          </div>
+              <li className='mode__item'>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rem!</li>
+            </ul>
+          )}
         </div>
+
+        <div className='mode__video'>
+          <ReactPlayer
+            url='https://www.youtube.com/watch?v=RQELVJHn1Hc'
+            // width='567px'
+            // height='387px'
+            controls={true}
+            className='mode__link'
+          />
+        </div>
+
+        <NewTagForm />
       </section>
 
       <section className='tags'>
@@ -94,22 +104,8 @@ export default function Home() {
               </div>
             </div>
 
-            <div className='tags__bottom'>
-              <article className='tag-card'>
-                <div className='tag-card__top'>
-                  <div className='tag-card__img'>
-                    <img src={tagImg} alt='tag' />
-                  </div>
-
-                  <span className='tag-card__title'>Bow Tie Pet Tag</span>
-
-                  <span className='tag-card__desc'>Engrave - Memories, Etched Forever!</span>
-                </div>
-
-                <button className='tag-card__btn' type='button'>
-                  Buy for $100
-                </button>
-              </article>
+            <div className='tags__bottom' id="tags__bottom">
+              <ShopifyCard wrapper={'tags__bottom'}/>
             </div>
 
             <Link className='tags__more' to='/'>
@@ -118,6 +114,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      
     </main>
   );
 }

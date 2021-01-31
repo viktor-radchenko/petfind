@@ -10,8 +10,10 @@ import Dasboard from "../dashboard";
 import SetPassword from "../set-password";
 import RegisterTagForm from "../register-tag-form";
 import Footer from "../footer";
-import DashboardTable from "../dashboard-table";
 import PrivateRoute from "../hoc";
+import ForgotPassword from "../forgot-password";
+import ResetPassword from "../reset-password";
+import ConfirmationPending from "../confirmation-pending";
 
 import "./app.css";
 
@@ -23,11 +25,7 @@ export function useAppContext() {
 
 const initialState = {
   location: null,
-  foundOwnerModal: {isOpen: false, data: []},
-  contactOwnerModal: {isOpen: false, data: []},
-  editTagModal: {isOpen: false, data: []},
-  deleteTagModal: {isOpen: false, data: []},
-  addTagModal: {isOpen: false, data: []}
+  registerTagId: "",
 };
 
 function reducer(state, action) {
@@ -37,30 +35,10 @@ function reducer(state, action) {
         ...state,
         location: action.payload,
       };
-    case "TOGGLE_FOUND_OWNER":
+    case "REGISTER_TAG_ID":
       return {
         ...state,
-        foundOwnerModal: action.payload,
-      }
-    case "TOGGLE_CONTACT_OWNER":
-      return {
-        ...state,
-        contactOwnerModal: action.payload,
-      }
-    case "TOGGLE_EDIT_TAG":
-      return {
-        ...state,
-        editTagModal: action.payload,
-      }
-    case "TOGGLE_DELETE_TAG":
-      return {
-        ...state,
-        deleteTagModal: action.payload,
-      }
-    case "TOGGLE_ADD_TAG":
-      return {
-        ...state,
-        addTagModal: action.payload,
+        registerTagId: action.payload
       }
     default:
       return state;
@@ -72,7 +50,6 @@ export default function App() {
 
   useEffect(() => {
     fetchLocation().then((res) => {
-      console.log("Location response:", res);
       dispatch({
         type: "UPDATE_LOCATION",
         payload: res,
@@ -82,7 +59,7 @@ export default function App() {
 
   return (
     <AppContext.Provider value={[state, dispatch]}>
-      <Router>
+      <Router basename="/">
         <Switch>
           <Route path='/contact-us'>Contact us Page coming soon</Route>
           <Route path='/terms-and-conditions'>Terms and conditions page coming soon</Route>
@@ -93,13 +70,19 @@ export default function App() {
           <Route path='/register_tag'>
             <RegisterTagForm />
           </Route>
-          <Route path='/auth/set-password/:token'>
+          <Route path='/activate_your_account'>
+            <ConfirmationPending />
+          </Route>
+          <Route path='/auth/set_password/:token'>
             <SetPassword />
           </Route>
-          <Route path='/dashboard-table'>
-            <DashboardTable />
-          </Route>
           <PrivateRoute path='/dashboard' component={Dasboard} />
+          <Route path='/auth/forgot_password'>
+            <ForgotPassword />
+          </Route>
+          <Route path='/auth/reset_password/:token'>
+            <ResetPassword />
+          </Route>
           <Route path='/'>
             <Header />
             <Home />

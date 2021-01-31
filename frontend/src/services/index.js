@@ -7,6 +7,29 @@ import {
   fetchLocation,
   lookUpTagId,
   updateRegisteredTag,
+  addRegisteredTag,
+  deleteRegisteredTag,
+  getUserData,
+  sendPrivateMessage,
+  requestPasswordReset,
+  resetPassword,
+  updateProfile,
 } from "./trace-return-services";
 
-export { useAuth, authFetch, login, logout, completeRegistration, fetchLocation, lookUpTagId, updateRegisteredTag };
+export {
+  useAuth,
+  authFetch,
+  login,
+  logout,
+  completeRegistration,
+  fetchLocation,
+  lookUpTagId,
+  updateRegisteredTag,
+  addRegisteredTag,
+  deleteRegisteredTag,
+  getUserData,
+  sendPrivateMessage,
+  requestPasswordReset,
+  resetPassword,
+  updateProfile,
+};

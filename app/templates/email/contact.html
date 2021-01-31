@@ -1,0 +1,19 @@
+  <p>Dear {{ user.full_name }},</p>
+  <p>You have a new message for {{ tag_id }} tag from {{ name }}</b>!</p>
+  <p>Message:</p>
+  <quote>
+    {{ text }}
+  </quote>
+  <p>Message details:</p>
+  <ul>
+    <li>Name: {{ name }}</li>
+    <li>Phone: {{ phone_number }}</li>
+    <li>Location: latitude:{{ lat }}; longitude:{{ lon }}</li>
+    <li>City: {{ city }}</li>
+    <li>IP: {{ ip_address }}</li>
+    <li>Time: {{ time }}</li>
+  </ul>  
+  <p>NOTE! If you received this message by accident, simply ignore it</p>
+  <p>Sincerely,</p>
+  <p>{{ config["APP_NAME"] }} Team</p>
+  <p><small>Note: replies to this email address are not monitored.</small></p>

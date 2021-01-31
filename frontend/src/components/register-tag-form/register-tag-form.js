@@ -1,10 +1,14 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { Link } from "react-router-dom";
+import PhoneInput from "react-phone-number-input";
+import { useAppContext } from "../app";
 
 import { completeRegistration } from "../../services";
+import { validateTagForm, validateUserForm } from "./validator";
 
 import logo from "../../images/logo.png";
 import imagePlaceholder from "../../images/icons/add-photo.svg";
+import "./register-tag-form.css";
 
 const initialFormState = {
   tagIdMessage: "",
@@ -34,7 +38,10 @@ function reducer(state, { field, value }) {
 export default function RegisterTagForm() {
   // Initialise registration form state
   const [state, dispatch] = useReducer(reducer, initialFormState);
-  console.log(state);
+  const [errors, setErrors] = useState({});
+  const [appState] = useAppContext();
+  const [serverError, setServerError] = useState("");
+  const [phoneValue, setPhoneValue] = useState("");
 
   const {
     tagIdMessage,
@@ -45,7 +52,6 @@ export default function RegisterTagForm() {
     tagImage,
     firstName,
     lastName,
-    phone,
     email,
     address,
     city,
@@ -53,6 +59,14 @@ export default function RegisterTagForm() {
     zipCode,
     userState,
   } = state;
+
+  useEffect(() => {
+    if (appState.registerTagId)
+      dispatch({
+        field: "tagId",
+        value: appState.registerTagId,
+      });
+  }, []);
 
   const onChange = (e) => {
     dispatch({
@@ -96,65 +110,85 @@ export default function RegisterTagForm() {
 
   const handleNextStep = () => {
     // submit first form and switch to the next
-    console.log(currentStep);
-    if (currentStep === 1) {
-      dispatch({
-        field: "currentStep",
-        value: 2,
-      });
+    const values = {
+      tagId: tagId,
+      tagName: tagName,
+    };
+    const validatedForm = validateTagForm(values);
+    if (Object.keys(validatedForm).length === 0 && validatedForm.constructor === Object) {
+      if (currentStep === 1) {
+        dispatch({
+          field: "currentStep",
+          value: 2,
+        });
+      }
+    } else {
+      setErrors(validatedForm);
     }
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    completeRegistration(
-      tagId,
-      tagName,
-      tagImage,
-      firstName,
-      lastName,
-      phone,
-      email,
-      address,
-      city,
-      country,
-      zipCode,
-      userState
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        if (res.confirmed) {
-          dispatch({
-            field: "currentStep",
-            value: 3,
-          });
-        }
-      })
-      .catch((e) => console.error(e));
-  };
-
-  const resendRegistrationEmail = (e) => {
-    e.preventDefault();
-    console.log("RESENDING EMAIL");
-    // let opts = {
-    //   email: email,
-    // };
-    // fetch("/api/auth/resend-registration-email", {
-    //   method: "post",
-    //   body: JSON.stringify(opts),
-    // });
+    const values = {
+      firstName: firstName,
+      lastName: lastName,
+      phone: phoneValue,
+      email: email,
+    };
+    const validatedForm = validateUserForm(values);
+    if (Object.keys(validatedForm).length === 0 && validatedForm.constructor === Object) {
+      completeRegistration(
+        tagId,
+        tagName,
+        tagImage,
+        firstName,
+        lastName,
+        phoneValue,
+        email,
+        address,
+        city,
+        country,
+        zipCode,
+        userState
+      )
+        .then((res) => {
+          if (!res.ok) throw new Error("Internal server error. Please try again or contact support for help");
+          return res.json();
+        })
+        .then((res) => {
+          if (res.error) setServerError(res.error);
+          if (res.confirmed) {
+            localStorage.setItem("confirmation_pending", email);
+            dispatch({
+              field: "currentStep",
+              value: 3,
+            });
+          }
+        })
+        .catch((e) => alert(e));
+    } else {
+      setErrors(validatedForm);
+    }
   };
 
   return (
     <>
-      <div className='full-logo'>
+      <Link className='full-logo' to='/'>
         <img src={logo} alt='full logo' />
-      </div>
+      </Link>
 
       {currentStep !== 3 ? (
         <ul className='breadcrumbs'>
-          <li className='breadcrumbs__item breadcrumbs__item--active'>Register item</li>
+          <li
+            className={`breadcrumbs__item ${currentStep === 2 ? "breadcrumbs__item--active" : null}`}
+            onClick={() =>
+              dispatch({
+                field: "currentStep",
+                value: 1,
+              })
+            }>
+            Register item
+          </li>
           <li className='breadcrumbs__item'>Create Account</li>
         </ul>
       ) : null}
@@ -200,7 +234,15 @@ export default function RegisterTagForm() {
                 value={tagId}
                 onChange={onChange}
               />
-              {tagIdMessage && <span className='register-item__message'>{tagIdMessage}</span>}
+              {tagIdMessage && (
+                <div
+                  className={`input-error input-error--main ${
+                    tagIdMessage.includes("Available") ? "register-item__message" : null
+                  }`}>
+                  {tagIdMessage}
+                </div>
+              )}
+              {errors.tagId && <div className='input-error input-error--main'>{errors.tagId}</div>}
             </label>
 
             <label className='label'>
@@ -212,6 +254,7 @@ export default function RegisterTagForm() {
                 value={tagName}
                 onChange={onChange}
               />
+              {errors.tagName && <div className='input-error'>{errors.tagName}</div>}
             </label>
 
             <button
@@ -245,6 +288,7 @@ export default function RegisterTagForm() {
                   value={firstName}
                   onChange={onChange}
                 />
+                {errors.firstName && <div className='input-error'>{errors.firstName}</div>}
               </label>
 
               <label className='label'>
@@ -257,18 +301,22 @@ export default function RegisterTagForm() {
                   value={lastName}
                   onChange={onChange}
                 />
+                {errors.lastName && <div className='input-error'>{errors.lastName}</div>}
               </label>
 
               <label className='label'>
                 <span>Phone Number</span>
-                <input
+                <PhoneInput
                   required='required'
                   className='input create-account__input'
                   type='tel'
                   name='phone'
-                  value={phone}
-                  onChange={onChange}
+                  placeholder='(123) 456 78 90 '
+                  defaultCountry='US'
+                  value={phoneValue}
+                  onChange={setPhoneValue}
                 />
+                {errors.phone && <div className='input-error'>{errors.phone}</div>}
               </label>
 
               <label className='label'>
@@ -281,6 +329,7 @@ export default function RegisterTagForm() {
                   value={email}
                   onChange={onChange}
                 />
+                {errors.email && <div className='input-error'>{errors.email}</div>}
               </label>
             </div>
 
@@ -347,6 +396,8 @@ export default function RegisterTagForm() {
               </label>
             </div>
 
+            {serverError && <div className='input-error input-error--main'>{serverError}</div>}
+
             <div className='create-account__bottom'>
               <button className='button create-account__btn' type='submit' onClick={handleSubmit}>
                 Signup & Register
@@ -366,9 +417,7 @@ export default function RegisterTagForm() {
 
           <p className='password-notify__text'>You need to set a password. We have sent you a link at {email}.</p>
 
-          <button className='password-notify__link' onClick={resendRegistrationEmail}>
-            Resend Link
-          </button>
+          <button className='password-notify__link'>Resend Link</button>
         </section>
       )}
 

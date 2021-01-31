@@ -1,12 +1,11 @@
-
-  <p>Dear {{ user.full_name }},</p>
-  <p>Welcome to <b>PetFind App</b>!</p>
-  <p>To confirm your account please <a href="{{ url_for('auth.test_verify', token=token, _external=True) }}">click here</a>.</p>
-  <p>Alternatively, you can paste the following link in your browser's address bar:</p>
-  <p>{{ url_for('auth.test_verify', token=token, _external=True) }}</p>
-  <p>Your temporary password is:</p>
-  <p>{{ password }}</p>
-  <p>NOTE! Do not share this password with anybody. You will be prompted to update it before completing registration.</p>
-  <p>Sincerely,</p>
-  <p>The PetFind App Team</p>
-  <p><small>Note: replies to this email address are not monitored.</small></p>
+<p>Dear {{ user.full_name }},</p>
+<p>Welcome to <b>{{ config["APP_NAME"]}} App</b>!</p>
+<p>To confirm your account please <a href="{{ callback_url }}">click here</a>.</p>
+<p>Alternatively, you can paste the following link in your browser's address bar:</p>
+<p>{{ callback_url }}</p>
+<p><b>Your temporary password is:</b></p>
+<p><b>{{ password }}</b></p>
+<p>NOTE! Do not share this password with anybody. You will be prompted to update it before completing registration.</p>
+<p>Sincerely,</p>
+<p>{{ config["APP_NAME"]}} Team</p>
+<p><small>Note: replies to this email address are not monitored.</small></p>

@@ -7,17 +7,13 @@ import logo from "../../images/logo.png";
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [serverFeedback, setServerFeedback] = useState("");
 
   const [logged] = useAuth();
   const history = useHistory();
 
-  if (logged) {
-    const redirect = () => {
-      history.push("/");
-    };
-
-    redirect();
-  }
+  if (localStorage.getItem("confirmation_pending")) history.push("/activate_your_account");
+  if (logged) history.push("/dashboard");
 
   const onSubmitClick = (e) => {
     e.preventDefault();
@@ -29,15 +25,17 @@ export default function Login() {
       method: "post",
       body: JSON.stringify(opts),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        return res.json();
+      })
       .then((res) => {
         if (res.access_token) {
           login(res);
         } else {
-          console.log("Please type in correct username/password");
+          setServerFeedback(res);
         }
       })
-      .catch(e => console.log(e));
+      .catch((e) => console.log(e));
   };
 
   const handleUsernameChange = (e) => {
@@ -50,9 +48,9 @@ export default function Login() {
 
   return (
     <>
-      <div className='full-logo'>
+      <Link className='full-logo' to='/'>
         <img src={logo} alt='full logo' />
-      </div>
+      </Link>
 
       <div className='auth'>
         <span className='auth__subtitle'>Welcome back!</span>
@@ -69,6 +67,8 @@ export default function Login() {
             <input className='input auth__input' type='password' onChange={handlePasswordChange} value={password} />
           </label>
 
+          {serverFeedback && <div className='input-error'>{serverFeedback.message}</div>}
+
           <div className='auth__password'>
             <label className='label auth__label'>
               <input className='input auth__input-checkbox' type='checkbox' />
@@ -76,7 +76,7 @@ export default function Login() {
               <span>Remember me</span>
             </label>
 
-            <Link className='auth__forgot' to='/forgot-password'>
+            <Link className='auth__forgot' to='/auth/forgot_password'>
               Forgot your password?
             </Link>
           </div>
@@ -86,9 +86,9 @@ export default function Login() {
           </button>
 
           <span className='auth__sign-up'>
-            No account yet?{" "}
-            <Link className='auth__forgot' to='/register'>
-              Sign up
+            No account yet?
+            <Link className='auth__forgot' to='/register_tag'>
+              {" Sign up"}
             </Link>
           </span>
         </form>

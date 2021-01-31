@@ -1,0 +1,103 @@
+import React, { useEffect } from "react";
+
+import "./shopify-card.css";
+
+export const ShopifyCard = ({ wrapper }) => {
+  useEffect(() => {
+    const s = document.createElement("script");
+    s.type = "text/javascript";
+    s.async = true;
+    s.innerHTML = `(function () {
+      var scriptURL = "https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js";
+      if (window.ShopifyBuy) {
+        if (window.ShopifyBuy.UI) {
+          ShopifyBuyInit();
+        } else {
+          loadScript();
+        }
+      } else {
+        loadScript();
+      }
+      function loadScript() {
+        var script = document.createElement("script");
+        script.async = true;
+        script.src = scriptURL;
+        (document.getElementsByTagName("head")[0] || document.getElementsByTagName("body")[0]).appendChild(script);
+        script.onload = ShopifyBuyInit;
+      }
+      function ShopifyBuyInit() {
+        var client = ShopifyBuy.buildClient({
+          domain: "kitty-nation-store.myshopify.com",
+          storefrontAccessToken: "e9482d0c2c6c05d1a1f55a866a3f8fcc",
+        });
+        ShopifyBuy.UI.onReady(client).then(function (ui) {
+          ui.createComponent("product", {
+            id: "11074072132",
+            node: document.getElementById("${wrapper}"),
+            moneyFormat: "%24%7B%7Bamount%7D%7D",
+            options: {
+              product: {
+                styles: {
+                  product: {
+                    "@media (min-width: 601px)": {
+                      "max-width": "calc(25% - 20px)",
+                      "margin-left": "20px",
+                      "margin-bottom": "50px",
+                    },
+                  },
+                },
+                buttonDestination: "modal",
+                contents: {
+                  options: false,
+                },
+                text: {
+                  button: "View product",
+                },
+              },
+              productSet: {
+                styles: {
+                  products: {
+                    "@media (min-width: 601px)": {
+                      "margin-left": "-20px",
+                    },
+                  },
+                },
+              },
+              modalProduct: {
+                contents: {
+                  img: false,
+                  imgWithCarousel: true,
+                  button: false,
+                  buttonWithQuantity: true,
+                },
+                styles: {
+                  product: {
+                    "@media (min-width: 601px)": {
+                      "max-width": "100%",
+                      "margin-left": "0px",
+                      "margin-bottom": "0px",
+                    },
+                  },
+                },
+                text: {
+                  button: "Add to cart",
+                },
+              },
+              cart: {
+                text: {
+                  total: "Subtotal",
+                  button: "Checkout",
+                },
+              },
+            },
+          });
+        });
+      }
+    })();`;
+    document.body.appendChild(s);
+  }, []);
+
+  return <></>;
+};
+
+export default ShopifyCard;

@@ -6,6 +6,7 @@ Flask
 Flask-Login
 Flask-SQLAlchemy
 Flask-WTF
+Flask-Admin
 itsdangerous
 Jinja2
 MarkupSafe
@@ -18,3 +19,4 @@ flask-praetorian
 flask-cors
 Pillow
 mailjet_rest
+twilio

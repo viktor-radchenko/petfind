@@ -9,7 +9,7 @@ from app.logger import log
 
 class User(db.Model, UserMixin, ModelMixin):
 
-    __tablename__ = 'user'
+    __tablename__ = "user"
 
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(64))
@@ -22,34 +22,41 @@ class User(db.Model, UserMixin, ModelMixin):
     country = db.Column(db.String(64))
     state = db.Column(db.String(64))
     zip_code = db.Column(db.String(16))
-    roles = db.Column(db.Text, default='user')
+    roles = db.Column(db.Text, default="user")
     activated = db.Column(db.Boolean, default=False)
     created_on = db.Column(db.DateTime, default=datetime.now)
-    tags = db.relationship("RegisteredTag", lazy=True)
+    tags = db.relationship("RegisteredTag", backref="user", lazy=True)
 
     def to_json(self):
         return {
             "id": self.id,
             "full_name": self.full_name,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
             "phone": self.phone,
             "email": self.email,
-            "address": f"{self.address}, {self.city}, {self.state}, {self.zip_code}, {self.country}"
+            "address": self.address,
+            "city": self.city,
+            "state": self.state,
+            "zip_code": self.zip_code,
+            "country": self.country,
+            "roles": self.roles
         }
 
     @property
     def full_name(self):
-        return f'{self.first_name} {self.last_name}'
+        return f"{self.first_name} {self.last_name}"
 
     @property
     def rolenames(self):
         try:
-            return self.roles.split(',')
+            return self.roles.split(",")
         except Exception:
             return []
 
     @classmethod
     def lookup(cls, username):
-        log(log.DEBUG, '[Looking up username %s]', username)
+        log(log.DEBUG, "[Looking up username %s]", username)
         return cls.query.filter_by(email=username).one_or_none()
 
     @classmethod
@@ -64,7 +71,7 @@ class User(db.Model, UserMixin, ModelMixin):
         return self.activated
 
     def __str__(self):
-        return '<User: %s %s>' % self.first_name, self.last_name
+        return "<User: %s %s>" % (self.first_name, self.last_name)
 
 
 class AnonymousUser(AnonymousUserMixin):

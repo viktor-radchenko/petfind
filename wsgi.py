@@ -40,7 +40,7 @@ def add_unregistered_tags():
 
 def add_registered_tags():
     user = User.query.get(1)
-    for i in range(10, 100):
+    for i in range(10, 41):
         tag = RegisteredTag(
             tag_id=f'REGS{i}',
             tag_name=f'Tag #{i}',

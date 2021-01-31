@@ -1,0 +1,10 @@
+<p>Dear {{ user.full_name }},</p>
+<p>
+  Someone has searched for your tag ID. You can review this activity using the dashboard. Click 
+  <a href="{{ callback_url }}">this link </a> to access the dashboard.
+</p>
+<p>Alternatively, you can paste the following link in your browser's address bar:</p>
+<p>{{ callback_url }}</p>
+<p>Sincerely,</p>
+<p>{{ config["APP_NAME"]}} Team</p>
+<p><small>Note: replies to this email address are not monitored.</small></p>
