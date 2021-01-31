@@ -21,7 +21,6 @@ export default function NewTagForm() {
   };
 
   const handleMouseLeave = (e) => {
-    e.target.focus();
     setTooltipActive(false);
   };
 
