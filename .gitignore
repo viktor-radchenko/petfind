@@ -11,3 +11,4 @@ app/static/tag_pics/*
 *.pyc
 /*.sqlite3
 .eslintcache
+tag_image/*
