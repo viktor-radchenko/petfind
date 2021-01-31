@@ -20,6 +20,11 @@ export default function NewTagForm() {
     history.push("/register_tag");
   };
 
+  const handleFocus = (e) => {
+    e.target.focus();
+    setTooltipActive(true);
+  };
+
   const handleMouseLeave = (e) => {
     setTooltipActive(false);
   };
@@ -44,7 +49,7 @@ export default function NewTagForm() {
           <button
             className='tooltip-tag__icon'
             type='button'
-            onClick={() => setTooltipActive(true)}
+            onClick={(e) => handleFocus(e)}
             onBlur={handleMouseLeave}></button>
           {tooltipActive && (
             <div className='tooltip-tag__id'>
