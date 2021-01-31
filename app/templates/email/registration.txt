@@ -1,6 +1,6 @@
 Dear {{ user.full_name }},
 
-Welcome to PetFind App!
+Welcome to Trace Return!
 
 To confirm your account please click on the following link:
 
