@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, createContext, useContext } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { usePosition } from "use-position";
 
 import { fetchLocation } from "../../services";
 
@@ -38,8 +39,8 @@ function reducer(state, action) {
     case "REGISTER_TAG_ID":
       return {
         ...state,
-        registerTagId: action.payload
-      }
+        registerTagId: action.payload,
+      };
     default:
       return state;
   }
@@ -48,8 +49,11 @@ function reducer(state, action) {
 export default function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const { latitude, longitude, accuracy } = usePosition();
+
   useEffect(() => {
     fetchLocation().then((res) => {
+      console.log("Fetching restricted location:", res);
       dispatch({
         type: "UPDATE_LOCATION",
         payload: res,
@@ -57,9 +61,26 @@ export default function App() {
     });
   }, []);
 
+  useEffect(() => {
+    if (latitude || longitude) {
+      console.log("Data from usePosition:", latitude, longitude, accuracy);
+      const location = { ...state.location };
+      console.log("Spreaded location:", location);
+      location.lat = latitude;
+      location.lon = longitude;
+      console.log("Updated GEO:", location);
+      dispatch({
+        type: "UPDATE_LOCATION",
+        payload: location
+      });
+    }
+  }, [latitude, longitude]);
+
+  console.log("State location:", state.location);
+
   return (
     <AppContext.Provider value={[state, dispatch]}>
-      <Router basename="/">
+      <Router basename='/'>
         <Switch>
           <Route path='/contact-us'>Contact us Page coming soon</Route>
           <Route path='/terms-and-conditions'>Terms and conditions page coming soon</Route>

@@ -412,7 +412,6 @@ body {
   background-color: transparent;
   cursor: pointer;
   outline: transparent;
-  border: 1px solid transparent;
   font-size: 0;
   display: none;
   background-image: url("images/icons/burger.svg");
@@ -426,18 +425,6 @@ body {
   .burger-btn {
     display: block;
   }
-}
-
-.burger-btn:focus {
-  border: 1px solid #202020;
-}
-
-.burger-btn:hover {
-  border: 1px solid #202020;
-}
-
-.burger-btn:active {
-  border: 1px solid #202020;
 }
 
 .burger-btn--active {

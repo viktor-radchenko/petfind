@@ -51,7 +51,7 @@ export default function ModalAnalytics({ data }) {
             <div className='cell analytics__city'>City</div>
             <div className='cell analytics__zip'>Zip</div>
             <div className='cell analytics__ip'>IP</div>
-            <div className='cell analytics__coord'>Lat/Lon</div>
+            {/* <div className='cell analytics__coord'>Lat/Lon</div> */}
             <div className='cell analytics__map'>Map</div>
           </div>
 
@@ -62,7 +62,7 @@ export default function ModalAnalytics({ data }) {
                 <div className='cell analytics__city'>{row.city}</div>
                 <div className='cell analytics__zip'>{row.zip_code}</div>
                 <div className='cell analytics__ip'>{row.ip_address}</div>
-                <div className='cell analytics__coord'>{`${row.lat}/${row.lon}`}</div>
+                {/* <div className='cell analytics__coord'>{`${row.lat}/${row.lon}`}</div> */}
                 <div className='cell analytics__map'>
                   <a
                     rel='noreferrer'
