@@ -1128,12 +1128,12 @@ body {
 }
 
 .create-account__input {
-  max-width: 324px;
+  width: 324px;
 }
 
 @media (max-width: 900px) {
   .create-account__input {
-    max-width: 260px;
+    width: 260px;
   }
 }
 

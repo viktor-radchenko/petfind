@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import PhoneInput from "react-phone-number-input";
 import { useAppContext } from "../app";
 
-import { completeRegistration } from "../../services";
+import { completeRegistration, resendConfirmationEmail } from "../../services";
 import { validateTagForm, validateUserForm } from "./validator";
 
 import logo from "../../images/logo.png";
@@ -42,6 +42,7 @@ export default function RegisterTagForm() {
   const [appState] = useAppContext();
   const [serverError, setServerError] = useState("");
   const [phoneValue, setPhoneValue] = useState("");
+  const [resendLink, setResendLink] = useState("");
 
   const {
     tagIdMessage,
@@ -173,6 +174,21 @@ export default function RegisterTagForm() {
     }
   };
 
+  const handleResend = () => {
+    resendConfirmationEmail(email)
+      .then((res) => {
+        if (!res.ok) throw new Error("Internal server error. Please try again or contact support for help");
+        return res.json();
+      })
+      .then((res) => {
+        if (res.error) setServerError(res.error);
+        if (res.message) {
+          setResendLink(res.message);
+          };
+        })
+      .catch((e) => alert(e));
+  };
+
   return (
     <>
       <Link className='full-logo' to='/'>
@@ -222,7 +238,6 @@ export default function RegisterTagForm() {
               </label>
             </div>
             {errors.tagImage && <div className='input-error'>{errors.tagImage}</div>}
-
 
             <label className='label label__tag-id'>
               <span>Tag ID</span>
@@ -421,7 +436,11 @@ export default function RegisterTagForm() {
 
           <p className='password-notify__text'>You need to set a password. We have sent you a link at {email}.</p>
 
-          <button className='password-notify__link'>Resend Link</button>
+          <button onClick={handleResend} className='password-notify__link'>
+            Resend Link
+          </button>
+
+          {resendLink && <div className="password-notify__resend">{resendLink}</div>}
         </section>
       )}
 

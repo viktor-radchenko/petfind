@@ -134,3 +134,8 @@
 	opacity: 1;
 	color: var(--PhoneInputCountrySelectArrow-color--focus);
 }
+
+.password-notify__resend {
+	margin-top: 20px;
+  color: #4d9c4d;
+}

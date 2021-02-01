@@ -14,6 +14,7 @@ import {
   requestPasswordReset,
   resetPassword,
   updateProfile,
+  resendConfirmationEmail,
 } from "./trace-return-services";
 
 export {
@@ -32,4 +33,5 @@ export {
   requestPasswordReset,
   resetPassword,
   updateProfile,
+  resendConfirmationEmail,
 };

@@ -205,8 +205,7 @@ def refresh():
 
 @auth_blueprint.route("/api/auth/resend_registration_email", methods=["POST"])
 def resend_email():
-    req = request.get_json(force=True)
-    email = req.get("email", None)
+    email = request.get_json(force=True)
     user = User.query.filter_by(email=email).first_or_404()
     if user.activated:
         response = {"error": "User is already activated. Please log in"}
@@ -220,7 +219,7 @@ def resend_email():
         temp_data=temp_user_password,
     )
     new_message.save()
-    response = {"message": "Activation email succesfully sent. Check your inbox."}
+    response = {"message": "Activation email succesfully sent. Check your inbox"}
     return jsonify(response), 200
 
 

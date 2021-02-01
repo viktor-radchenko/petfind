@@ -45,6 +45,13 @@ export const completeRegistration = async (
   });
 };
 
+export const resendConfirmationEmail = async (email) => {
+  return await fetch('/api/auth/resend_registration_email', {
+    method: "POST",
+    body: JSON.stringify(email)
+  })
+}
+
 export const fetchLocation = async () => {
   return await fetch(`http://ip-api.com/json/`).then((res) => res.json());
   // return await fetch(`https://geolocation-db.com/json/${_geolocationDbKey}`).then((res) => res.json());
