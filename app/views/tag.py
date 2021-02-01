@@ -179,12 +179,16 @@ def modify_tag(tag_id):
 @auth_required
 def delete_tag(tag_id):
     deleted_tag = RegisteredTag.query.get_or_404(tag_id)
+    available_tag = Tag.query.get(tag_id)
     if deleted_tag.user_id != current_user().id:
         return {"error": "You are not authorized to delete this tag"}, 401
 
-    deleted_tag.deleted = True
-    deleted_tag.save()
+    db.session.delete(deleted_tag)
+    db.session.commit()
 
+    if available_tag:
+        available_tag.is_registered = False
+        available_tag.save()
     return jsonify(deleted_tag.to_json()), 200
 
 

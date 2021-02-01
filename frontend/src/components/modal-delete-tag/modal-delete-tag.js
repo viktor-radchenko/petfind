@@ -2,18 +2,21 @@ import React from "react";
 import { deleteRegisteredTag } from "../../services";
 
 
-export default function ModalDeleteTag({ data, handleUpdate }) {
+export default function ModalDeleteTag({ data }) {
   const tagId = data.tag_id;
 
   const handleSubmit = (e, tagId) => {
     e.preventDefault();
 
     deleteRegisteredTag(tagId)
-      .then((res) => res.json())
       .then((res) => {
-        handleUpdate(res);
-      });
-    window.location.reload();
+        if (!res.ok) throw new Error("An error occured while deleting tag id. Please contact support")
+        return res.json()
+      })
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((e)=> alert(e.message));
   };
 
   return (
