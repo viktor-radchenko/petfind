@@ -97,8 +97,7 @@ def send_messages():
     """Activate Message Queue manager and send SMS/email messages"""
     messages = MessageQueue.query.filter_by(sent=False).all()
     sender = MessageSender(messages)
-    sender.prepare_messages()
-    sender.send_messages()
+    sender.process_messages()
 
 
 if __name__ == "__main__":

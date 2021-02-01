@@ -1,3 +1,4 @@
+import ast
 import pendulum
 import json
 
@@ -34,70 +35,47 @@ class MessageSender:
                     current_app.config["TWILIO_AUTH_TOKEN"],
                 )
 
-    def prepare_messages(self):
+    def process_messages(self):
         if not self.messages:
             log(log.INFO, "No new messages")
         for message in self.messages:
-            if message.message_type == MessageQueue.MessageType.registration_email:
-                self.prepare_registration_email(message)
-            if message.message_type == MessageQueue.MessageType.contact_email:
-                self.prepare_contact_email(message)
+            recipient = User.query.get(message.recipient_id)
+            if not recipient:
+                log(
+                    log.ERROR,
+                    "Can't send message: no such user. Message ID: [%d]",
+                    message.message_id,
+                )
+                return
             if message.message_type == MessageQueue.MessageType.sms:
-                self.prepare_sms(message)
+                self.send_sms(message, recipient)
+                continue
+            if message.message_type == MessageQueue.MessageType.registration_email:
+                self.send_registration_email(message, recipient)
+                continue
             if message.message_type == MessageQueue.MessageType.password_reset_email:
-                self.prepare_password_reset_email(message)
-            if (
-                message.message_type
-                == MessageQueue.MessageType.search_notification_email
-            ):
-                self.prepare_search_notification_email(message)
+                self.send_password_reset_email(message, recipient)
+                continue
+            if message.message_type == MessageQueue.MessageType.contact_email:
+                self.send_contact_form_email(message, recipient)
+                continue
+            if message.message_type == MessageQueue.MessageType.search_notification_email:
+                self.send_search_notification_email(message, recipient)
+                continue
 
-    def prepare_sms(self, message):
-        log(log.INFO, "Preparing sms")
-        recipient = User.query.get(message.recipient_id)
-        if not recipient:
-            log(log.ERROR, "No such user to send sms notification")
-            return
+    def send_sms(self, message, recipient):
+        log(log.INFO, "Sending sms")
         data = json.loads(message.temp_data)
-        body = f"You have a new message for tag: {data.tag_id}. Visit http://{current_app.config['SERVER_NAME']}/dashboard for details"
-        sms_template = {"body": body, "to": recipient.phone}
-        self.sms_messages.append(sms_template)
-
-    def prepare_search_notification_email(self, message):
-        log(log.INFO, "Preparing search notification email")
-        recipient = User.query.get(message.recipient_id)
-        if not recipient:
-            log(log.ERROR, "No such user to send registration email")
-            return
-
-        template = "email/search_notification"
-        callback_url = f"http://{current_app.config['SERVER_NAME']}/dashboard"
-        msg_body = render_template(
-            template + ".txt",
-            user=recipient,
-            callback_url=callback_url,
+        body = f"You have a new message for tag: {data['tag_id']}. Visit http://{current_app.config['SERVER_NAME']}/dashboard for details"  # noqa 501
+        response = self.twilio_client.messages.create(
+            messaging_service_sid=current_app.config["TWILIO_SERVICE_SID"], body=body, to=recipient.phone
         )
-        msg_html = render_template(
-            template + ".html",
-            user=recipient,
-            callback_url=callback_url,
-        )
-        email_template = {
-            "To": [{"Email": recipient.email, "Name": recipient.full_name}],
-            "TextPart": msg_body,
-            "HTMLPart": msg_html,
-        }
-        self.search_notification.append(email_template)
-        message.sent = True
-        message.save()
+        if response.status == "accepted":
+            message.sent = True
+            message.save()
 
-    def prepare_registration_email(self, message):
-        log(log.INFO, "Preparing registration email")
-        recipient = User.query.get(message.recipient_id)
-        if not recipient:
-            log(log.ERROR, "No such user to send registration email")
-            return
-
+    def send_registration_email(self, message, recipient):
+        log(log.INFO, "Sending registration confirmation email")
         template = "email/registration"
         token = guard.encode_jwt_token(
             recipient,
@@ -123,23 +101,76 @@ class MessageSender:
             callback_url=callback_url,
         )
         email_template = {
-            "To": [{"Email": recipient.email, "Name": recipient.full_name}],
-            "TextPart": msg_body,
-            "HTMLPart": msg_html,
+            "Messages": [
+                {
+                    "From": {
+                        "Email": current_app.config["MAIL_USERNAME"],
+                        "Name": current_app.config["MAIL_USERNAME"],
+                    },
+                    "To": [{"Email": recipient.email, "Name": recipient.full_name}],
+                    "TextPart": msg_body,
+                    "HTMLPart": msg_html,
+                    "Subject": "Confirm your registration",
+                }
+            ]
         }
-        self.registration_emails.append(email_template)
-        message.sent = True
+        response = self.mailjet.send.create(data=email_template)
+        if not response.ok:
+            message.error = response.text
+        else:
+            message.sent = True
         message.save()
 
-    def prepare_contact_email(self, message):
-        log(log.INFO, "Preparing contact email")
-        recipient = User.query.get(message.recipient_id)
-        if not recipient:
-            log(log.ERROR, "No such user to send contact email")
-            return
+    def send_password_reset_email(self, message, recipient):
+        log(log.INFO, "Sending password reset email")
+        template = "email/password_reset"
+        token = guard.encode_jwt_token(
+            recipient,
+            override_access_lifespan=pendulum.duration(days=1),
+            bypass_user_check=True,
+            is_reset_token=True,
+        )
+        callback_url = (
+            f"http://{current_app.config['SERVER_NAME']}/auth/reset_password/{token}"
+        )
+        msg_body = render_template(
+            template + ".txt",
+            user=recipient,
+            password=message.temp_data,
+            token=token,
+            callback_url=callback_url,
+        )
+        msg_html = render_template(
+            template + ".html",
+            user=recipient,
+            password=message.temp_data,
+            token=token,
+            callback_url=callback_url,
+        )
+        email_template = {
+            "Messages": [
+                {
+                    "From": {
+                        "Email": current_app.config["MAIL_USERNAME"],
+                        "Name": current_app.config["MAIL_USERNAME"],
+                    },
+                    "To": [{"Email": recipient.email, "Name": recipient.full_name}],
+                    "TextPart": msg_body,
+                    "HTMLPart": msg_html,
+                    "Subject": "Password reset request",
+                }
+            ]
+        }
+        response = self.mailjet.send.create(data=email_template)
+        if not response.ok:
+            message.error = response.text
+        else:
+            message.sent = True
+        message.save()
 
+    def send_contact_form_email(self, message, recipient):
+        log(log.INFO, "Sending contact form email")
         data = json.loads(message.temp_data)
-
         template = "email/contact"
         msg_body = render_template(
             template + ".txt",
@@ -170,107 +201,57 @@ class MessageSender:
             time=message.created_on.strftime("%m/%d/%Y, ,%H:%M:%S"),
         )
         email_template = {
-            "To": [{"Email": recipient.email, "Name": recipient.full_name}],
-            "TextPart": msg_body,
-            "HTMLPart": msg_html,
+            "Messages": [
+                {
+                    "From": {
+                        "Email": current_app.config["MAIL_USERNAME"],
+                        "Name": current_app.config["MAIL_USERNAME"],
+                    },
+                    "To": [{"Email": recipient.email, "Name": recipient.full_name}],
+                    "TextPart": msg_body,
+                    "HTMLPart": msg_html,
+                    "Subject": f"New message from {current_app.config['APP_NAME']}",
+                }
+            ]
         }
-        self.contact_emails.append(email_template)
-        message.sent = True
+        response = self.mailjet.send.create(data=email_template)
+        if not response.ok:
+            message.error = response.text
+        else:
+            message.sent = True
         message.save()
 
-    def prepare_password_reset_email(self, message):
-        log(log.INFO, "Preparing password reset email")
-        recipient = User.query.get(message.recipient_id)
-        if not recipient:
-            log(log.ERROR, "No such user to send password reset email")
-            return
-
-        template = "email/password_reset"
-        token = guard.encode_jwt_token(
-            recipient,
-            override_access_lifespan=pendulum.duration(days=1),
-            bypass_user_check=True,
-            is_reset_token=True,
-        )
-        callback_url = (
-            f"http://{current_app.config['SERVER_NAME']}/auth/reset_password/{token}"
-        )
+    def send_search_notification_email(self, message, recipient):
+        log(log.INFO, "Sending search notification email")
+        template = "email/search_notification"
+        callback_url = f"http://{current_app.config['SERVER_NAME']}/dashboard"
         msg_body = render_template(
             template + ".txt",
             user=recipient,
-            password=message.temp_data,
-            token=token,
             callback_url=callback_url,
         )
         msg_html = render_template(
             template + ".html",
             user=recipient,
-            password=message.temp_data,
-            token=token,
             callback_url=callback_url,
         )
         email_template = {
-            "To": [{"Email": recipient.email, "Name": recipient.full_name}],
-            "TextPart": msg_body,
-            "HTMLPart": msg_html,
+            "Messages": [
+                {
+                    "From": {
+                        "Email": current_app.config["MAIL_USERNAME"],
+                        "Name": current_app.config["MAIL_USERNAME"],
+                    },
+                    "To": [{"Email": recipient.email, "Name": recipient.full_name}],
+                    "TextPart": msg_body,
+                    "HTMLPart": msg_html,
+                    "Subject": "People are looking for your Tag ID"
+                }
+            ]
         }
-        self.password_reset_emails.append(email_template)
-        message.sent = True
+        response = self.mailjet.send.create(data=email_template)
+        if not response.ok:
+            message.error = response.text
+        else:
+            message.sent = True
         message.save()
-
-    def send_messages(self):
-        if self.registration_emails:
-            data = {
-                "Globals": {
-                    "From": {
-                        "Email": current_app.config["MAIL_USERNAME"],
-                        "Name": current_app.config["MAIL_USERNAME"],
-                    },
-                    "Subject": "Confirm your registration",
-                },
-                "Messages": self.registration_emails,
-            }
-            result = self.mailjet.send.create(data=data)
-        if self.contact_emails:
-            data = {
-                "Globals": {
-                    "From": {
-                        "Email": current_app.config["MAIL_USERNAME"],
-                        "Name": current_app.config["MAIL_USERNAME"],
-                    },
-                    "Subject": "New message from Trace Return App",
-                },
-                "Messages": self.contact_emails,
-            }
-            result = self.mailjet.send.create(data=data)
-        if self.search_notification:
-            data = {
-                "Globals": {
-                    "From": {
-                        "Email": current_app.config["MAIL_USERNAME"],
-                        "Name": current_app.config["MAIL_USERNAME"],
-                    },
-                    "Subject": "People are looking for your Tag ID",
-                },
-                "Messages": self.search_notification,
-            }
-            result = self.mailjet.send.create(data=data)
-        if self.password_reset_emails:
-            data = {
-                "Globals": {
-                    "From": {
-                        "Email": current_app.config["MAIL_USERNAME"],
-                        "Name": current_app.config["MAIL_USERNAME"],
-                    },
-                    "Subject": f"{current_app.config['APP_NAME']} - forgot password?",
-                },
-                "Messages": self.password_reset_emails,
-            }
-            result = self.mailjet.send.create(data=data)
-        if current_app.config["TWILIO_ACCOUNT_SID"] and self.sms_messages:
-            for message in self.sms_messages:
-                result = self.twilio_client.messages.create(
-                    current_app.config["TWILIO_SERVICE_SID"],
-                    body=message.get("body"),
-                    to=message.get("to"),
-                )

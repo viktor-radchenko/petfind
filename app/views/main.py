@@ -44,6 +44,5 @@ def serve_tag_image(filename):
 def test_messages():
     messages = MessageQueue.query.filter_by(sent=False).all()
     sender = MessageSender(messages)
-    sender.prepare_messages()
-    sender.send_messages()
+    sender.process_messages()
     return jsonify({"status": "ok"}), 200
