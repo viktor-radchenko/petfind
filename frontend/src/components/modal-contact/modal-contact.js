@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PhoneInput from "react-phone-number-input";
 import { useAppContext } from "../app";
 import { sendPrivateMessage } from "../../services";
 
@@ -6,10 +7,11 @@ import validateForm from "./validator";
 
 export default function ModalContact({ tagId }) {
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phoneValue, setPhoneValue] = useState("");
   const [text, setText] = useState("");
   const [status, setStatus] = useState("");
   const [errors, setErrors] = useState({});
+
 
   const [state] = useAppContext();
 
@@ -18,13 +20,13 @@ export default function ModalContact({ tagId }) {
     e.preventDefault();
     const form = {
       name: name,
-      phone: phone,
+      phone: phoneValue,
       text: text,
     };
     const validatedForm = validateForm(form);
     if (Object.keys(validatedForm).length === 0 && validatedForm.constructor === Object) {
       const { location } = state;
-      sendPrivateMessage(name, phone, text, tagId, location)
+      sendPrivateMessage(name, phoneValue, text, tagId, location)
         .then((res) => {
           if (res.error) throw Error(res.error);
           if (res.status === "ok") setStatus("You message has been sent!");
@@ -60,13 +62,17 @@ export default function ModalContact({ tagId }) {
 
           <label className='label contact-owner__label'>
             <span>Phone Number</span>
-            <input
-              className='input contact-owner__input'
-              type='tel'
-              name='phone'
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
+
+            <PhoneInput
+                required='required'
+                className='input contact-owner__input'
+                type='tel'
+                name='phone'
+                placeholder='(123) 456 78 90 '
+                defaultCountry='US'
+                value={phoneValue}
+                onChange={setPhoneValue}
+              />
           </label>
           {errors.phone && <div className="input-error">{errors.phone}</div>}
 

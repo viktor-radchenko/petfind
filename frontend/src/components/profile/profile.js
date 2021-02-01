@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useReducer } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import PhoneInput from "react-phone-number-input";
 import { logout, updateProfile } from "../../services";
 
 import validateForm from "./validator";
@@ -26,10 +27,11 @@ export default function Profile({ userData }) {
   const [state, dispatch] = useReducer(reducer, initialFormState);
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
+  const [phoneValue, setPhoneValue] = useState("");
+
   const history = useHistory();
 
-
-  const { firstName, lastName, phone, address, city, country, zipCode, userState } = state;
+  const { firstName, lastName, address, city, country, zipCode, userState } = state;
 
   const handlePasswordReset = () => {
     if (window.confirm("Are you sure you want to reset password?")) {
@@ -40,7 +42,6 @@ export default function Profile({ userData }) {
 
   const updateInitialState = (data) => {
     return {
-      phone: data.phone,
       address: data.address,
       city: data.city,
       country: data.country,
@@ -59,6 +60,7 @@ export default function Profile({ userData }) {
         value: new_data[property],
       });
     }
+    setPhoneValue(userData.phone);
   }, []);
 
   const onChange = (e) => {
@@ -70,9 +72,19 @@ export default function Profile({ userData }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const validatedForm = validateForm(state);
+    const values = {
+      address: address,
+      city: city,
+      country: country,
+      zipCode: zipCode,
+      userState: userState,
+      firstName: firstName,
+      lastName: lastName,
+      phone: phoneValue,
+    };
+    const validatedForm = validateForm(values);
     if (Object.keys(validatedForm).length === 0 && validatedForm.constructor === Object) {
-      updateProfile(state)
+      updateProfile(values)
         .then((res) => {
           if (!res.ok) throw new Error("ehm");
           return res.json();
@@ -119,14 +131,16 @@ export default function Profile({ userData }) {
 
           <label className='label'>
             <span>Phone Number</span>
-            <input
-              required='required'
-              className='input edit-tag__input'
-              type='tel'
-              name='phone'
-              value={phone}
-              onChange={onChange}
-            />
+            <PhoneInput
+                required='required'
+                className='input edit-tag__input'
+                type='tel'
+                name='phone'
+                placeholder='(123) 456 78 90 '
+                defaultCountry='US'
+                value={phoneValue}
+                onChange={setPhoneValue}
+              />
             {errors.phone && <div className='input-error input-error--main'>{errors.phone}</div>}
           </label>
 

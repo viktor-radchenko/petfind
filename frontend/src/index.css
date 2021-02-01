@@ -159,6 +159,7 @@ button,
 textarea,
 select {
   font: inherit;
+  -webkit-user-select:text;
 }
 
 a {
@@ -1127,12 +1128,12 @@ body {
 }
 
 .create-account__input {
-  width: 324px;
+  max-width: 324px;
 }
 
 @media (max-width: 900px) {
   .create-account__input {
-    width: 260px;
+    max-width: 260px;
   }
 }
 

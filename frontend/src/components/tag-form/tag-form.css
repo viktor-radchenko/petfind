@@ -40,3 +40,7 @@
     transform: scale(1.0);
   }
 }
+
+.captcha {
+  margin-bottom: 20px;
+}

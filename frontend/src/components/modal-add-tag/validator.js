@@ -11,15 +11,6 @@ const validateForm = (values) => {
     errors.tagName = "Tag Name is required";
   }
 
-  // User Name
-  // if (!values.firstName.trim()) {
-  //   errors.firstName = "First Name is required";
-  // }
-
-  // if (!values.lastName.trim()) {
-  //   errors.lastName = "Last Name is required";
-  // }
-
   // Email
   if (!values.email) {
     errors.email = "Email required";

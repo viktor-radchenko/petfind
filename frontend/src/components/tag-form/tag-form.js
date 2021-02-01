@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import ModalWrapper from "../modal-wrapper";
 import ModalContact from "../modal-contact";
@@ -26,6 +27,7 @@ export default function TagForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [lookUpResult, setLookUpResult] = useState(null);
   const [tagId, setTagId] = useState("");
+  const [captchaValue, setCaptchaValue] = useState("");
 
   const contactPrivateModal = useRef(null);
   const contactPublicModal = useRef(null);
@@ -44,12 +46,16 @@ export default function TagForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (tagId.length === 6) {
+    if (captchaValue === "") {
+      setLookUpResult({ message: "Please confirm you are not a robot", status: "captcha" })
+      return 
+    }
+    if (tagId.length === 6 && captchaValue) {
       setIsLoading(true);
       lookUpTagId(tagId.toUpperCase(), state.location).then((res) => setLookUpResult(res));
       setIsLoading(false);
     } else {
-      setLookUpResult({ message: "No such tag", status: "na" });
+      setLookUpResult({ message: "No such Tag ID", status: "na" });
     }
   };
 
@@ -67,8 +73,19 @@ export default function TagForm() {
     setTooltipActive(true);
   };
 
+  const handleCaptcha = (value) => {
+    setCaptchaValue(value);
+  };
+
+  console.log(captchaValue);
+
   return (
     <>
+    { tagId.length >= 3 && (
+    <div className="captcha">
+      <ReCAPTCHA sitekey='6Lf3IUAaAAAAAERWg-zwGVTCAyVdEiBZtuEbjjAx' onChange={handleCaptcha} />
+    </div>
+    )}
       <form className='id-form' onSubmit={handleSubmit}>
         <div className='id-form__box'>
           <input
@@ -106,8 +123,20 @@ export default function TagForm() {
         <button className='id-form__btn id-form__btn--search' type='submit'>
           {isLoading ? <LoaderDots /> : "Search the owner"}
         </button>
+
       </form>
+        
       <div className='modal__wrapper'>
+        {lookUpResult && lookUpResult.status === "captcha" && (
+          <div className='modal-disabled'>
+            <span className='modal-disabled__title'>Pleae confirm you are not a robot</span>
+            <button className='close modal-disabled__close' type='button' onClick={handleClear}>
+              Close
+            </button>
+            <span className='modal-disabled__desc'>Click on the icon above and try again!</span>
+          </div>
+        )}
+        
         {lookUpResult && lookUpResult.status === "na" && (
           <div className='modal-disabled'>
             <span className='modal-disabled__title'>No such Tag ID</span>

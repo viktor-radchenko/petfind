@@ -24,6 +24,11 @@ const validateForm = (values) => {
     errors.phone = "Phone number is invalid";
   }
 
+  // Image
+  if (values.tagImage && values.tagImage.size >= 2048 * 1000) {
+    errors.tagImage = "Image file is too large"
+  }
+
   return errors;
 };
 

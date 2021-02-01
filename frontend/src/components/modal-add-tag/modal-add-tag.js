@@ -1,4 +1,6 @@
 import React, { useReducer, useEffect, useState } from "react";
+import PhoneInput from "react-phone-number-input";
+
 import { authFetch, addRegisteredTag, logout } from "../../services";
 
 import validateForm from "./validator";
@@ -11,7 +13,6 @@ const initialFormState = {
   tagIdMessage: "",
   tagIdIsValid: false,
   tagImage: null,
-  phone: "",
   email: "",
   address: "",
   city: "",
@@ -30,6 +31,8 @@ function reducer(state, { field, value }) {
 export default function ModalAddTag() {
   const [state, dispatch] = useReducer(reducer, initialFormState);
   const [errors, setErrors] = useState({});
+  const [phoneValue, setPhoneValue] = useState("");
+
 
   const {
     tagId,
@@ -37,7 +40,6 @@ export default function ModalAddTag() {
     tagIdMessage,
     tagName,
     tagImage,
-    phone,
     email,
     address,
     city,
@@ -54,7 +56,6 @@ export default function ModalAddTag() {
       })
       .then((res) => {
         const new_state = {
-          phone: res.phone,
           email: res.email,
           address: res.address,
           city: res.city,
@@ -69,6 +70,7 @@ export default function ModalAddTag() {
             value: new_state[property],
           });
         }
+        setPhoneValue(res.phone);
       })
       .catch((e) => {
         alert(e.message);
@@ -118,9 +120,21 @@ export default function ModalAddTag() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const validatedForm = validateForm(state);
+    const values = {
+      tagId: tagId,
+      tagName: tagName,
+      tagImage: tagImage,
+      email: email,
+      phone: phoneValue,
+      address: address,
+      city: city,
+      country: country,
+      zipCode: zipCode,
+      userState: userState,
+    }
+    const validatedForm = validateForm(values);
     if (Object.keys(validatedForm).length === 0 && validatedForm.constructor === Object) {
-      addRegisteredTag(state)
+      addRegisteredTag(values)
         .then((res) => res.json())
         .then((res) => {
           if (res.error) {
@@ -248,7 +262,16 @@ export default function ModalAddTag() {
 
             <label className='label edit-tag__label--input'>
               <span>Phone Number</span>
-              <input className='input edit-tag__input' type='tel' name='phone' value={phone} onChange={onChange} />
+              <PhoneInput
+                required='required'
+                className='input edit-tag__input'
+                type='tel'
+                name='phone'
+                placeholder='(123) 456 78 90 '
+                defaultCountry='US'
+                value={phoneValue}
+                onChange={setPhoneValue}
+              />
               {errors.phone && <div className='input-error'>{errors.phone}</div>}
             </label>
 

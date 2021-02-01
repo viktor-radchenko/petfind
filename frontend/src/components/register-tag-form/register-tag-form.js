@@ -76,6 +76,7 @@ export default function RegisterTagForm() {
   };
 
   const onFileChange = (e) => {
+    console.log(e.target.files[0]);
     dispatch({
       field: e.target.name,
       value: e.target.files[0],
@@ -113,6 +114,7 @@ export default function RegisterTagForm() {
     const values = {
       tagId: tagId,
       tagName: tagName,
+      tagImage: tagImage,
     };
     const validatedForm = validateTagForm(values);
     if (Object.keys(validatedForm).length === 0 && validatedForm.constructor === Object) {
@@ -219,6 +221,8 @@ export default function RegisterTagForm() {
                 <span className='register-item__max'>max file size 2mb</span>
               </label>
             </div>
+            {errors.tagImage && <div className='input-error'>{errors.tagImage}</div>}
+
 
             <label className='label label__tag-id'>
               <span>Tag ID</span>

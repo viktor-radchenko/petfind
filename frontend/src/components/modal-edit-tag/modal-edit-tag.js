@@ -1,4 +1,5 @@
 import React, { useReducer, useEffect, useState } from "react";
+import PhoneInput from "react-phone-number-input";
 import { updateRegisteredTag } from "../../services";
 
 import validateForm from "./validator";
@@ -15,7 +16,7 @@ const initialFormState = {
   zipCode: "",
   userState: "",
   status: "",
-  isPrivate: ""
+  isPrivate: "",
 };
 
 function reducer(state, { field, value }) {
@@ -28,15 +29,15 @@ function reducer(state, { field, value }) {
 export default function ModalEditTag({ data }) {
   const [state, dispatch] = useReducer(reducer, initialFormState);
   const [errors, setErrors] = useState({});
+  const [phoneValue, setPhoneValue] = useState("");
 
-  const { tagId, tagName, tagImage, phone, email, address, city, country, zipCode, userState } = state;
+  const { tagId, tagName, tagImage, email, address, city, country, zipCode, userState } = state;
 
   const updateInitialState = (data) => {
     return {
       tagId: data.tag_id,
       tagName: data.tag_name,
       tagImage: data.tag_image,
-      phone: data.phone,
       email: data.email,
       address: data.address,
       city: data.city,
@@ -44,12 +45,14 @@ export default function ModalEditTag({ data }) {
       zipCode: data.zip_code,
       userState: data.state,
       tagStatus: data.status,
-      isPrivate: data.is_private
+      isPrivate: data.is_private,
     };
   };
 
   useEffect(() => {
     const new_data = updateInitialState(data);
+    console.log("THIS IS PHONE:", data.phone);
+    setPhoneValue(data.phone);
     for (const property in new_data) {
       dispatch({
         field: property,
@@ -74,9 +77,21 @@ export default function ModalEditTag({ data }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const validatedForm = validateForm(state);
+    const values = {
+      tagId: tagId,
+      tagName: tagName,
+      tagImage: tagImage,
+      email: email,
+      phone: phoneValue,
+      address: address,
+      city: city,
+      country: country,
+      zipCode: zipCode,
+      userState: userState,
+    }
+    const validatedForm = validateForm(values);
     if (Object.keys(validatedForm).length === 0 && validatedForm.constructor === Object) {
-      updateRegisteredTag(tagId, state).then((res) => {
+      updateRegisteredTag(tagId, values).then((res) => {
         if (res.ok) window.location.reload();
       });
     } else {
@@ -93,7 +108,13 @@ export default function ModalEditTag({ data }) {
             <div className='register-item__img'>
               <span>Add an Image</span>
               <img
-                src={tagImage instanceof File ? URL.createObjectURL(tagImage) : tagImage ? `/uploads/tag_image/${tagImage}` : null}
+                src={
+                  tagImage instanceof File
+                    ? URL.createObjectURL(tagImage)
+                    : tagImage
+                    ? `/uploads/tag_image/${tagImage}`
+                    : null
+                }
                 alt='img'
               />
             </div>
@@ -110,6 +131,7 @@ export default function ModalEditTag({ data }) {
               <span className='register-item__max'>max file size 2mb</span>
             </label>
           </div>
+          {errors.tagImage && <div className='input-error'>{errors.tagImage}</div>}
 
           <div className='edit-tag__tag'>
             <div className='table__item-tag table__item-tag--title edit-tag__title'>Tag ID</div>
@@ -179,7 +201,16 @@ export default function ModalEditTag({ data }) {
 
             <label className='label edit-tag__label--input'>
               <span>Phone Number</span>
-              <input className='input edit-tag__input' type='tel' name='phone' value={phone} onChange={onChange} />
+              <PhoneInput
+                required='required'
+                className='input edit-tag__input'
+                type='tel'
+                name='phone'
+                placeholder='(123) 456 78 90 '
+                defaultCountry='US'
+                value={phoneValue}
+                onChange={setPhoneValue}
+              />
               {errors.phone && <div className='input-error'>{errors.tagId}</div>}
             </label>
 

@@ -11,6 +11,11 @@ const validateTagForm = (values) => {
     errors.tagName = "Tag Name is required";
   }
 
+  // Image
+  if (values.tagImage && values.tagImage.size >= 2048 * 1000) {
+    errors.tagImage = "Image file is too large"
+  }
+
   return errors;
 }
 
