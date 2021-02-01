@@ -32,6 +32,9 @@ export default function TagForm() {
   const contactPrivateModal = useRef(null);
   const contactPublicModal = useRef(null);
 
+  const _captchaKey = process.env.REACT_APP_CAPTCHA_KEY || "";
+  console.log(_captchaKey);
+
   const handleTagIdChange = (e) => {
     setTagId(e.target.value.toUpperCase());
   };
@@ -83,7 +86,7 @@ export default function TagForm() {
     <>
     { tagId.length >= 3 && (
     <div className="captcha">
-      <ReCAPTCHA sitekey='6Lf3IUAaAAAAAERWg-zwGVTCAyVdEiBZtuEbjjAx' onChange={handleCaptcha} />
+      <ReCAPTCHA sitekey={_captchaKey} onChange={handleCaptcha} />
     </div>
     )}
       <form className='id-form' onSubmit={handleSubmit}>

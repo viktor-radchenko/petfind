@@ -53,7 +53,6 @@ export default function App() {
 
   useEffect(() => {
     fetchLocation().then((res) => {
-      console.log("Fetching restricted location:", res);
       dispatch({
         type: "UPDATE_LOCATION",
         payload: res,
@@ -63,20 +62,15 @@ export default function App() {
 
   useEffect(() => {
     if (latitude || longitude) {
-      console.log("Data from usePosition:", latitude, longitude, accuracy);
       const location = { ...state.location };
-      console.log("Spreaded location:", location);
       location.lat = latitude;
       location.lon = longitude;
-      console.log("Updated GEO:", location);
       dispatch({
         type: "UPDATE_LOCATION",
         payload: location
       });
     }
   }, [latitude, longitude]);
-
-  console.log("State location:", state.location);
 
   return (
     <AppContext.Provider value={[state, dispatch]}>

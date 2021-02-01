@@ -77,7 +77,6 @@ export default function RegisterTagForm() {
   };
 
   const onFileChange = (e) => {
-    console.log(e.target.files[0]);
     dispatch({
       field: e.target.name,
       value: e.target.files[0],

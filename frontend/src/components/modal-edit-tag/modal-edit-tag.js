@@ -51,7 +51,6 @@ export default function ModalEditTag({ data }) {
 
   useEffect(() => {
     const new_data = updateInitialState(data);
-    console.log("THIS IS PHONE:", data.phone);
     setPhoneValue(data.phone);
     for (const property in new_data) {
       dispatch({

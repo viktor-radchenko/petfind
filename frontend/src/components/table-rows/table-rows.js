@@ -57,8 +57,6 @@ export default function TableRows({ rows, loading, handleUpdate }) {
       });
   };
 
-  console.log(rowState)
-
   return (
     <>
       <ul className='table__content'>
