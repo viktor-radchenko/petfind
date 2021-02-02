@@ -65,7 +65,7 @@ class MessageSender:
     def send_sms(self, message, recipient):
         log(log.INFO, "Sending sms")
         data = json.loads(message.temp_data)
-        body = f"You have a new message for tag: {data['tag_id']}. Visit http://{current_app.config['SERVER_NAME']}/dashboard for details"  # noqa 501
+        body = f"You have a new message for tag: {data['tag_id']}. Visit https://{current_app.config['SERVER_NAME']}/dashboard for details"  # noqa 501
         response = self.twilio_client.messages.create(
             messaging_service_sid=current_app.config["TWILIO_SERVICE_SID"], body=body, to=recipient.phone
         )
@@ -83,7 +83,7 @@ class MessageSender:
             is_registration_token=True,
         )
         callback_url = (
-            f"http://{current_app.config['SERVER_NAME']}/auth/set_password/{token}"
+            f"https://{current_app.config['SERVER_NAME']}/auth/set_password/{token}"
         )
         msg_body = render_template(
             template + ".txt",
@@ -130,7 +130,7 @@ class MessageSender:
             is_reset_token=True,
         )
         callback_url = (
-            f"http://{current_app.config['SERVER_NAME']}/auth/reset_password/{token}"
+            f"https://{current_app.config['SERVER_NAME']}/auth/reset_password/{token}"
         )
         msg_body = render_template(
             template + ".txt",
@@ -223,7 +223,7 @@ class MessageSender:
     def send_search_notification_email(self, message, recipient):
         log(log.INFO, "Sending search notification email")
         template = "email/search_notification"
-        callback_url = f"http://{current_app.config['SERVER_NAME']}/dashboard"
+        callback_url = f"https://{current_app.config['SERVER_NAME']}/dashboard"
         msg_body = render_template(
             template + ".txt",
             user=recipient,

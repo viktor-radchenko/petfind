@@ -59,7 +59,7 @@ class MessageSender:
             log(log.ERROR, "No such user to send sms notification")
             return
         data = json.loads(message.temp_data)
-        body = f"You have a new message for tag: {data.tag_id}. Visit http://{current_app.config['SERVER_NAME']}/dashboard for details"
+        body = f"You have a new message for tag: {data.tag_id}. Visit https://{current_app.config['SERVER_NAME']}/dashboard for details"
         sms_template = {"body": body, "to": recipient.phone}
         self.sms_messages.append(sms_template)
 
@@ -71,7 +71,7 @@ class MessageSender:
             return
 
         template = "email/search_notification"
-        callback_url = f"http://{current_app.config['SERVER_NAME']}/dashboard"
+        callback_url = f"https://{current_app.config['SERVER_NAME']}/dashboard"
         msg_body = render_template(
             template + ".txt",
             user=recipient,
@@ -106,7 +106,7 @@ class MessageSender:
             is_registration_token=True,
         )
         callback_url = (
-            f"http://{current_app.config['SERVER_NAME']}/auth/set_password/{token}"
+            f"https://{current_app.config['SERVER_NAME']}/auth/set_password/{token}"
         )
         msg_body = render_template(
             template + ".txt",
@@ -193,7 +193,7 @@ class MessageSender:
             is_reset_token=True,
         )
         callback_url = (
-            f"http://{current_app.config['SERVER_NAME']}/auth/reset_password/{token}"
+            f"https://{current_app.config['SERVER_NAME']}/auth/reset_password/{token}"
         )
         msg_body = render_template(
             template + ".txt",
