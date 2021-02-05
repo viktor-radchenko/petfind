@@ -87,7 +87,8 @@ export default function ModalEditTag({ data }) {
       country: country,
       zipCode: zipCode,
       userState: userState,
-    }
+    };
+    console.log("VALUES", values);
     const validatedForm = validateForm(values);
     if (Object.keys(validatedForm).length === 0 && validatedForm.constructor === Object) {
       updateRegisteredTag(tagId, values).then((res) => {
@@ -97,6 +98,8 @@ export default function ModalEditTag({ data }) {
       setErrors(validatedForm);
     }
   };
+
+  console.log(errors);
 
   return (
     <>
@@ -203,14 +206,13 @@ export default function ModalEditTag({ data }) {
               <PhoneInput
                 required='required'
                 className='input edit-tag__input'
-                type='tel'
                 name='phone'
-                placeholder='(123) 456 78 90 '
+                placeholder='(123) 456 78 90'
                 defaultCountry='US'
                 value={phoneValue}
                 onChange={setPhoneValue}
               />
-              {errors.phone && <div className='input-error'>{errors.tagId}</div>}
+              {errors.phone && <div className='input-error'>{errors.phone}</div>}
             </label>
 
             <label className='label edit-tag__label--input'>

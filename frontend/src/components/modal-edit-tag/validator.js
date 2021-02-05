@@ -10,6 +10,7 @@ const validateForm = (values) => {
   if (!values.email) {
     errors.email = "Email required";
   } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+    console.log("Email is invalid");
     errors.email = "Email address is invalid";
   }
 
@@ -21,12 +22,13 @@ const validateForm = (values) => {
       values.phone
     )
   ) {
+    console.log("Phone is invalid");
     errors.phone = "Phone number is invalid";
   }
 
   // Image
   if (values.tagImage && values.tagImage.size >= 2048 * 1000) {
-    errors.tagImage = "Image file is too large"
+    errors.tagImage = "Image file is too large";
   }
 
   return errors;

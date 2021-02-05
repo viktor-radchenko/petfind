@@ -33,7 +33,6 @@ export default function TagForm() {
   const contactPublicModal = useRef(null);
 
   const _captchaKey = process.env.REACT_APP_CAPTCHA_KEY || "";
-  console.log(_captchaKey);
 
   const handleTagIdChange = (e) => {
     setTagId(e.target.value.toUpperCase());
@@ -50,8 +49,8 @@ export default function TagForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (captchaValue === "") {
-      setLookUpResult({ message: "Please confirm you are not a robot", status: "captcha" })
-      return 
+      setLookUpResult({ message: "Please confirm you are not a robot", status: "captcha" });
+      return;
     }
     if (tagId.length === 6 && captchaValue) {
       setIsLoading(true);
@@ -84,11 +83,11 @@ export default function TagForm() {
 
   return (
     <>
-    { tagId.length >= 3 && (
-    <div className="captcha">
-      <ReCAPTCHA sitekey={_captchaKey} onChange={handleCaptcha} />
-    </div>
-    )}
+      {tagId.length >= 3 && (
+        <div className='captcha'>
+          <ReCAPTCHA sitekey={_captchaKey} onChange={handleCaptcha} />
+        </div>
+      )}
       <form className='id-form' onSubmit={handleSubmit}>
         <div className='id-form__box'>
           <input
@@ -126,9 +125,8 @@ export default function TagForm() {
         <button className='id-form__btn id-form__btn--search' type='submit'>
           {isLoading ? <LoaderDots /> : "Search the owner"}
         </button>
-
       </form>
-        
+
       <div className='modal__wrapper'>
         {lookUpResult && lookUpResult.status === "captcha" && (
           <div className='modal-disabled'>
@@ -139,7 +137,7 @@ export default function TagForm() {
             <span className='modal-disabled__desc'>Click on the icon above and try again!</span>
           </div>
         )}
-        
+
         {lookUpResult && lookUpResult.status === "na" && (
           <div className='modal-disabled'>
             <span className='modal-disabled__title'>No such Tag ID</span>

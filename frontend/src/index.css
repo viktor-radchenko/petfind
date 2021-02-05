@@ -1,3 +1,5 @@
+@import-normalize;
+
 /*
 * Prefixed by https://autoprefixer.github.io
 * PostCSS: v7.0.29,
@@ -159,7 +161,7 @@ button,
 textarea,
 select {
   font: inherit;
-  -webkit-user-select:text;
+  /* -webkit-user-select:text; */
 }
 
 a {

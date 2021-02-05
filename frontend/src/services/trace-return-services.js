@@ -46,14 +46,14 @@ export const completeRegistration = async (
 };
 
 export const resendConfirmationEmail = async (email) => {
-  return await fetch('/api/auth/resend_registration_email', {
+  return await fetch("/api/auth/resend_registration_email", {
     method: "POST",
-    body: JSON.stringify(email)
-  })
-}
+    body: JSON.stringify(email),
+  });
+};
 
 export const fetchLocation = async () => {
-  return await fetch(`http://ip-api.com/json/`).then((res) => res.json());
+  return await fetch(`https://freegeoip.app/json`).then((res) => res.json());
   // return await fetch(`https://geolocation-db.com/json/${_geolocationDbKey}`).then((res) => res.json());
 };
 
@@ -165,7 +165,7 @@ export const updateProfile = async (data) => {
   formData.append("zip_code", data.zipCode);
   formData.append("state", data.userState);
   formData.append("old_password", data.oldPassword);
-  formData.append("new_password", data.newPassword)
+  formData.append("new_password", data.newPassword);
 
   return await authFetch("/api/auth/update_profile", {
     method: "POST",

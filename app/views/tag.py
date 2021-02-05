@@ -111,10 +111,10 @@ def registered_lookup(tag_id):
     if not tag:
         return {"message": "No such tag", "status": "na"}, 200
     search = Search(
-        lat=location.get("lat"),
-        lon=location.get("lon"),
-        ip_address=location.get("query"),
-        zip_code=location.get("zip"),
+        lat=location.get("latitude"),
+        lon=location.get("longitude"),
+        ip_address=location.get("ip"),
+        zip_code=location.get("zip_code"),
         city=location.get("city"),
         tag_id=tag.tag_id,
     )

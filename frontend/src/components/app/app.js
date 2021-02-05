@@ -63,14 +63,16 @@ export default function App() {
   useEffect(() => {
     if (latitude || longitude) {
       const location = { ...state.location };
-      location.lat = latitude;
-      location.lon = longitude;
+      location.latitude = latitude;
+      location.longitude = longitude;
       dispatch({
         type: "UPDATE_LOCATION",
-        payload: location
+        payload: location,
       });
     }
   }, [latitude, longitude]);
+
+  console.log(state.location);
 
   return (
     <AppContext.Provider value={[state, dispatch]}>
