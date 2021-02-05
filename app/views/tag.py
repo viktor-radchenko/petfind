@@ -205,7 +205,7 @@ def search_history(tag_id):
 def import_tags():
     if "csv-file" not in request.files:
         log(log.WARNING, "No file submitted in request")
-        return redirect(url_for("tag_blueprint.import_tags"))
+        return redirect(url_for("admin.index"))
     csv_file = request.files["csv-file"]
     with TextIOWrapper(csv_file, encoding="utf-8") as _file:
         csv_reader = csv.DictReader(_file, delimiter=",")
@@ -224,3 +224,18 @@ def import_tags():
         db.session.commit()
     flash("Tags imported succesfully", "success")
     return redirect(url_for("admin.index"))
+
+
+@tag_blueprint.route("/api/tag/generate", methods=["POST"])
+@login_required
+def generate_tags():
+    num = int(request.form.get('tag_num'))
+    if not num:
+        log(log.WARNING, "Tag num to generate is not defined")
+        return redirect(url_for("admin.index"))
+    for _ in range(num):
+        new_tag = Tag()
+        db.session.add(new_tag)
+    db.session.commit()
+    return redirect(url_for("admin.index"))
+    

@@ -20,4 +20,12 @@
   <input type="file" name="csv-file" value="">
   <input class="btn btn-success" type="submit" value="Import">
 </form>
+
+<form action="{{ url_for('tag_blueprint.generate_tags') }}" enctype="multipart/form-data" method="POST">
+  <label>
+    Generate tags (#):
+    <input type="number" name="tag_num">
+  </label>
+  <input class="btn btn-success" type="submit" value="Generate">
+</form>
 {% endblock body %}

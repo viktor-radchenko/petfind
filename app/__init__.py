@@ -81,7 +81,7 @@ def create_app(environment='development'):
         admin.add_view(RegisteredTagsView(RegisteredTag, db.session))
         admin.add_view(TagsView(Tag, db.session))
         admin.add_view(MessageView(MessageQueue, db.session))
-        admin.add_view(TagImportView(name="Tag Import", endpoint="import_tag"))
+        admin.add_view(TagImportView(name="Tag Management", endpoint="tag_management"))
         admin.add_link(MenuLink(name="Back to website", category="", url=url_for("auth.admin_logout")))
 
     # Set up flask login.

@@ -88,7 +88,6 @@ export default function ModalEditTag({ data }) {
       zipCode: zipCode,
       userState: userState,
     };
-    console.log("VALUES", values);
     const validatedForm = validateForm(values);
     if (Object.keys(validatedForm).length === 0 && validatedForm.constructor === Object) {
       updateRegisteredTag(tagId, values).then((res) => {
@@ -98,8 +97,6 @@ export default function ModalEditTag({ data }) {
       setErrors(validatedForm);
     }
   };
-
-  console.log(errors);
 
   return (
     <>

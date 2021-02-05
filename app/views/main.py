@@ -1,8 +1,7 @@
-from flask import render_template, Blueprint, send_from_directory, current_app, jsonify, redirect
+from flask import render_template, Blueprint, send_from_directory, current_app, redirect
 from flask_praetorian import auth_required, current_user
 
-from app.controllers import MessageSender
-from app.models import MessageQueue, ShortUrl
+from app.models import ShortUrl
 
 main_blueprint = Blueprint("main", __name__)
 

@@ -82,8 +82,6 @@ export default function TagForm() {
     setSearchCount(0);
   };
 
-  console.log(captchaValue);
-
   return (
     <>
       {searchCount > 2 && tagId.length >= 3 && (

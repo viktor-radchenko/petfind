@@ -1,13 +1,6 @@
-import base64
-
-from flask import make_response, request, url_for
 from flask_login import current_user
-from flask_login.utils import current_user
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import AdminIndexView, BaseView, expose
-
-from app.models import User
-from app import admin
 
 
 class MyAdminIndexView(AdminIndexView):
@@ -35,6 +28,7 @@ class RegisteredTagsView(AuthModelView):
 
 class TagsView(AuthModelView):
     column_display_pk = True
+    can_export = True
 
 
 class MessageView(AuthModelView):

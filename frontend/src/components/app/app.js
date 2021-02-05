@@ -72,8 +72,6 @@ export default function App() {
     }
   }, [latitude, longitude]);
 
-  console.log(state.location);
-
   return (
     <AppContext.Provider value={[state, dispatch]}>
       <Router basename='/'>
