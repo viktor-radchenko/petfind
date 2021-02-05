@@ -28,11 +28,14 @@ export default function TagForm() {
   const [lookUpResult, setLookUpResult] = useState(null);
   const [tagId, setTagId] = useState("");
   const [captchaValue, setCaptchaValue] = useState("");
+  const [searchCount, setSearchCount] = useState(0);
 
   const contactPrivateModal = useRef(null);
   const contactPublicModal = useRef(null);
 
   const _captchaKey = process.env.REACT_APP_CAPTCHA_KEY || "";
+
+  console.log(state.location);
 
   const handleTagIdChange = (e) => {
     setTagId(e.target.value.toUpperCase());
@@ -48,16 +51,15 @@ export default function TagForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (captchaValue === "") {
+    setSearchCount(searchCount + 1);
+    if (searchCount > 2 && captchaValue === "") {
       setLookUpResult({ message: "Please confirm you are not a robot", status: "captcha" });
       return;
     }
-    if (tagId.length === 6 && captchaValue) {
+    if ((tagId.length === 6 && captchaValue) || (tagId.length === 6 && searchCount < 2)) {
       setIsLoading(true);
       lookUpTagId(tagId.toUpperCase(), state.location).then((res) => setLookUpResult(res));
       setIsLoading(false);
-    } else {
-      setLookUpResult({ message: "No such Tag ID", status: "na" });
     }
   };
 
@@ -77,13 +79,14 @@ export default function TagForm() {
 
   const handleCaptcha = (value) => {
     setCaptchaValue(value);
+    setSearchCount(0);
   };
 
   console.log(captchaValue);
 
   return (
     <>
-      {tagId.length >= 3 && (
+      {searchCount > 2 && tagId.length >= 3 && (
         <div className='captcha'>
           <ReCAPTCHA sitekey={_captchaKey} onChange={handleCaptcha} />
         </div>

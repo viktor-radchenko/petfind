@@ -1,12 +1,12 @@
 import pendulum
 import json
 
-from flask import current_app, render_template
+from flask import current_app, render_template, url_for
 from mailjet_rest import Client as mail_client
 from twilio.rest import Client as sms_client
 
 from app import guard
-from ..models import User, MessageQueue
+from ..models import User, MessageQueue, ShortUrl
 from app.logger import log
 
 
@@ -65,7 +65,10 @@ class MessageSender:
     def send_sms(self, message, recipient):
         log(log.INFO, "Sending sms")
         data = json.loads(message.temp_data)
-        body = f"You have a new message for tag: {data['tag_id']}. Visit https://{current_app.config['SERVER_NAME']}/dashboard for details"  # noqa 501
+        original_url = f"https://www.google.com/maps/search/?api=1&query={data['lat']},{data['lon']}"
+        link = ShortUrl(original_url=original_url)
+        link.save()
+        body = f"You have a new message for tag: {data['tag_id']}. Visit https://{current_app.config['SERVER_NAME']}/dashboard for details. Check it on the map: {url_for('main.redirect_to_url', short_url=link.short_url, _external=True)}"  # noqa 501
         response = self.twilio_client.messages.create(
             messaging_service_sid=current_app.config["TWILIO_SERVICE_SID"], body=body, to=recipient.phone
         )

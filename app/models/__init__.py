@@ -5,3 +5,4 @@ from .search import Search  # noqa f401
 from .message import Message  # noqa f401
 from .merch import Merch  # noqa f401
 from .message_queue import MessageQueue  # noqa f401
+from .short_url import ShortUrl  # noqa f401

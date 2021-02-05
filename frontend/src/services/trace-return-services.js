@@ -70,10 +70,10 @@ export const sendPrivateMessage = async (contactName, phone, text, tagId, locati
   formData.append("phone_number", phone);
   formData.append("text", text);
   formData.append("tag_id", tagId.toUpperCase());
-  formData.append("ip_address", location.query);
-  formData.append("zip_code", location.postal);
-  formData.append("lat", location.lat);
-  formData.append("lon", location.lon);
+  formData.append("ip_address", location.ip);
+  formData.append("zip_code", location.zip_code);
+  formData.append("lat", location.latitude);
+  formData.append("lon", location.longitude);
   formData.append("city", location.city);
 
   return await fetch(`/api/send_private_message`, {
