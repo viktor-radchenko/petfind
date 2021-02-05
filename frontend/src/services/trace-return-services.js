@@ -1,6 +1,6 @@
 import { createAuthProvider } from "react-token-auth";
 
-// const _geolocationDbKey = process.env.GEOLOCATION_DB_KEY || "";
+const _geolocationDbKey = process.env.REACT_APP_GEOLOCATION_DB_KEY || "";
 
 export const [useAuth, authFetch, login, logout] = createAuthProvider({
   accessTokenKey: "access_token",
@@ -53,8 +53,8 @@ export const resendConfirmationEmail = async (email) => {
 };
 
 export const fetchLocation = async () => {
-  return await fetch(`https://freegeoip.app/json`).then((res) => res.json());
-  // return await fetch(`https://geolocation-db.com/json/${_geolocationDbKey}`).then((res) => res.json());
+  // return await fetch(`https://freegeoip.app/json`).then((res) => res.json());
+  return await fetch(`https://geolocation-db.com/json/${_geolocationDbKey}`).then((res) => res.json());
 };
 
 export const lookUpTagId = async (tagId, location) => {
@@ -70,8 +70,8 @@ export const sendPrivateMessage = async (contactName, phone, text, tagId, locati
   formData.append("phone_number", phone);
   formData.append("text", text);
   formData.append("tag_id", tagId.toUpperCase());
-  formData.append("ip_address", location.ip);
-  formData.append("zip_code", location.zip_code);
+  formData.append("ip_address", location.IPv4);
+  formData.append("zip_code", location.postal);
   formData.append("lat", location.latitude);
   formData.append("lon", location.longitude);
   formData.append("city", location.city);

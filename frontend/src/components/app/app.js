@@ -62,6 +62,7 @@ export default function App() {
 
   useEffect(() => {
     if (latitude || longitude) {
+      console.log("This is state location:", state.location);
       const location = { ...state.location };
       location.latitude = latitude;
       location.longitude = longitude;
