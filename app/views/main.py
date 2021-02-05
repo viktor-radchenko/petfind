@@ -40,12 +40,12 @@ def serve_tag_image(filename):
     return send_from_directory(current_app.config["UPLOAD_FOLDER"], filename)
 
 
-@main_blueprint.route("/api/test/send_messages")
-def test_messages():
-    messages = MessageQueue.query.filter_by(sent=False).all()
-    sender = MessageSender(messages)
-    sender.process_messages()
-    return jsonify({"status": "ok"}), 200
+# @main_blueprint.route("/api/test/send_messages")
+# def test_messages():
+#     messages = MessageQueue.query.filter_by(sent=False).all()
+#     sender = MessageSender(messages)
+#     sender.process_messages()
+#     return jsonify({"status": "ok"}), 200
 
 
 @main_blueprint.route("/r/<short_url>")
