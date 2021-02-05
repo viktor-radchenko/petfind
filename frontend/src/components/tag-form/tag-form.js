@@ -35,8 +35,6 @@ export default function TagForm() {
 
   const _captchaKey = process.env.REACT_APP_CAPTCHA_KEY || "";
 
-  console.log(state.location);
-
   const handleTagIdChange = (e) => {
     setTagId(e.target.value.toUpperCase());
   };

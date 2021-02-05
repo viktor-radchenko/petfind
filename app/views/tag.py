@@ -113,8 +113,8 @@ def registered_lookup(tag_id):
     search = Search(
         lat=location.get("latitude"),
         lon=location.get("longitude"),
-        ip_address=location.get("ip"),
-        zip_code=location.get("zip_code"),
+        ip_address=location.get("IPv4"),
+        zip_code=location.get("postal"),
         city=location.get("city"),
         tag_id=tag.tag_id,
     )
