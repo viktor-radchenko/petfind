@@ -15,6 +15,7 @@ import PrivateRoute from "../hoc";
 import ForgotPassword from "../forgot-password";
 import ResetPassword from "../reset-password";
 import ConfirmationPending from "../confirmation-pending";
+import PageAbout from "../page_about";
 
 import "./app.css";
 
@@ -78,7 +79,11 @@ export default function App() {
         <Switch>
           <Route path='/contact-us'>Contact us Page coming soon</Route>
           <Route path='/terms-and-conditions'>Terms and conditions page coming soon</Route>
-          <Route path='/about'>About page coming soon</Route>
+          <Route path='/about'>
+            <Header />
+            <PageAbout />
+            <Footer />
+          </Route>
           <Route path='/login'>
             <Login />
           </Route>
