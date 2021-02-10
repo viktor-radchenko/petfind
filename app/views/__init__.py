@@ -10,4 +10,5 @@ from .admin import (  # noqa f401
     MessageView,
     MerchView,
     TagImportView,
+    ContactView
 ) 

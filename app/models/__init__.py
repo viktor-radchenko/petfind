@@ -7,3 +7,4 @@ from .merch import Merch  # noqa f401
 from .message_queue import MessageQueue  # noqa f401
 from .short_url import ShortUrl  # noqa f401
 from .tag_report import TagReport  # noqa f401
+from .contact import Contact  # noqa f401

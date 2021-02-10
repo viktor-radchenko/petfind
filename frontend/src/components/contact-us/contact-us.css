@@ -1,0 +1,10 @@
+.contact-us {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.contact-us__recaptcha {
+  margin: 0 auto 20px;
+  max-width: 305px;
+}

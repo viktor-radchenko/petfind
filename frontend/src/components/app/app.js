@@ -16,6 +16,7 @@ import ForgotPassword from "../forgot-password";
 import ResetPassword from "../reset-password";
 import ConfirmationPending from "../confirmation-pending";
 import PageAbout from "../page_about";
+import ContactUs from "../contact-us";
 
 import "./app.css";
 
@@ -77,7 +78,11 @@ export default function App() {
     <AppContext.Provider value={[state, dispatch]}>
       <Router basename='/'>
         <Switch>
-          <Route path='/contact-us'>Contact us Page coming soon</Route>
+          <Route path='/contact-us'>
+            <Header />
+            <ContactUs />
+            <Footer />
+          </Route>
           <Route path='/terms-and-conditions'>Terms and conditions page coming soon</Route>
           <Route path='/about'>
             <Header />

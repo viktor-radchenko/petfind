@@ -32,7 +32,9 @@ def create_app(environment='development'):
         RegisteredTagsView,
         TagsView,
         MessageView,
-        TagImportView
+        TagImportView,
+        MerchView,
+        ContactView
     )
     from app.models import (
         User,
@@ -40,7 +42,8 @@ def create_app(environment='development'):
         RegisteredTag,
         Tag,
         MessageQueue,
-        Merch
+        Merch,
+        Contact
     )
 
     # Instantiate app.
@@ -82,7 +85,8 @@ def create_app(environment='development'):
         admin.add_view(RegisteredTagsView(RegisteredTag, db.session))
         admin.add_view(TagsView(Tag, db.session))
         admin.add_view(MessageView(MessageQueue, db.session))
-        admin.add_view(MessageView(Merch, db.session))
+        admin.add_view(MerchView(Merch, db.session))
+        admin.add_view(ContactView(Contact, db.session))
         admin.add_view(TagImportView(name="Tag Management", endpoint="tag_management"))
         admin.add_link(MenuLink(name="Back to website", category="", url=url_for("auth.admin_logout")))
 

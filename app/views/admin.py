@@ -16,12 +16,21 @@ class AuthModelView(ModelView):
 
 
 class UserView(AuthModelView):
-    form_excluded_columns = ('password')
-    column_exclude_list = ['password', ]
+    form_excluded_columns = "password"
+    column_exclude_list = [
+        "password",
+    ]
 
 
 class RegisteredTagsView(AuthModelView):
-    column_exclude_list = ['tag_image', 'address', 'city', 'country', 'state', 'zip_code', ]
+    column_exclude_list = [
+        "tag_image",
+        "address",
+        "city",
+        "country",
+        "state",
+        "zip_code",
+    ]
     create_modal = True
     column_display_pk = True
     edit_modal = True
@@ -42,12 +51,17 @@ class MerchView(AuthModelView):
     column_display_pk = True
 
 
-class TagImportView(BaseView):
+class ContactView(AuthModelView):
+    can_export = True
+    column_display_pk = True
+    can_create = False
 
+
+class TagImportView(BaseView):
     def is_accessible(self):
         return current_user.is_authenticated
 
-    @expose('/')
+    @expose("/")
     def import_tags(self):
         tag_reports = TagReport.query.all()
-        return self.render('import_csv.html', tag_reports=tag_reports)
+        return self.render("import_csv.html", tag_reports=tag_reports)

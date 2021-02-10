@@ -2,7 +2,7 @@ import json
 
 from flask import Blueprint, request
 
-from app.models import Message, MessageQueue, RegisteredTag
+from app.models import Message, MessageQueue, RegisteredTag, Contact
 
 message_blueprint = Blueprint("message", __name__)
 
@@ -49,4 +49,14 @@ def send_private_message():
     new_sms.temp_data = data
     new_sms.save()
 
+    return {"status": "ok"}
+
+
+@message_blueprint.route('/api/contact_form', methods=["POST"])
+def send_contact_form_message():
+    name = request.form.get("name")
+    email = request.form.get("email")
+    message = request.form.get("message")
+    new_contact_message = Contact(name=name, email=email, message=message)
+    new_contact_message.save()
     return {"status": "ok"}

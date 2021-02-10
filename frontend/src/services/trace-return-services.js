@@ -82,6 +82,18 @@ export const sendPrivateMessage = async (contactName, phone, text, tagId, locati
   }).then((res) => res.json());
 };
 
+export const sendContactMessage = async (name, email, message) => {
+  const formData = new FormData();
+  formData.append("name", name);
+  formData.append("email", email);
+  formData.append("message", message);
+
+  return await fetch(`/api/contact_form`, {
+    method: "post",
+    body: formData,
+  }).then((res) => res.json());
+};
+
 export const updateRegisteredTag = async (tagId, options) => {
   const formData = new FormData();
   formData.append("tag_name", options.tagName);
