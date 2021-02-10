@@ -1,5 +1,6 @@
-from flask import render_template, Blueprint, send_from_directory, current_app, redirect, jsonify
+from flask import render_template, Blueprint, send_from_directory, current_app, redirect, jsonify, url_for
 from flask_praetorian import auth_required, current_user
+from flask_login import current_user
 
 from app.models import ShortUrl, Merch
 
@@ -57,3 +58,11 @@ def redirect_to_url(short_url):
 def get_merchandize():
     merch = [m.to_json() for m in Merch.query.all()]
     return jsonify(merch)
+
+
+@main_blueprint.route("/uploads/tag_report/<string:filename>")
+def serve_tag_report(filename):
+    if current_user.is_authenticated:
+        return send_from_directory(current_app.config["UPLOAD_FOLDER"], f"tag_csv/{filename}")
+    else:
+        return redirect(url_for("admin.index"))

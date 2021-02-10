@@ -1,13 +1,15 @@
 import csv
 from io import TextIOWrapper
+from datetime import datetime
+import os
 
-from flask import Blueprint, request, jsonify, url_for, redirect, flash
+from flask import Blueprint, request, jsonify, url_for, redirect, flash, current_app, send_from_directory
 from flask_praetorian import auth_required, current_user
 from flask_login import login_required
 
 from app import db
 from app.logger import log
-from app.models import Tag, RegisteredTag, User, Search, MessageQueue
+from app.models import Tag, RegisteredTag, User, Search, MessageQueue, TagReport
 from app.controllers import save_picture
 
 tag_blueprint = Blueprint("tag_blueprint", __name__)
@@ -230,12 +232,27 @@ def import_tags():
 @login_required
 def generate_tags():
     num = int(request.form.get('tag_num'))
+    date_time = datetime.now().strftime("%m-%d-%Y %H:%M:%S")
+
     if not num:
         log(log.WARNING, "Tag num to generate is not defined")
         return redirect(url_for("admin.index"))
-    for _ in range(num):
-        new_tag = Tag()
-        db.session.add(new_tag)
-    db.session.commit()
-    return redirect(url_for("admin.index"))
-    
+    filename = f'Tag-list-{date_time}.csv'
+    filepath = os.path.join(current_app.config["UPLOAD_FOLDER"], f"tag_csv/{filename}")
+    with open(filepath, mode='w') as f:
+        fieldnames = ['#', 'Tag ID', 'Date created']
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for i in range(num):
+            new_tag = Tag()
+            new_tag.save()
+            writer.writerow({
+                '#': i+1,
+                'Tag ID': new_tag.tag_id,
+                'Date created': new_tag.created_on
+            })
+    tag_report = TagReport(filename=filename, tag_num=num)
+    tag_report.save()
+
+    return send_from_directory(current_app.config['UPLOAD_FOLDER'],
+                               f"tag_csv/{filename}", as_attachment=True)

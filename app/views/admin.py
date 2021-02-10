@@ -2,6 +2,8 @@ from flask_login import current_user
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import AdminIndexView, BaseView, expose
 
+from app.models import TagReport
+
 
 class MyAdminIndexView(AdminIndexView):
     def is_accessible(self):
@@ -47,4 +49,5 @@ class TagImportView(BaseView):
 
     @expose('/')
     def import_tags(self):
-        return self.render('import_csv.html')
+        tag_reports = TagReport.query.all()
+        return self.render('import_csv.html', tag_reports=tag_reports)
