@@ -3,15 +3,34 @@ import { authFetch, logout } from "../../services";
 
 import DashboardTable from "../dashboard-table";
 import DashboardSidebar from "../dashboard-sidebar";
-import ShopifyCard from "../shopify-card";
 import Profile from "../profile";
 
 import "./dashboard.css";
+import Carousel from "react-multi-carousel";
+
+const responsive = {
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 4,
+    slidesToSlide: 2, // optional, default to 1.
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 2,
+    slidesToSlide: 2, // optional, default to 1.
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1,
+    slidesToSlide: 1, // optional, default to 1.
+  },
+};
 
 export default function Dasboard() {
   const [userData, setUserData] = useState();
   const [currentTab, setCurrentTab] = useState("table");
   const [sideBarActive, setSideBarActive] = useState(false);
+  const [cards, setCards] = useState([]);
 
   const handleTabChange = (tab) => {
     setCurrentTab(tab);
@@ -53,6 +72,15 @@ export default function Dasboard() {
       });
   }, []);
 
+  useEffect(() => {
+    const cards = async () => {
+      return await fetch("/api/merchandize")
+        .then((res) => res.json())
+        .then((res) => setCards(res));
+    };
+    cards();
+  }, []);
+
   return (
     <section className='dashboard'>
       {userData && (
@@ -68,9 +96,7 @@ export default function Dasboard() {
       <div className='dashboard__content'>
         <div className='dashboard__inner'>
           <div className='dashboard__box'>
-            <button
-              className="burger-btn"
-              onClick={handleSidebarActive}>
+            <button className='burger-btn' onClick={handleSidebarActive}>
               Sidebar Button
             </button>
             <span className='title dashboard__title'>Dashboard</span>
@@ -84,13 +110,40 @@ export default function Dasboard() {
         <div className='buy-tags'>
           <div className='buy-tags__top'>
             <span className='title buy-tags__title'>Buy Tags</span>
-            <a className='tags__more buy-tags__more' href='!#'>
+            <a className='tags__more buy-tags__more' href='https://store.tracereturn.com'>
               See all
             </a>
           </div>
-          <div className='buy-tags__content' id='buy-tags__content'>
-            <ShopifyCard wrapper={"buy-tags__content"} />
-          </div>
+          <Carousel
+            containerClass='buy-tags__content'
+            responsive={responsive}
+            infinite
+            arrows={false}
+            autoPlaySpeed={7000}
+            autoPlay>
+            {cards.map((card) => (
+              <div key={card.id} class='tag-card'>
+                <div class='tag-card__top'>
+                  <div class='tag-card__img'>
+                    <img src={card.imgUrl} alt='tag' />
+                  </div>
+
+                  <div class='tag-card__details'>
+                    <span class='tag-card__title'>{card.title}</span>
+
+                    <button class='tag-card__btn' type='button'>
+                      ${card.price}
+                    </button>
+                  </div>
+
+                  <span class='tag-card__desc'>{card.subtitle}</span>
+                  <a href={card.url} className='tag-link'>
+                    {" "}
+                  </a>
+                </div>
+              </div>
+            ))}
+          </Carousel>
         </div>
       </div>
     </section>

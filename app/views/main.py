@@ -1,7 +1,7 @@
-from flask import render_template, Blueprint, send_from_directory, current_app, redirect
+from flask import render_template, Blueprint, send_from_directory, current_app, redirect, jsonify
 from flask_praetorian import auth_required, current_user
 
-from app.models import ShortUrl
+from app.models import ShortUrl, Merch
 
 main_blueprint = Blueprint("main", __name__)
 
@@ -51,3 +51,9 @@ def serve_tag_image(filename):
 def redirect_to_url(short_url):
     url = ShortUrl.query.filter_by(short_url=short_url).first_or_404()
     return redirect(url.original_url)
+
+
+@main_blueprint.route("/api/merchandize")
+def get_merchandize():
+    merch = [m.to_json() for m in Merch.query.all()]
+    return jsonify(merch)

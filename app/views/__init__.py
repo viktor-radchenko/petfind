@@ -8,5 +8,6 @@ from .admin import (  # noqa f401
     RegisteredTagsView,
     TagsView,
     MessageView,
+    MerchView,
     TagImportView,
 ) 

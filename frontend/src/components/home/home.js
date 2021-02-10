@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ReactPlayer from "react-player/youtube";
 
@@ -6,9 +6,21 @@ import ShopifyCard from "../shopify-card";
 import TagForm from "../tag-form";
 import NewTagForm from "../new-tag-form.js";
 
-
 export default function Home() {
   const [currentTab, setCurrentTab] = useState(1);
+  const [cards, setCards] = useState([]);
+
+  useEffect(() => {
+    const cards = async () => {
+      return await fetch("/api/merchandize")
+        .then((res) => res.json())
+        .then((res) => {
+          console.log("Fetched product IDs:", res);
+          setCards(res);
+        });
+    };
+    cards();
+  }, []);
 
   return (
     <main>
@@ -55,21 +67,21 @@ export default function Home() {
         <div className='tabs__content'>
           {currentTab === 1 && (
             <ul className='mode__advantages'>
-              <li className='mode__item'>Register your items Tag ID with trace and return</li>
+              <li className='mode__item'>Secure your pets and stuff with tags and stickers</li>
 
-              <li className='mode__item'>Track the lost items</li>
+              <li className='mode__item'>Get notifications when someone searches for your lost item</li>
 
-              <li className='mode__item'>Founder would message you and you find your lost item!!</li>
+              <li className='mode__item'>Privacy: make your contact info private</li>
             </ul>
           )}
 
           {currentTab === 2 && (
             <ul className='mode__advantages'>
-              <li className='mode__item'>Lorem ipsum, dolor sit amet consectetur adipisicing</li>
+              <li className='mode__item'>Find the owner's contact info instantly</li>
 
-              <li className='mode__item'>Lorem ipsum dolor sit amet consectetur.</li>
+              <li className='mode__item'>Send messages to owners of the lost item</li>
 
-              <li className='mode__item'>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rem!</li>
+              <li className='mode__item'>Email us when you return a lost item for a reward</li>
             </ul>
           )}
         </div>
@@ -90,32 +102,10 @@ export default function Home() {
       <section className='tags'>
         <div className='container'>
           <div className='tags__inner'>
-            <div className='tags__top'>
-              <div className='tags__text'>
-                <span className='title tags__title'>Need a tag?</span>
-
-                <span className='tags__label'>Choose a Tag, which is perfect for your items</span>
-              </div>
-
-              <div className='tags__nav'>
-                <button className='tags__btn tags__btn--prev'></button>
-
-                <button className='tags__btn tags__btn--next'></button>
-              </div>
-            </div>
-
-            <div className='tags__bottom' id="tags__bottom">
-              <ShopifyCard wrapper={'tags__bottom'}/>
-            </div>
-
-            <Link className='tags__more' to='/'>
-              See All
-            </Link>
+            <ShopifyCard type={"home"} />
           </div>
         </div>
       </section>
-
-      
     </main>
   );
 }

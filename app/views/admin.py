@@ -35,6 +35,11 @@ class MessageView(AuthModelView):
     column_display_pk = True
 
 
+class MerchView(AuthModelView):
+    can_export = True
+    column_display_pk = True
+
+
 class TagImportView(BaseView):
 
     def is_accessible(self):

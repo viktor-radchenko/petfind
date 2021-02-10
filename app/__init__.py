@@ -1,7 +1,6 @@
 import os
-import base64
 
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_mail import Mail
@@ -9,7 +8,6 @@ from flask_praetorian import Praetorian
 from flask_cors import CORS
 from flask_admin import Admin
 from flask_admin.menu import MenuLink
-from flask_admin.contrib.sqla import ModelView
 from werkzeug.exceptions import HTTPException
 
 # instantiate extensions
@@ -41,7 +39,8 @@ def create_app(environment='development'):
         AnonymousUser,
         RegisteredTag,
         Tag,
-        MessageQueue
+        MessageQueue,
+        Merch
     )
 
     # Instantiate app.
@@ -75,12 +74,15 @@ def create_app(environment='development'):
     app.register_blueprint(message_blueprint)
 
     # Initialise admin views
+
+    # app.config['FLASK_ADMIN_SWATCH'] = 'journal'
     admin.init_app(app, index_view=MyAdminIndexView())
     with app.test_request_context():
         admin.add_view(UserView(User, db.session))
         admin.add_view(RegisteredTagsView(RegisteredTag, db.session))
         admin.add_view(TagsView(Tag, db.session))
         admin.add_view(MessageView(MessageQueue, db.session))
+        admin.add_view(MessageView(Merch, db.session))
         admin.add_view(TagImportView(name="Tag Management", endpoint="tag_management"))
         admin.add_link(MenuLink(name="Back to website", category="", url=url_for("auth.admin_logout")))
 

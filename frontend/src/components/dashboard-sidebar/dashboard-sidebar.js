@@ -3,10 +3,9 @@ import { Link } from "react-router-dom";
 import { authFetch, logout } from "../../services";
 
 import "./dashboard-sidebar.css";
-import logo from "../../images/logo-noword.png";
+import logo from "../../images/logo.png";
 
 export default function DashboardSidebar({ active, userData, handleTabChange, currentTab, handleSidebarActive }) {
-
   const getInitials = (string) => {
     let names = string.split(" "),
       initials = names[0].substring(0, 1).toUpperCase();
@@ -64,9 +63,11 @@ export default function DashboardSidebar({ active, userData, handleTabChange, cu
           Account Settings
         </li>
 
-        {userData.roles.includes('admin') && (<li className='dashboard__tab dashboard__tab--account' onClick={() => getToAdmin()}>
-          Admin page
-        </li>)}
+        {userData.roles.includes("admin") && (
+          <li className='dashboard__tab dashboard__tab--account' onClick={() => getToAdmin()}>
+            Admin page
+          </li>
+        )}
       </ul>
 
       <div className='dashboard__username'>

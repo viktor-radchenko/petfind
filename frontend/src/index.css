@@ -204,8 +204,9 @@ body {
 .logo-noword img {
   width: 149px;
   height: 149px;
-  -o-object-fit: cover;
-  object-fit: cover;
+  -o-object-fit: contain;
+  object-fit: contain;
+  transform: rotate(180deg) translateY(40px);
 }
 
 .logo {
@@ -214,10 +215,6 @@ body {
 
 .logo img {
   width: 403px;
-  height: 124px;
-  -o-object-fit: cover;
-  object-fit: cover;
-  transform: translateX(-30px);
 }
 
 @media (max-width: 600px) {
@@ -246,8 +243,8 @@ body {
 .full-logo img {
   width: 134px;
   height: 134px;
-  -o-object-fit: cover;
-  object-fit: cover;
+  -o-object-fit: contain;
+  object-fit: contain;
 }
 
 .title {
@@ -1732,6 +1729,10 @@ ul.tabs {
   margin-bottom: 44px;
 }
 
+.tags__inner {
+  position: relative;
+}
+
 @media (max-width: 600px) {
   .tags__top {
     margin-bottom: 26px;
@@ -1815,7 +1816,8 @@ ul.tabs {
 }
 
 .tags__bottom {
-  margin-bottom: 41px;
+  margin-bottom: 40px;
+  padding-left: 35px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1861,11 +1863,20 @@ ul.tabs {
 
 
 .tag-card {
+  background-color: #fff;
   max-width: 325px;
   min-height: 490px;
   text-align: center;
   -webkit-box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
   box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
+}
+
+.tag-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 @media (max-width: 600px) {
@@ -1879,6 +1890,8 @@ ul.tabs {
   padding: 8px 8px 17px;
   border-bottom: 2px solid #faf7f4;
   margin-bottom: 2px;
+  position: relative;
+
 }
 
 @media (max-width: 600px) {
@@ -1936,6 +1949,7 @@ ul.tabs {
 
 .tag-card__btn {
   border: none;
+  display: block;
   background-color: transparent;
   padding: 21px 100px;
   width: 100%;
@@ -1947,6 +1961,12 @@ ul.tabs {
   -webkit-transition: background-color 0.3s;
   -o-transition: background-color 0.3s;
   transition: background-color 0.3s;
+}
+
+.tags__nav {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 @media (max-width: 600px) {
@@ -2819,16 +2839,6 @@ ul.tabs {
 
 .buy-tags__content {
   padding: 25px 20px 33px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -ms-flex-flow: row wrap;
-  flex-flow: row wrap;
 }
 
 .buy-tags__more {
