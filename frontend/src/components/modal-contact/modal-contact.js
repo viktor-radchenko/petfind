@@ -12,9 +12,14 @@ export default function ModalContact({ tagId }) {
   const [status, setStatus] = useState("");
   const [errors, setErrors] = useState({});
 
-
   const [state] = useAppContext();
 
+  const clearState = () => {
+    setText("");
+    setPhoneValue("");
+    setName("");
+    setStatus("You message has been sent!");
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -29,7 +34,7 @@ export default function ModalContact({ tagId }) {
       sendPrivateMessage(name, phoneValue, text, tagId, location)
         .then((res) => {
           if (res.error) throw Error(res.error);
-          if (res.status === "ok") setStatus("You message has been sent!");
+          if (res.status === "ok") clearState();
           setTimeout(() => window.location.reload(), 2000);
         })
         .catch((e) => alert(e));
@@ -41,60 +46,66 @@ export default function ModalContact({ tagId }) {
   return (
     <>
       <div className='modal__content'>
-        <div className='contact-owner__notice'>
-          <p>
-            Your Information will beprivate and confidential. Spamming of any kind is strictly prohibited and will be reported.
-          </p>
+        {status ? (
+          <div className='contac-owner__confirmation'>{status}</div>
+        ) : (
+          <>
+            <div className='contact-owner__notice'>
+              <p>
+                Your Information will beprivate and confidential. Spamming of any kind is strictly prohibited and will
+                be reported.
+              </p>
+            </div>
+
+            <form className='contact-owner__form' onSubmit={handleSubmit}>
+              <label className='label contact-owner__label'>
+                <span>Name</span>
+                <input
+                  className='input contact-owner__input'
+                  type='text'
+                  name='name'
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </label>
+              {errors.name && <div className='input-error'>{errors.name}</div>}
+
+              <label className='label contact-owner__label'>
+                <span>Phone Number</span>
+
+                <PhoneInput
+                  required='required'
+                  className='input contact-owner__input'
+                  type='tel'
+                  name='phone'
+                  placeholder='(123) 456 78 90 '
+                  defaultCountry='US'
+                  value={phoneValue}
+                  onChange={setPhoneValue}
+                />
+              </label>
+              {errors.phone && <div className='input-error'>{errors.phone}</div>}
+
+              <label className='label contact-owner__label'>
+                <span>Message</span>
+                <textarea
+                  className='textarea contact-owner__textarea'
+                  name='text'
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}></textarea>
+              </label>
+              {errors.text && <div className='input-error'>{errors.text}</div>}
+            </form>
+          </>
+        )}
+      </div>
+      {!status && (
+        <div className='modal__footer'>
+          <button className='button' type='submit' onClick={handleSubmit}>
+            Send Message
+          </button>
         </div>
-
-        <form className='contact-owner__form' onSubmit={handleSubmit}>
-          <label className='label contact-owner__label'>
-            <span>Name</span>
-            <input
-              className='input contact-owner__input'
-              type='text'
-              name='name'
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </label>
-          {errors.name && <div className="input-error">{errors.name}</div>}
-
-          <label className='label contact-owner__label'>
-            <span>Phone Number</span>
-
-            <PhoneInput
-                required='required'
-                className='input contact-owner__input'
-                type='tel'
-                name='phone'
-                placeholder='(123) 456 78 90 '
-                defaultCountry='US'
-                value={phoneValue}
-                onChange={setPhoneValue}
-              />
-          </label>
-          {errors.phone && <div className="input-error">{errors.phone}</div>}
-
-          <label className='label contact-owner__label'>
-            <span>Message</span>
-            <textarea
-              className='textarea contact-owner__textarea'
-              name='text'
-              value={text}
-              onChange={(e) => setText(e.target.value)}></textarea>
-          </label>
-          {errors.text && <div className="input-error">{errors.text}</div>}
-
-          {status && <div className='contac-owner__confirmation'>{status}</div>}
-        </form>
-      </div>
-
-      <div className='modal__footer'>
-        <button className='button' type='submit' onClick={handleSubmit}>
-          Send Message
-        </button>
-      </div>
+      )}
     </>
   );
 }
