@@ -20,6 +20,7 @@ class UserView(AuthModelView):
     column_exclude_list = [
         "password",
     ]
+    column_searchable_list = ['email', 'phone']
 
 
 class RegisteredTagsView(AuthModelView):
@@ -40,6 +41,7 @@ class RegisteredTagsView(AuthModelView):
 class TagsView(AuthModelView):
     column_display_pk = True
     can_export = True
+    column_searchable_list = ['tag_id']
 
 
 class MessageView(AuthModelView):

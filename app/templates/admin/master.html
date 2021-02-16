@@ -3,4 +3,5 @@
 {% block head_css %}
   {{ super() }}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/flask_admin.css') }}">
+  <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
 {% endblock %}
