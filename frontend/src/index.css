@@ -1312,7 +1312,7 @@ body {
     display: block;
     position: absolute;
     background-color: #faf7f4;
-    top: 100px;
+    top: 90px;
     right: 0;
     bottom: 0;
     left: 0;
@@ -1788,11 +1788,11 @@ ul.tabs {
   }
 }
 
-@media (max-width: 600px) {
+/* @media (max-width: 600px) {
   .tags__btn {
     display: none;
   }
-}
+} */
 
 .tags__btn:focus {
   background-color: #e9b320;
