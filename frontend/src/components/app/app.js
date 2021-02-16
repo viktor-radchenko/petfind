@@ -51,7 +51,7 @@ function reducer(state, action) {
 export default function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { latitude, longitude, accuracy } = usePosition();
+  const { latitude, longitude } = usePosition();
 
   useEffect(() => {
     fetchLocation().then((res) => {

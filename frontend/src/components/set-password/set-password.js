@@ -13,7 +13,6 @@ export default function SetPassword() {
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState();
 
-
   const history = useHistory();
 
   if (logged) {
@@ -40,10 +39,9 @@ export default function SetPassword() {
             );
           return res.json();
         })
-        .then((res) => { 
+        .then((res) => {
           if (res.access_token) {
-            if (localStorage.getItem('confirmation_pending')) localStorage.removeItem('confirmation_pending');
-            login(res)
+            login(res);
           }
         })
         .catch((e) => setServerError(e.message));

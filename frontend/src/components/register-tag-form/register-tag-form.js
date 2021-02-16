@@ -67,7 +67,7 @@ export default function RegisterTagForm() {
         field: "tagId",
         value: appState.registerTagId,
       });
-  }, []);
+  }, [appState.registerTagId]);
 
   const onChange = (e) => {
     dispatch({

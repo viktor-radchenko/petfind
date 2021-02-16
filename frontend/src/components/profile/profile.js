@@ -61,7 +61,7 @@ export default function Profile({ userData }) {
       });
     }
     setPhoneValue(userData.phone);
-  }, []);
+  }, [userData]);
 
   const onChange = (e) => {
     dispatch({
@@ -132,15 +132,15 @@ export default function Profile({ userData }) {
           <label className='label'>
             <span>Phone Number</span>
             <PhoneInput
-                required='required'
-                className='input edit-tag__input'
-                type='tel'
-                name='phone'
-                placeholder='(123) 456 78 90 '
-                defaultCountry='US'
-                value={phoneValue}
-                onChange={setPhoneValue}
-              />
+              required='required'
+              className='input edit-tag__input'
+              type='tel'
+              name='phone'
+              placeholder='(123) 456 78 90 '
+              defaultCountry='US'
+              value={phoneValue}
+              onChange={setPhoneValue}
+            />
             {errors.phone && <div className='input-error input-error--main'>{errors.phone}</div>}
           </label>
 

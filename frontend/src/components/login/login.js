@@ -12,7 +12,7 @@ export default function Login() {
   const [logged] = useAuth();
   const history = useHistory();
 
-  if (localStorage.getItem("confirmation_pending")) history.push("/activate_your_account");
+  // if (localStorage.getItem("confirmation_pending")) history.push("/activate_your_account");
   if (logged) history.push("/dashboard");
 
   const onSubmitClick = (e) => {

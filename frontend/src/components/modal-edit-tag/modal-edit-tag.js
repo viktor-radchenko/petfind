@@ -58,7 +58,7 @@ export default function ModalEditTag({ data }) {
         value: new_data[property],
       });
     }
-  }, []);
+  }, [data]);
 
   const onChange = (e) => {
     dispatch({

@@ -5,7 +5,6 @@ import { useAuth } from "../../services";
 import NewTagForm from "../new-tag-form.js";
 
 import "./header.css";
-import homeLogo from "../../images/home-logo.png";
 import homeLogo2 from "../../images/logo2.png";
 
 export default function Header() {

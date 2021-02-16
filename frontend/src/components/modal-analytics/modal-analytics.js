@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { authFetch } from "../../services";
-import TablePagination from '../table-pagination';
+import TablePagination from "../table-pagination";
 
 import "./modal-analytics.css";
 
@@ -37,7 +37,7 @@ export default function ModalAnalytics({ data }) {
       .then((res) => {
         setSearches(res);
       });
-  }, []);
+  }, [data.tag_id]);
 
   return (
     <>
@@ -56,27 +56,31 @@ export default function ModalAnalytics({ data }) {
           </div>
 
           <ul className='analytics__table-rows'>
-            {currentRows.length > 1 ? currentRows.map((row, index) => (
-              <li key={`row${index}`} className='analytics__table-row'>
-                <div className='cell analytics__date'>{row.date}</div>
-                <div className='cell analytics__city'>{row.city}</div>
-                <div className='cell analytics__zip'>{row.zip_code}</div>
-                <div className='cell analytics__ip'>{row.ip_address}</div>
-                {/* <div className='cell analytics__coord'>{`${row.lat}/${row.lon}`}</div> */}
-                <div className='cell analytics__map'>
-                  <a
-                    rel='noreferrer'
-                    target='_blank'
-                    href={`https://www.google.com/maps/search/?api=1&query=${row.lat},${row.lon}`}
-                    className='analytics__link'>
-                    map
-                  </a>
-                </div>
-              </li>
-            )) : <div className="analytics__table-row">No searches results yet</div>}
+            {currentRows.length > 1 ? (
+              currentRows.map((row, index) => (
+                <li key={`row${index}`} className='analytics__table-row'>
+                  <div className='cell analytics__date'>{row.date}</div>
+                  <div className='cell analytics__city'>{row.city}</div>
+                  <div className='cell analytics__zip'>{row.zip_code}</div>
+                  <div className='cell analytics__ip'>{row.ip_address}</div>
+                  {/* <div className='cell analytics__coord'>{`${row.lat}/${row.lon}`}</div> */}
+                  <div className='cell analytics__map'>
+                    <a
+                      rel='noreferrer'
+                      target='_blank'
+                      href={`https://www.google.com/maps/search/?api=1&query=${row.lat},${row.lon}`}
+                      className='analytics__link'>
+                      map
+                    </a>
+                  </div>
+                </li>
+              ))
+            ) : (
+              <div className='analytics__table-row'>No searches results yet</div>
+            )}
           </ul>
 
-          <TablePagination 
+          <TablePagination
             rowPerPage={rowPerPage}
             totalRows={searches.length}
             paginate={paginate}

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import ReactPlayer from "react-player/youtube";
 
 import ShopifyCard from "../shopify-card";
@@ -8,19 +7,6 @@ import NewTagForm from "../new-tag-form.js";
 
 export default function Home() {
   const [currentTab, setCurrentTab] = useState(1);
-  const [cards, setCards] = useState([]);
-
-  useEffect(() => {
-    const cards = async () => {
-      return await fetch("/api/merchandize")
-        .then((res) => res.json())
-        .then((res) => {
-          console.log("Fetched product IDs:", res);
-          setCards(res);
-        });
-    };
-    cards();
-  }, []);
 
   return (
     <main>
