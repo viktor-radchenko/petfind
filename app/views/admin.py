@@ -19,8 +19,10 @@ class UserView(AuthModelView):
     form_excluded_columns = "password"
     column_exclude_list = [
         "password",
+        "address",
+        "zip_code",
     ]
-    column_searchable_list = ['email', 'phone']
+    column_searchable_list = ["email", "phone"]
 
 
 class RegisteredTagsView(AuthModelView):
@@ -41,11 +43,13 @@ class RegisteredTagsView(AuthModelView):
 class TagsView(AuthModelView):
     column_display_pk = True
     can_export = True
-    column_searchable_list = ['tag_id']
+    column_searchable_list = ["tag_id"]
 
 
 class MessageView(AuthModelView):
-    column_display_pk = True
+    column_exclude_list = [
+        "temp_data",
+    ]
 
 
 class MerchView(AuthModelView):
