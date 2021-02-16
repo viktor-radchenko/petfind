@@ -701,14 +701,14 @@ body {
   cursor: pointer;
 }
 
-.auth__label span {
+.auth__text {
   margin-bottom: 0;
   font-size: 14px;
-  color: #fe4a59;
+  color: #928c8b;
 }
 
 @media (max-width: 600px) {
-  .auth__label span {
+  .auth__text {
     font-size: 12px;
   }
 }
@@ -730,12 +730,17 @@ body {
   background-image: url("images/icons/check.svg");
   background-repeat: no-repeat;
   background-position: center center;
+  border-color: #fe4a59;
+}
+
+.auth__input-checkbox:checked + .auth__text {
+  color: #fe4a59;
 }
 
 .auth__checkbox {
   width: 20px;
   height: 20px;
-  border: 1px solid #fe4a59;
+  border: 1px solid #928c8b;
   border-radius: 4px;
   margin-right: 9px;
 }
@@ -1636,7 +1641,7 @@ body {
   margin-bottom: 40px;
   cursor: pointer;
   transition: box-shadow 0.3s;
-  border: 10px solid #FFDD7D;
+  border: 10px solid #ffdd7d;
 }
 
 .mode__video:hover {
@@ -1660,7 +1665,6 @@ body {
     display: block;
   }
 }
-
 
 .mode .id-form {
   margin: 0 auto;
@@ -1860,8 +1864,6 @@ ul.tabs {
   color: #fe4a59;
 }
 
-
-
 .tag-card {
   background-color: #fff;
   max-width: 325px;
@@ -1891,7 +1893,6 @@ ul.tabs {
   border-bottom: 2px solid #faf7f4;
   margin-bottom: 2px;
   position: relative;
-
 }
 
 @media (max-width: 600px) {
@@ -3096,7 +3097,8 @@ ul.tabs {
 }
 
 @media (max-width: 600px) {
-  .modal-disabled, .modal-private {
+  .modal-disabled,
+  .modal-private {
     top: -50px;
   }
 }

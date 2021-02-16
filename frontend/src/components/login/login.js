@@ -73,7 +73,7 @@ export default function Login() {
             <label className='label auth__label'>
               <input className='input auth__input-checkbox' type='checkbox' />
               <span className='auth__checkbox'></span>
-              <span>Remember me</span>
+              <span className='auth__text'>Remember me</span>
             </label>
 
             <Link className='auth__forgot' to='/auth/forgot_password'>
