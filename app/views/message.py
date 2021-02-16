@@ -59,4 +59,13 @@ def send_contact_form_message():
     message = request.form.get("message")
     new_contact_message = Contact(name=name, email=email, message=message)
     new_contact_message.save()
+    new_email = MessageQueue(recipient_id=1)
+    new_email.message_type = MessageQueue.MessageType.contact_us_email
+    data = json.dumps({
+        "name": name,
+        "email": email,
+        'message': message
+    })
+    new_email.temp_data = data
+    new_email.save()
     return {"status": "ok"}

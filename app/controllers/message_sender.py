@@ -61,6 +61,9 @@ class MessageSender:
             if message.message_type == MessageQueue.MessageType.search_notification_email:
                 self.send_search_notification_email(message, recipient)
                 continue
+            if message.message_type == MessageQueue.MessageType.contact_us_email:
+                self.send_contact_us_email(message)
+                continue
 
     def send_sms(self, message, recipient):
         log(log.INFO, "Sending sms")
@@ -248,6 +251,42 @@ class MessageSender:
                     "TextPart": msg_body,
                     "HTMLPart": msg_html,
                     "Subject": "People are looking for your Tag ID"
+                }
+            ]
+        }
+        response = self.mailjet.send.create(data=email_template)
+        if not response.ok:
+            message.error = response.text
+        else:
+            message.sent = True
+        message.save()
+
+    def send_contact_us_email(self, message):
+        log(log.INFO, "Sending search contact us form email")
+        template = "email/contact_us"
+        data = json.loads(message.temp_data)
+        msg_body = render_template(
+            template + ".txt",
+            name=data.get('name'),
+            email=data.get('email'),
+            message=data.get('message')
+        )
+        msg_html = render_template(
+            template + ".html",
+            name=data.get('name'),
+            email=data.get('email'),
+            message=data.get('message')
+        )
+        email_template = {
+            "Messages": [
+                {
+                    "From": {
+                        "Email": current_app.config["MAIL_USERNAME"],
+                    },
+                    "To": [{"Email": current_app.config["CONTACT_US_EMAIL"], "Name": ''}],
+                    "TextPart": msg_body,
+                    "HTMLPart": msg_html,
+                    "Subject": "New contact form message - TraceReturn"
                 }
             ]
         }

@@ -23,6 +23,7 @@ class BaseConfig(object):
 
     MAILJET_API_KEY = os.environ.get("MAILJET_API_KEY", None)
     MAILJET_SECRET_KEY = os.environ.get("MAILJET_SECRET_KEY", None)
+    CONTACT_US_EMAIL = os.environ.get("CONTACT_US_EMAIL", None)
 
     TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID", None)
     TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN", None)
