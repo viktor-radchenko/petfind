@@ -3532,6 +3532,8 @@ ul.tabs {
   border-radius: 6px;
   font-size: 14px;
   text-transform: none;
+  position: absolute;
+  z-index: 100;
 }
 
 .tooltip-tag__text {
