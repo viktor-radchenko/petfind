@@ -12,13 +12,12 @@ const validateTagForm = (values) => {
   }
 
   // Image
-  if (values.tagImage && values.tagImage.size >= 2048 * 1000) {
-    errors.tagImage = "Image file is too large"
+  if (values.tagImage && values.tagImage.size >= 1024 * 15 * 1000) {
+    errors.tagImage = "Image file is too large";
   }
 
   return errors;
-}
-
+};
 
 const validateUserForm = (values) => {
   let errors = {};

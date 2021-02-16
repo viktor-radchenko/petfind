@@ -127,7 +127,7 @@ export default function ModalEditTag({ data }) {
                 onChange={onFileChange}
               />
               <span className='register-item__upload'>Upload image</span>
-              <span className='register-item__max'>max file size 2mb</span>
+              <span className='register-item__max'>max file size 15 MB</span>
             </label>
           </div>
           {errors.tagImage && <div className='input-error'>{errors.tagImage}</div>}

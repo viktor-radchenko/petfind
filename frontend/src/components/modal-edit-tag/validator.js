@@ -25,7 +25,7 @@ const validateForm = (values) => {
   }
 
   // Image
-  if (values.tagImage && values.tagImage.size >= 2048 * 1000) {
+  if (values.tagImage && values.tagImage.size >= 1024 * 15 * 1000) {
     errors.tagImage = "Image file is too large";
   }
 

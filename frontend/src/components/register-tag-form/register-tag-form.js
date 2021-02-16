@@ -183,8 +183,8 @@ export default function RegisterTagForm() {
         if (res.error) setServerError(res.error);
         if (res.message) {
           setResendLink(res.message);
-          };
-        })
+        }
+      })
       .catch((e) => alert(e));
   };
 
@@ -233,7 +233,7 @@ export default function RegisterTagForm() {
                   onChange={onFileChange}
                 />
                 <span className='register-item__upload'>Upload image</span>
-                <span className='register-item__max'>max file size 2mb</span>
+                <span className='register-item__max'>max file size 15 MB</span>
               </label>
             </div>
             {errors.tagImage && <div className='input-error'>{errors.tagImage}</div>}
@@ -439,7 +439,7 @@ export default function RegisterTagForm() {
             Resend Link
           </button>
 
-          {resendLink && <div className="password-notify__resend">{resendLink}</div>}
+          {resendLink && <div className='password-notify__resend'>{resendLink}</div>}
         </section>
       )}
 
