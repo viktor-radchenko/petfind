@@ -19,6 +19,18 @@ class Message(db.Model, ModelMixin):
     zip_code = db.Column(db.String(16))
     tag_id = db.Column(db.Integer, db.ForeignKey("registered_tag.tag_id"))
     created_on = db.Column(db.DateTime, default=datetime.now)
+    is_read = db.Column(db.Boolean, default=False)
+
+    def to_json(self):
+        return {
+            "name": self.name,
+            "phone_number": self.phone_number,
+            "text": self.text,
+            "date": self.created_on.strftime("%m/%d/%Y"),
+            "id": self.message_id,
+            "tag": self.tag_id,
+            "is_read": self.is_read
+        }
 
     def __str__(self):
         return '<Message: %d>' % self.message_id
