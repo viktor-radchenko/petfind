@@ -71,10 +71,17 @@ function DashboarMessages() {
       })
       .then((res) => {
         if (res.message) return;
-        const newData = [...tableData];
-        const index = tableData.indexOf(res.id);
-        newData[index] = res;
-        setTableData(newData);
+        setTableData((state) => {
+          const list = state.map((item) => {
+            if (item.id === res.id) {
+              return res;
+            } else {
+              return item;
+            }
+          });
+
+          return list;
+        });
       })
       .catch((e) => {
         alert(e.message);
@@ -110,7 +117,7 @@ function DashboarMessages() {
         <ul className='table__rows'>
           {currentRows &&
             currentRows.map((row) => (
-              <li key={row.id} className='table__row table__row--msg' onClick={() => handleOnClick(row.id)}>
+              <li key={row.id} className='table__row table__row--msg' onClick={() => handleOnClick(row)}>
                 <span className='table__item-tag'>{row.tag}</span>
                 <span
                   className={row.is_read ? "table__item-message" : "table__item-message table__item-message--unread"}
