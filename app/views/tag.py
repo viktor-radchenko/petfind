@@ -9,7 +9,7 @@ from flask_login import login_required
 
 from app import db
 from app.logger import log
-from app.models import Tag, RegisteredTag, User, Search, MessageQueue, TagReport
+from app.models import Tag, RegisteredTag, User, Search, MessageQueue, Message, TagReport
 from app.controllers import save_picture
 
 tag_blueprint = Blueprint("tag_blueprint", __name__)
@@ -153,6 +153,32 @@ def get_registered_tags():
     if not tags:
         return {"message": "No tags found"}
     return jsonify(tags), 200
+
+
+@tag_blueprint.route("/api/registered_tag/messages")
+@auth_required
+def get_tags_messages():
+    user = current_user()
+    user_tags = user.tags
+    messages = []
+    for tag in user_tags:
+        message_list = [message.to_json() for message in tag.messages]
+        messages.extend(message_list)
+    if not messages:
+        return {"message": "No messages found"}
+    return jsonify(messages), 200
+
+
+@tag_blueprint.route("/api/registered_tag/messages/<message_id>", methods=["POST"])
+@auth_required
+def update_tags_messages(message_id):
+    user = current_user()
+    message = Message.query.get(message_id)
+    if not message:
+        return {"message": "No messages found"}
+    message.is_read = True
+    message.save()
+    return jsonify(message.to_json()), 200
 
 
 @tag_blueprint.route("/api/registered_tag/modify/<tag_id>", methods=["POST"])
