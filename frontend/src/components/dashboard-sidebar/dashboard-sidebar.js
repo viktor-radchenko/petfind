@@ -46,12 +46,12 @@ export default function DashboardSidebar({ active, userData, handleTabChange, cu
         </li>
         <li
           className={
-            currentTab === "analytics"
+            currentTab === "messages"
               ? `dashboard__tab dashboard__tab--analytics dashboard__tab--active`
               : "dashboard__tab dashboard__tab--analytics"
           }
-          onClick={() => handleTabChange("analytics")}>
-          Analytics
+          onClick={() => handleTabChange("messages")}>
+          Messages
         </li>
         <li
           className={

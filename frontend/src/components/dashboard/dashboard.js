@@ -4,6 +4,7 @@ import { authFetch, logout } from "../../services";
 import DashboardTable from "../dashboard-table";
 import DashboardSidebar from "../dashboard-sidebar";
 import Profile from "../profile";
+import DashboardMessages from "../dasboard-messages";
 
 import "./dashboard.css";
 import Carousel from "react-multi-carousel";
@@ -103,7 +104,7 @@ export default function Dasboard() {
           </div>
 
           {currentTab === "table" && <DashboardTable />}
-          {currentTab === "analytics" && <div>Analytics tab</div>}
+          {currentTab === "messages" && <DashboardMessages />}
           {currentTab === "profile" && <Profile userData={userData} />}
         </div>
 

@@ -18,7 +18,9 @@ def send_private_message():
     if not name or not phone_number or not text:
         return {"error": "Contact details are not complete. Check your input and try again"}
 
-    message = Message()
+    user_id = RegisteredTag.query.filter_by(tag_id=tag_id).first().user_id
+    message = Message(user_id=user_id)
+
     for key, value in request.form.items():
         if value != "undefined":
             setattr(message, key, value)

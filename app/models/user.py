@@ -26,6 +26,7 @@ class User(db.Model, UserMixin, ModelMixin):
     activated = db.Column(db.Boolean, default=False)
     created_on = db.Column(db.DateTime, default=datetime.now)
     tags = db.relationship("RegisteredTag", backref="user", lazy=True)
+    messages = db.relationship("Message", backref="user", lazy=True)
 
     def to_json(self):
         return {
