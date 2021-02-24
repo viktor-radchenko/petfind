@@ -18,6 +18,7 @@ class Message(db.Model, ModelMixin):
     ip_address = db.Column(db.String(16))
     zip_code = db.Column(db.String(16))
     tag_id = db.Column(db.Integer, db.ForeignKey("registered_tag.tag_id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     created_on = db.Column(db.DateTime, default=datetime.now)
     is_read = db.Column(db.Boolean, default=False)
 
@@ -27,6 +28,8 @@ class Message(db.Model, ModelMixin):
             "phone_number": self.phone_number,
             "text": self.text,
             "date": self.created_on.strftime("%m/%d/%Y"),
+            "lat": self.lat,
+            "lon": self.lon,
             "id": self.message_id,
             "tag": self.tag_id,
             "is_read": self.is_read

@@ -159,14 +159,10 @@ def get_registered_tags():
 @auth_required
 def get_tags_messages():
     user = current_user()
-    user_tags = user.tags
-    messages = []
-    for tag in user_tags:
-        message_list = [message.to_json() for message in tag.messages]
-        messages.extend(message_list)
-    if not messages:
+    message_list = [message.to_json() for message in user.messages]
+    if not message_list:
         return {"message": "No messages found"}
-    return jsonify(messages), 200
+    return jsonify(message_list), 200
 
 
 @tag_blueprint.route("/api/registered_tag/messages/<message_id>", methods=["POST"])
