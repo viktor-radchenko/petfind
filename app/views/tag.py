@@ -172,6 +172,8 @@ def update_tags_messages(message_id):
     message = Message.query.get(message_id)
     if not message:
         return {"message": "No messages found"}
+    if user.id != message.user_id:
+        return {"message": "You are not authorized to perform this operation"}
     message.is_read = True
     message.save()
     return jsonify(message.to_json()), 200
