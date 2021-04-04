@@ -78,37 +78,39 @@ export default function App() {
     <AppContext.Provider value={[state, dispatch]}>
       <Router basename='/'>
         <Switch>
-          <Route path='/contact-us'>
+          <Route path='/contact-us' exact>
             <Header />
             <ContactUs />
             <Footer />
           </Route>
-          <Route path='/terms-and-conditions'>Terms and conditions page coming soon</Route>
-          <Route path='/about'>
+          <Route path='/terms-and-conditions' exact>
+            Terms and conditions page coming soon
+          </Route>
+          <Route path='/about' exact>
             <Header />
             <PageAbout />
             <Footer />
           </Route>
-          <Route path='/login'>
+          <Route path='/login' exact>
             <Login />
           </Route>
-          <Route path='/register_tag'>
+          <Route path='/register_tag' exact>
             <RegisterTagForm />
           </Route>
-          <Route path='/activate_your_account'>
+          <Route path='/activate_your_account' exact>
             <ConfirmationPending />
           </Route>
-          <Route path='/auth/set_password/:token'>
+          <Route path='/auth/set_password/:token' exact>
             <SetPassword />
           </Route>
-          <PrivateRoute path='/dashboard' component={Dasboard} />
-          <Route path='/auth/forgot_password'>
+          <PrivateRoute path='/dashboard' component={Dasboard} exact />
+          <Route path='/auth/forgot_password' exact>
             <ForgotPassword />
           </Route>
           <Route path='/auth/reset_password/:token'>
             <ResetPassword />
           </Route>
-          <Route path='/'>
+          <Route path='/:tagIdFromRequest?'>
             <Header />
             <Home />
             <Footer />
