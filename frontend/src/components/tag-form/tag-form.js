@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 
 import ModalWrapper from "../modal-wrapper";
@@ -32,6 +32,7 @@ export default function TagForm() {
   const [searchCount, setSearchCount] = useState(0);
 
   const { tagIdFromRequest } = useParams();
+  const history = useHistory();
 
   const contactPrivateModal = useRef(null);
   const contactPublicModal = useRef(null);
@@ -80,7 +81,10 @@ export default function TagForm() {
             contactPrivateModal.current.open();
           }
           if (res.status === "found") setLookUpResult(res);
-          if (res.status === "na") setLookUpResult(res);
+          if (res.status === "na") {
+            setLookUpResult(res);
+            history.push("/");
+          }
         });
         setIsLoading(false);
       }
