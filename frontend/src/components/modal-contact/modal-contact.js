@@ -17,8 +17,6 @@ export default function ModalContact({ tagId }) {
 
   const [state] = useAppContext();
 
-  console.log("Passed to modal ID:", tagId);
-
   const clearState = () => {
     setText("");
     setPhoneValue("");

@@ -113,8 +113,6 @@ function DashboarMessages() {
   const indexOfFirstRow = indexOfLastRow - rowPerPage;
   const currentRows = filteredData.slice(indexOfFirstRow, indexOfLastRow);
 
-  console.log(tableData);
-
   return (
     <>
       <form className='dashboard__search'>

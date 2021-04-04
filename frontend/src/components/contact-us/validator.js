@@ -19,7 +19,6 @@ const validateForm = (values) => {
   }
 
   if (!values.recaptcha) {
-    console.log("RECAPTHCHAS!@£!@£!@£!");
     errors.recaptcha = "Please confirm you are not a robot";
   }
 
