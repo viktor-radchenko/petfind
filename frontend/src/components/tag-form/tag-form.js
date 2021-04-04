@@ -72,8 +72,6 @@ export default function TagForm() {
   useEffect(() => {
     if (tagIdFromRequest && state.location) {
       if ((tagIdFromRequest.length === 6 && captchaValue) || (tagIdFromRequest.length === 6 && searchCount < 2)) {
-        console.log(`This page has loaded with following request tagId: ${tagIdFromRequest}`);
-        console.log("And this is location:", state.location);
         setIsLoading(true);
         lookUpTagId(tagIdFromRequest.toUpperCase(), state.location).then((res) => {
           if (res.status === "private") {
