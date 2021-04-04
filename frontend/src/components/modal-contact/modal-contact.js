@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import PhoneInput from "react-phone-number-input";
 import { useAppContext } from "../app";
 import { sendPrivateMessage } from "../../services";
@@ -12,7 +13,11 @@ export default function ModalContact({ tagId }) {
   const [status, setStatus] = useState("");
   const [errors, setErrors] = useState({});
 
+  const history = useHistory();
+
   const [state] = useAppContext();
+
+  console.log("Passed to modal ID:", tagId);
 
   const clearState = () => {
     setText("");
@@ -35,7 +40,8 @@ export default function ModalContact({ tagId }) {
         .then((res) => {
           if (res.error) throw Error(res.error);
           if (res.status === "ok") clearState();
-          setTimeout(() => window.location.reload(), 2000);
+          history.push("/");
+          setTimeout(() => window.location.reload(), 1000);
         })
         .catch((e) => alert(e));
     } else {
