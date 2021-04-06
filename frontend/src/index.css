@@ -2401,7 +2401,7 @@ ul.tabs {
   border: 1px solid #dfdfdf;
   border-radius: 8px;
   margin-bottom: 65px;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .table__header {
