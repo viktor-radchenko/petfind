@@ -11,6 +11,8 @@ function DashboarMessages() {
   const [rowPerPage] = useState(8);
   const [openedRows, setOpenedRows] = useState([]);
 
+  const notMobile = document.documentElement.clientWidth >= 640;
+
   useEffect(() => {
     setLoading(true);
 
@@ -156,7 +158,7 @@ function DashboarMessages() {
                     style={{
                       boxShadow: openedRows.includes(row.id) ? "none" : "0px -1px 0px #dfdfdf, 0px 1px 0px #dfdfdf;",
                     }}>
-                    <div className='table__item-tag table__item-tag--title'></div>
+                    {notMobile && <div className='table__item-tag table__item-tag--title'></div>}
                     <div className='table__item-message'>
                       <div style={{ display: "flex", justifyContent: "space-between" }}>
                         <span>
@@ -180,7 +182,7 @@ function DashboarMessages() {
                         <strong>Message</strong>: <br /> {row.text}
                       </div>
                     </div>
-                    <div className='table__item-date'></div>
+                    {notMobile && <div className='table__item-date'></div>}
                   </div>
                 )}
               </>
