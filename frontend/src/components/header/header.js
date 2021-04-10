@@ -15,13 +15,13 @@ export default function Header() {
     <header className='header'>
       <div className='container'>
         <nav className='header__inner'>
-          <Link className='logo' to='/'>
+          <Link className='logo' to='/' onClick={() => setMenuActive(false)}>
             <img src={homeLogo2} alt='logotype' />
           </Link>
 
           <ul className={menuActive ? "menu menu--active" : "menu"}>
             <li className='menu__item'>
-              <Link className='menu__link' to='/contact-us'>
+              <Link className='menu__link' to='/contact-us' onClick={() => setMenuActive(false)}>
                 Contact Us
               </Link>
             </li>
