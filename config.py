@@ -19,7 +19,7 @@ class BaseConfig(object):
 
     UPLOAD_FOLDER = os.path.join(os.getcwd(), os.environ.get("UPLOAD_FOLDER", "tag_image"))
     ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
-    MAX_CONTENT_LENGTH = 2 * 1024 * 1024
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 
     MAILJET_API_KEY = os.environ.get("MAILJET_API_KEY", None)
     MAILJET_SECRET_KEY = os.environ.get("MAILJET_SECRET_KEY", None)
