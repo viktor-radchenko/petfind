@@ -35,7 +35,7 @@ function DashboarMessages() {
   useEffect(() => {
     if (tableData.length > 1) {
       const results = tableData.filter(
-        (tag) => tag.name.toLowerCase().includes(filter) || tag.id.toLowerCase().includes(filter)
+        (tag) => tag.name.toLowerCase().includes(filter) || tag.tag.toLowerCase().includes(filter)
       );
       if (results.length > 0) setFilteredData(results.reverse());
     } else {
