@@ -2135,6 +2135,17 @@ ul.tabs {
   background-image: url("images/icons/person.svg");
 }
 
+.dashboard__tab--unread::after {
+  content: "";
+  position: absolute;
+  top: calc(50% - 5px);
+  right: 35px;
+  width: 10px;
+  height: 10px;
+  background-color: #fe4a59;
+  border-radius: 50%;
+}
+
 .dashboard__username {
   margin-top: auto;
   padding: 0 18px 50px;
