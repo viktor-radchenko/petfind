@@ -111,6 +111,9 @@ def registered_lookup(tag_id):
     tag = RegisteredTag.query.get(tag_id)
     location = request.get_json(force=True)
     if not tag:
+        new_tag = Tag.query.get(tag_id)
+        if new_tag:
+            return {"message": "Tag is not registered", "status": "reg"}, 200
         return {"message": "No such tag", "status": "na"}, 200
     search = Search(
         lat=location.get("latitude"),
