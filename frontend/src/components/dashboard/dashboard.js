@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { authFetch, logout } from "../../services";
 
+import { useAppContext } from "../app";
 import DashboardTable from "../dashboard-table";
 import DashboardSidebar from "../dashboard-sidebar";
 import Profile from "../profile";
@@ -32,6 +33,8 @@ export default function Dasboard() {
   const [currentTab, setCurrentTab] = useState("table");
   const [sideBarActive, setSideBarActive] = useState(false);
   const [cards, setCards] = useState([]);
+
+  const [state, dispatch] = useAppContext();
 
   const handleTabChange = (tab) => {
     setCurrentTab(tab);
@@ -66,6 +69,22 @@ export default function Dasboard() {
       .then((res) => {
         const data = transformUserData(res);
         setUserData(data);
+      })
+      .catch((e) => {
+        alert(e.message);
+        logout();
+      });
+    authFetch(`/api/registered_tag/messages`)
+      .then((res) => {
+        if (!res.ok) throw new Error("We could not authorize your request. Try log in to the system and try again");
+        return res.json();
+      })
+      .then((res) => {
+        if (res.message) return;
+        dispatch({
+          type: "UPDATE_MESSAGES",
+          payload: res,
+        });
       })
       .catch((e) => {
         alert(e.message);

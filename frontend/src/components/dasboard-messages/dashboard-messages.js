@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TablePagination from "../table-pagination";
+
+import { useAppContext } from "../app";
 import { authFetch, logout } from "../../services";
 
 function DashboarMessages() {
@@ -11,37 +13,24 @@ function DashboarMessages() {
   const [rowPerPage] = useState(8);
   const [openedRows, setOpenedRows] = useState([]);
 
+  const [state, dispatch] = useAppContext();
+
   const notMobile = document.documentElement.clientWidth >= 640;
 
-  useEffect(() => {
-    setLoading(true);
-
-    authFetch(`/api/registered_tag/messages`)
-      .then((res) => {
-        if (!res.ok) throw new Error("We could not authorize your request. Try log in to the system and try again");
-        return res.json();
-      })
-      .then((res) => {
-        if (res.message) return;
-        setTableData(res);
-      })
-      .catch((e) => {
-        alert(e.message);
-        logout();
-      });
-    setLoading(false);
-  }, []);
+  // useEffect(() => {
+  //   if (state.messages) setTableData(state.messages);
+  // }, []);
 
   useEffect(() => {
-    if (tableData.length > 1) {
-      const results = tableData.filter(
+    if (state.messages.length >= 1) {
+      const results = state.messages.filter(
         (tag) => tag.name.toLowerCase().includes(filter) || tag.tag.toLowerCase().includes(filter)
       );
       if (results.length > 0) setFilteredData(results.reverse());
     } else {
-      setFilteredData(tableData.reverse());
+      setFilteredData(state.messages.reverse());
     }
-  }, [filter, tableData]);
+  }, [filter, state.messages]);
 
   const paginate = (page) => {
     setCurrentPage(page);
@@ -93,16 +82,10 @@ function DashboarMessages() {
       })
       .then((res) => {
         if (res.message) return;
-        setTableData((state) => {
-          const list = state.map((item) => {
-            if (item.id === res.id) {
-              return res;
-            } else {
-              return item;
-            }
-          });
-
-          return list;
+        const new_messages = state.messages.map((item) => (item.id === res.id ? res : item));
+        dispatch({
+          type: "UPDATE_MESSAGES",
+          payload: new_messages,
         });
       })
       .catch((e) => {
