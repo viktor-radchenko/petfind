@@ -23,7 +23,7 @@ function LoaderDots() {
 }
 
 export default function TagForm() {
-  const [state] = useAppContext();
+  const [state, dispatch] = useAppContext();
   const [tooltipActive, setTooltipActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [lookUpResult, setLookUpResult] = useState(null);
@@ -69,6 +69,14 @@ export default function TagForm() {
     triggerLookup(tagId);
   };
 
+  const customRedirect = () => {
+    dispatch({
+      type: "REGISTER_TAG_ID",
+      payload: tagIdFromRequest,
+    });
+    history.push("/register_tag");
+  };
+
   useEffect(() => {
     if (tagIdFromRequest && state.location) {
       if ((tagIdFromRequest.length === 6 && captchaValue) || (tagIdFromRequest.length === 6 && searchCount < 2)) {
@@ -83,6 +91,7 @@ export default function TagForm() {
             setLookUpResult(res);
             history.push("/");
           }
+          if (res.status === "reg") customRedirect();
         });
         setIsLoading(false);
       }
@@ -165,7 +174,7 @@ export default function TagForm() {
           </div>
         )}
 
-        {lookUpResult && lookUpResult.status === "na" && (
+        {lookUpResult && (lookUpResult.status === "na" || lookUpResult === "reg") && (
           <div className='modal-disabled'>
             <span className='modal-disabled__title'>No such Tag ID</span>
             <button className='close modal-disabled__close' type='button' onClick={handleClear}>

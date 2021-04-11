@@ -1,11 +1,27 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { authFetch, logout } from "../../services";
+
+import { useAppContext } from "../app";
 
 import "./dashboard-sidebar.css";
 import logo from "../../images/logo.png";
 
 export default function DashboardSidebar({ active, userData, handleTabChange, currentTab, handleSidebarActive }) {
+  const [isUnread, setIsUnread] = useState(false);
+  const [state] = useAppContext();
+
+  useEffect(() => {
+    if (state.messages.length >= 1) {
+      const unread = state.messages.filter((message) => (message.is_read ? null : true));
+      if (unread.length >= 1) {
+        setIsUnread(true);
+      } else {
+        setIsUnread(false);
+      }
+    }
+  }, [state.messages]);
+
   const getInitials = (string) => {
     let names = string.split(" "),
       initials = names[0].substring(0, 1).toUpperCase();
@@ -47,11 +63,14 @@ export default function DashboardSidebar({ active, userData, handleTabChange, cu
         <li
           className={
             currentTab === "messages"
-              ? `dashboard__tab dashboard__tab--analytics dashboard__tab--active`
-              : "dashboard__tab dashboard__tab--analytics"
+              ? `dashboard__tab dashboard__tab--analytics dashboard__tab--active ${
+                  isUnread ? "dashboard__tab--unread" : ""
+                }`
+              : `dashboard__tab dashboard__tab--analytics ${isUnread ? "dashboard__tab--unread" : ""}`
           }
           onClick={() => handleTabChange("messages")}>
           Messages
+          {/* {isUnread && <span className='dashboard__tab--unread'></span>} */}
         </li>
         <li
           className={

@@ -29,6 +29,7 @@ export function useAppContext() {
 const initialState = {
   location: null,
   registerTagId: "",
+  messages: [],
 };
 
 function reducer(state, action) {
@@ -42,6 +43,11 @@ function reducer(state, action) {
       return {
         ...state,
         registerTagId: action.payload,
+      };
+    case "UPDATE_MESSAGES":
+      return {
+        ...state,
+        messages: action.payload,
       };
     default:
       return state;

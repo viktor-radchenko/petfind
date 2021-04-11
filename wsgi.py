@@ -3,7 +3,7 @@ import os
 import click
 
 from app import create_app, db, models, forms, guard
-from app.models import User, Tag, MessageQueue, RegisteredTag
+from app.models import User, MessageQueue
 from app.controllers import MessageSender
 
 app = create_app()
@@ -12,6 +12,7 @@ ADMIN_FIRST_NAME = os.environ.get("ADMIN_FIRST_NAME", "Test")
 ADMIN_LAST_NAME = os.environ.get("ADMIN_LAST_NAME", "Admin")
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "admin@default.com")
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin")
+ADMIN_PHONE = os.environ.get("ADMIN_PHONE", "+123456789090")
 
 
 def add_admin():
@@ -19,49 +20,17 @@ def add_admin():
         first_name=ADMIN_FIRST_NAME,
         last_name=ADMIN_LAST_NAME,
         email=ADMIN_EMAIL,
-        phone="+9715512312312",
+        phone=ADMIN_PHONE,
         password=guard.hash_password(ADMIN_PASSWORD),
         activated=True,
-        address="Nice Street",
-        state="Dubai",
-        country="United Arab Emirates",
-        city="Dubai",
         roles="admin",
     )
     admin.save()
 
 
-def add_unregistered_tags():
-    for i in range(11, 21):
-        tag = Tag(tag_id=f"TEST{i}")
-        db.session.add(tag)
-    db.session.commit()
-
-
-def add_registered_tags():
-    user = User.query.get(1)
-    for i in range(10, 41):
-        tag = RegisteredTag(
-            tag_id=f'REGS{i}',
-            tag_name=f'Tag #{i}',
-            address=user.address,
-            phone=user.phone,
-            email=user.email,
-            city=user.city,
-            country=user.country,
-            state=user.state,
-            zip_code=user.zip_code,
-            user_id=1,
-        )
-        db.session.add(tag)
-    db.session.commit()
-
-
 def _init_db():
     db.create_all()
     add_admin()
-    add_unregistered_tags()
-    add_registered_tags()
 
 
 # flask cli context setup
