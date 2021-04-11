@@ -5,10 +5,8 @@ import { useAppContext } from "../app";
 import { authFetch, logout } from "../../services";
 
 function DashboarMessages() {
-  const [tableData, setTableData] = useState([]);
   const [filter, setFilter] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowPerPage] = useState(8);
   const [openedRows, setOpenedRows] = useState([]);
