@@ -71,7 +71,7 @@ class MessageSender:
         original_url = f"https://www.google.com/maps/search/?api=1&query={data['lat']},{data['lon']}"
         link = ShortUrl(original_url=original_url)
         link.save()
-        body = f"You have a new message for tag: {data['tag_id']}. Visit https://{current_app.config['SERVER_NAME']}/dashboard for details. Check the location of the sender on the map: {url_for('main.redirect_to_url', short_url=link.short_url, _external=True)}"  # noqa 501
+        body = f"Trace Return Alert ({data['tag_id']}). Visit https://{current_app.config['SERVER_NAME']}/dashboard for details. Check the location of the sender on the map: {url_for('main.redirect_to_url', short_url=link.short_url, _external=True)}"  # noqa 501
         response = self.twilio_client.messages.create(
             messaging_service_sid=current_app.config["TWILIO_SERVICE_SID"], body=body, to=recipient.phone
         )
