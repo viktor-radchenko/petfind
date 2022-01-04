@@ -237,21 +237,24 @@ def import_tags():
         return redirect(url_for("admin.index"))
     csv_file = request.files["csv-file"]
     with TextIOWrapper(csv_file, encoding="utf-8") as _file:
-        csv_reader = csv.DictReader(_file, delimiter=",")
-        for i, row in enumerate(csv_reader):
-            tag_id = row.get("tag_id")
-            if Tag.query.filter(Tag.tag_id == tag_id).first():
-                log(
-                    log.ERROR,
-                    "Tag ID [%s] is already taken, skipping row [%d]",
-                    tag_id,
-                    i + 1,
-                )
-                continue
-            new_tag = Tag(tag_id=tag_id)
-            db.session.add(new_tag)
-        db.session.commit()
-    flash("Tags imported succesfully", "success")
+        try:
+            csv_reader = csv.DictReader(_file, delimiter=",")
+            for i, row in enumerate(csv_reader):
+                tag_id = row.get("tag_id")
+                if Tag.query.filter(Tag.tag_id == tag_id).first():
+                    log(
+                        log.ERROR,
+                        "Tag ID [%s] is already taken, skipping row [%d]",
+                        tag_id,
+                        i + 1,
+                    )
+                    continue
+                new_tag = Tag(tag_id=tag_id)
+                db.session.add(new_tag)
+            db.session.commit()
+            flash("Tags imported succesfully", "success")
+        except Exception:
+            flash("An error occured while processing the file", "danger")
     return redirect(url_for("admin.index"))
 
 
