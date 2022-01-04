@@ -240,7 +240,7 @@ def import_tags():
         try:
             csv_reader = csv.DictReader(_file, delimiter=",")
             for i, row in enumerate(csv_reader):
-                tag_id = row.get("tag_id")
+                tag_id = row.get("tag_id") or row.get('Tag Id')
                 if Tag.query.filter(Tag.tag_id == tag_id).first():
                     log(
                         log.ERROR,
