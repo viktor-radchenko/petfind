@@ -48,7 +48,7 @@ def serve_tag_image(filename):
 #     return jsonify({"status": "ok"}), 200
 
 
-@main_blueprint.route("/r/<short_url>")
+@main_blueprint.route("/loc/<short_url>")
 def redirect_to_url(short_url):
     url = ShortUrl.query.filter_by(short_url=short_url).first_or_404()
     return redirect(url.original_url)
