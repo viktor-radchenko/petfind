@@ -109,7 +109,7 @@ export const ShopifyCard = ({ type }) => {
         ))}
       </Carousel>
 
-      <a className='tags__more' href='https://store.tracereturn.com'>
+      <a className='tags__more' href='https://shop.tracereturn.com'>
         See All
       </a>
     </>
