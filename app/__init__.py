@@ -10,6 +10,9 @@ from flask_admin import Admin
 from flask_admin.menu import MenuLink
 from werkzeug.exceptions import HTTPException
 
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
+
 # instantiate extensions
 login_manager = LoginManager()
 guard = Praetorian()
@@ -19,7 +22,7 @@ mail = Mail()
 admin = Admin()
 
 
-def create_app(environment='development'):
+def create_app(environment="development"):
 
     from config import config
     from app.views import (
@@ -34,7 +37,7 @@ def create_app(environment='development'):
         MessageView,
         TagImportView,
         MerchView,
-        ContactView
+        ContactView,
     )
     from app.models import (
         User,
@@ -43,21 +46,30 @@ def create_app(environment='development'):
         Tag,
         MessageQueue,
         Merch,
-        Contact
+        Contact,
+    )
+
+    sentry_sdk.init(
+        dsn=os.environ.get("SENTRY_URL", ""),
+        integrations=[FlaskIntegration()],
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for performance monitoring.
+        # We recommend adjusting this value in production.
+        traces_sample_rate=1.0,
     )
 
     # Instantiate app.
     app = Flask(__name__)
 
     # Set app config.
-    env = os.environ.get('FLASK_ENV', environment)
+    env = os.environ.get("FLASK_ENV", environment)
     app.config.from_object(config[env])
     config[env].configure(app)
 
     # Set JWT lifespan
     # TODO: set proper lifespan before putting in production
-    app.config['JWT_ACCESS_LIFESPAN'] = {'days': 1}
-    app.config['JWT_REFRESH_LIFESPAN'] = {'days': 7}
+    app.config["JWT_ACCESS_LIFESPAN"] = {"days": 1}
+    app.config["JWT_REFRESH_LIFESPAN"] = {"days": 7}
     guard.init_app(app, User)
 
     # Set up extensions.
@@ -88,20 +100,24 @@ def create_app(environment='development'):
         admin.add_view(MerchView(Merch, db.session))
         admin.add_view(ContactView(Contact, db.session))
         admin.add_view(TagImportView(name="Tag Management", endpoint="tag_management"))
-        admin.add_link(MenuLink(name="Back to website", category="", url=url_for("auth.admin_logout")))
+        admin.add_link(
+            MenuLink(
+                name="Back to website", category="", url=url_for("auth.admin_logout")
+            )
+        )
 
     # Set up flask login.
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
 
-    login_manager.login_view = 'auth.login'
-    login_manager.login_message_category = 'info'
+    login_manager.login_view = "auth.login"
+    login_manager.login_message_category = "info"
     login_manager.anonymous_user = AnonymousUser
 
     # Error handlers.
     @app.errorhandler(HTTPException)
     def handle_http_error(exc):
-        return render_template('error.html', error=exc), exc.code
+        return render_template("error.html", error=exc), exc.code
 
     return app

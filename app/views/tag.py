@@ -241,7 +241,7 @@ def import_tags():
             csv_reader = csv.DictReader(_file, delimiter=",")
             for i, row in enumerate(csv_reader):
                 tag_id = row.get("tag_id") or row.get('Tag Id')
-                if Tag.query.filter(Tag.tag_id == tag_id).first():
+                if Tag.query.filter(Tag.tag_id == tag_id.upper()).first():
                     log(
                         log.ERROR,
                         "Tag ID [%s] is already taken, skipping row [%d]",
@@ -249,7 +249,7 @@ def import_tags():
                         i + 1,
                     )
                     continue
-                new_tag = Tag(tag_id=tag_id)
+                new_tag = Tag(tag_id=tag_id.upper())
                 db.session.add(new_tag)
             db.session.commit()
             flash("Tags imported succesfully", "success")

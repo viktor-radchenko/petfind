@@ -36,7 +36,7 @@ export default function NewTagForm() {
           <input
             className='id-form__input'
             type='text'
-            maxLength='6'
+            maxLength='8'
             placeholder='Enter Tag ID'
             value={tagId}
             onChange={(e) => setTagId(e.target.value.toUpperCase())}
