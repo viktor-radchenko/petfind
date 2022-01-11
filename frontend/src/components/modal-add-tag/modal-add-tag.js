@@ -80,7 +80,7 @@ export default function ModalAddTag() {
 
   // Validate tagId
   useEffect(() => {
-    if (tagId.length === 6) {
+    if (tagId.length >= 3) {
       const fetchTagId = async () => {
         return await fetch(`/api/tag-id-lookup/${tagId.toUpperCase()}`)
           .then((res) => res.json())
@@ -183,7 +183,7 @@ export default function ModalAddTag() {
                     : "input register-item__input-id"
                 }
                 type='text'
-                maxLength='6'
+                maxLength='8'
                 name='tagId'
                 value={tagId}
                 onChange={onChange}

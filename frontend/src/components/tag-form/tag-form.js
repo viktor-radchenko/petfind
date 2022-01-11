@@ -57,7 +57,7 @@ export default function TagForm() {
       setLookUpResult({ message: "Please confirm you are not a robot", status: "captcha" });
       return;
     }
-    if ((tagId.length === 6 && captchaValue) || (tagId.length === 6 && searchCount < 2)) {
+    if ((tagId.length >=3 && captchaValue) || (tagId.length >= 3 && searchCount < 2)) {
       setIsLoading(true);
       lookUpTagId(tagId.toUpperCase(), state.location).then((res) => setLookUpResult(res));
       setIsLoading(false);
@@ -79,7 +79,7 @@ export default function TagForm() {
 
   useEffect(() => {
     if (tagIdFromRequest && state.location) {
-      if ((tagIdFromRequest.length === 6 && captchaValue) || (tagIdFromRequest.length === 6 && searchCount < 2)) {
+      if ((tagIdFromRequest.length >= 3 && captchaValue) || (tagIdFromRequest.length >= 3 && searchCount < 2)) {
         setIsLoading(true);
         lookUpTagId(tagIdFromRequest.toUpperCase(), state.location).then((res) => {
           if (res.status === "private") {
@@ -128,7 +128,7 @@ export default function TagForm() {
         <div className='id-form__box'>
           <input
             className='id-form__input'
-            maxLength='6'
+            maxLength='8'
             type='text'
             placeholder='Enter Tag ID'
             value={tagId}

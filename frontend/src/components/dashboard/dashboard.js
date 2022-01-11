@@ -130,7 +130,7 @@ export default function Dasboard() {
         <div className='buy-tags'>
           <div className='buy-tags__top'>
             <span className='title buy-tags__title'>Buy Tags</span>
-            <a className='tags__more buy-tags__more' href='https://store.tracereturn.com'>
+            <a className='tags__more buy-tags__more' href='https://shop.tracereturn.com'>
               See all
             </a>
           </div>
